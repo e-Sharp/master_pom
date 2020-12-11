@@ -1,5 +1,4 @@
-# pom_gen_proc
-Projet d'orientation pour le master - Génération procédurale de terrains
+# Génération procédurale de terrains
 
 # Liens
 
@@ -7,8 +6,16 @@ Projet d'orientation pour le master - Génération procédurale de terrains
 
 ## Documentation
 
-Notes
+- Notes
 [(GDoc)](https://docs.google.com/document/d/1FKcaXUoI7NyXDMGmygVqm8w8YIAHgqI8b3Is7dy8U_4/edit?usp=sharing)
-
-Cahier des charges
+- Cahier des charges
 [(GDoc)](https://docs.google.com/document/d/1_LBbR4m1p0Tvv4_rFC_Q7MMwb6rmQeY5h9o9nAAua5U/edit?usp=sharing)
+
+## Articles
+
+- [Eric Galin](https://perso.liris.cnrs.fr/eric.galin/articles.html)
+- [Inigo Quilez](https://www.iquilezles.org/www/index.htm)
+
+### Terrain Modelling
+
+- [Terrain Modeling from Feature Primitives (2015)](https://perso.liris.cnrs.fr/eric.galin/Articles/2015-terrain-from-primitives.pdf)
