@@ -13,4 +13,4 @@
 
 ## Wiki
 
-- [Ressources](wiki/ressources.md)
+- [Ressources](wiki/resources.md)
