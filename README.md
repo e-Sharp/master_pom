@@ -11,11 +11,6 @@
 - Cahier des charges
 [(GDoc)](https://docs.google.com/document/d/1_LBbR4m1p0Tvv4_rFC_Q7MMwb6rmQeY5h9o9nAAua5U/edit?usp=sharing)
 
-## Articles
+## Wiki
 
-- [Eric Galin](https://perso.liris.cnrs.fr/eric.galin/articles.html)
-- [Inigo Quilez](https://www.iquilezles.org/www/index.htm)
-
-### Terrain Modelling
-
-- [Terrain Modeling from Feature Primitives (2015)](https://perso.liris.cnrs.fr/eric.galin/Articles/2015-terrain-from-primitives.pdf)
+- [Ressources](wiki/ressources.md)
