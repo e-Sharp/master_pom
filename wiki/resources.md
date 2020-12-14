@@ -11,7 +11,7 @@
 
 # Books
 
-
+- Texturing and Modelling - A Modern Approach (third edition)
 
 # Publications
 
