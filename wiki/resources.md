@@ -11,7 +11,7 @@
 
 # Books
 
-- Texturing and Modelling - A Modern Approach (third edition)
+- Texturing and Modeling - A Procedural Approach (third edition)
 
 # Publications
 
