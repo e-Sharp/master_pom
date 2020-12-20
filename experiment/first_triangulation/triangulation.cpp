@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cmath>
 
 struct vector3 {
     float x, y, z;
@@ -13,20 +14,6 @@ struct vector3 {
         : x(a)
         , y(b)
         , z(c)
-    {}
-};
-
-struct triangle {
-    vector3 v1, v2, v3;
-    triangle()
-        : v1(vector3())
-        , v2(vector3())
-        , v3(vector3())
-    {}
-    triangle(vector3 x, vector3 y, vector3 z)
-        : v1(x)
-        , v2(y)
-        , v3(z)
     {}
 };
 
@@ -46,7 +33,6 @@ int main() {
         const unsigned height = 100;
 
         std::vector<float> vertex(width * height);
-        std::vector<triangle> triangles((width - 1) * (height - 1) * 2);
 
         //vertices
         for (auto i = 0; i < width; ++i) {
