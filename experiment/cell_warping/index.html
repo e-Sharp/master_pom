@@ -1,0 +1,58 @@
+let abs = Math.abs;
+let floor = Math.floor;
+let max = Math.max;
+let min = Math.min;
+
+let vec = p5.createVector;
+
+let dir = v => {
+  let d = len(v);
+  if(d === 0) return createVector(0, 0);
+  else return quo(v, d);
+}
+
+let len = p5.Vector.mag;
+let sum = p5.Vector.add;
+let dif = p5.Vector.sub;
+let prod = p5.Vector.mult;
+let quo = p5.Vector.div;
+
+function mapped(p) {
+  return p5.Vector.div(p, 799);
+}
+
+function sdbox(p, b = createVector(0.5, 0.5)) {
+  
+  let d = dif(createVector(abs(p.x), abs(p.y)), b);
+  return len(createVector(max(d.x, 0), max(d.y, 0)))
+      + min(max(d.x, d.y), 0);
+}
+
+
+
+function warped(p) {
+  p = prod(p, 3);
+  let a = createVector(floor(p.x) + 0.5, floor(p.y) + 0.5);
+  let d = sdbox(dif(p, a));
+  let f = min(- 2 * d * 1.5, 1);
+  p = sum(p, prod(dif(a, p), f));
+  p = quo(p, 3);
+  return p;
+}
+
+function col(p) {
+  return color(360 * p.x, 100 * p.y, 100);
+}
+
+function setup() {
+  createCanvas(800, 800);
+  colorMode(HSB);
+  
+  for(let i = 0; i < 800; ++i)
+  for(let j = 0; j < 800; ++j) {
+    stroke(col(warped(mapped(createVector(i, j)))));
+    point(i, j);
+  }
+}
+
+function draw() {}
