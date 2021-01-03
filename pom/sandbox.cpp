@@ -52,7 +52,7 @@ struct vector3 {
     {}
 };
 
-void tesselation(shared_ctree tree, unsigned width, unsigned height,
+void tesselation(shared_ctree tree, unsigned, unsigned,
                  int min, int max, int resolution, std::string name)
 {
     std::ofstream objfile;
@@ -90,18 +90,12 @@ void tesselation(shared_ctree tree, unsigned width, unsigned height,
 }
 
 int main() {
-    for(float f = 0.f; f <= 10.f; f += 0.2f) {
-        std::cout << f << " " << at(pom::hash(point{0.f, f}), 0) << std:: endl;
-    }
-
-    return 0;
-
     auto perlin_t = shared_ctree(new global_prim{
-        &pom::noise::perlin<point::traits>,
+        [](point p) { return pom::noise::fbm([](point p) { return pom::noise::perlin(p); }, 10, p); },
         [](point) { return 1.f; }
     });
 
-    tesselation(perlin_t, 100, 100, -10, 10, 101, "perlin_t");
+    tesselation(perlin_t, 0, 0, -2, 2, 1200, "perlin_t");
 }
 
 // int main() {
