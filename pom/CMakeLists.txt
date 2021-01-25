@@ -1,3 +1,7 @@
+add_subdirectory(qt)
+
+################################################################################
+
 add_library(pom INTERFACE)
 
 target_include_directories(pom
@@ -17,4 +21,18 @@ PRIVATE
 target_link_libraries(pom_sandbox
 PRIVATE
     pom
+    qt
+)
+
+add_executable(sandbox_qt)
+
+target_sources(sandbox_qt
+PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox_qt.cpp
+)
+
+target_link_libraries(sandbox_qt
+PRIVATE
+    pom
+    qt
 )
