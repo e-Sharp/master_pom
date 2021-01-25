@@ -10,3 +10,4 @@ add_subdirectory(lib/catch2)
 
 add_subdirectory(pom)
 add_subdirectory(pom/maths)
+add_subdirectory(pom/qt)
