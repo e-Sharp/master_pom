@@ -52,9 +52,10 @@ struct vector3 {
     {}
 };
 
-void tesselation(shared_ctree tree, unsigned, unsigned,
+void tesselation(shared_ctree tree,
                  int min, int max, int resolution, std::string name)
 {
+    resolution += 1;
     std::ofstream objfile;
     std::vector<float> vertex(resolution * resolution);
     objfile.open(name + ".OBJ");
@@ -62,12 +63,15 @@ void tesselation(shared_ctree tree, unsigned, unsigned,
         std::cout << "failed to open file" << std::endl;
     }
     else{
-        for(auto i = 0; i < resolution; ++i) {
-            for(auto j = 0; j < resolution; ++j) {
-                vertex[resolution * j + i] = tree->eval_at({index(i, min, max, resolution), index(j, min, max, resolution)}).height;
-                objfile << "v " << index(i, min, max, resolution) << " "; 
-                objfile << index(j, min, max, resolution) << " ";
-                objfile << vertex[resolution * j + i] << "\n";
+        for(auto j = 0; j < resolution; ++j) {
+            for(auto i = 0; i < resolution; ++i) {
+                auto index_x = index(i, min, max, resolution);
+                auto index_y = index(j, min, max, resolution);
+                auto index_z = resolution * j +i;
+                vertex[index_z] = tree->eval_at({index_x, index_y}).height;
+                objfile << "v " << index_x << " "; 
+                objfile << index_y << " ";
+                objfile << vertex[index_z] << "\n";
             }
         }
         std::vector<int> faces(resolution * resolution);
@@ -75,8 +79,8 @@ void tesselation(shared_ctree tree, unsigned, unsigned,
             faces[i] = i + 1;
         }
 
-        for (auto i = 0; i < resolution - 1; ++i) {
-            for (auto j = 0; j < resolution - 1; ++j) {
+        for (auto j = 0; j < resolution - 1; ++j) {
+            for (auto i = 0; i < resolution - 1; ++i) {
                 objfile << "f " << faces[resolution * j + i] << " ";
                 objfile << faces[resolution * j + (i + 1)] << " " ;
                 objfile << faces[resolution * (j + 1) + i] << "\n";
@@ -95,7 +99,7 @@ int main() {
         [](point) { return 1.f; }
     });
 
-    tesselation(perlin_t, 0, 0, -2, 2, 1200, "perlin_t");
+    tesselation(perlin_t, -2, 2, 1200, "perlin_t");
 }
 
 // int main() {
