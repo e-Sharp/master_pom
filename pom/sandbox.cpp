@@ -99,7 +99,7 @@ int main() {
         [](point) { return 1.f; }
     });
 
-    tesselation(perlin_t, 0, 0, -2, 2, 1200, "perlin_t");
+    tesselation(perlin_t, -2, 2, 1200, "perlin_t");
 }
 
 // int main() {
