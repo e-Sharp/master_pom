@@ -34,6 +34,17 @@ auto wyvill_fall_off_filter(float r) {
     };
 }
 
+constexpr
+auto wyvill_fall_off_filter(point c, float r) {
+    auto rr = r * r;
+    return [c, rr](point p) {
+        auto dd = (at(p, 0) - at(c, 0)) * (at(p, 0) - at(c, 0)) + (at(p, 1) - at(c, 1)) * (at(p, 1) - at(c, 1));
+        //auto dd = dot(c, p);
+        auto p1 = rr - dd;
+        return p1 > 0.f ? p1 * p1 * p1 : 0.f;
+    };
+}
+
 void tesselation(shared_ctree tree,
                  float min, float max, int resolution, std::string name)
 {
@@ -50,7 +61,7 @@ void tesselation(shared_ctree tree,
             for(auto i = 0; i < resolution; ++i) {
                 auto index_x = i * ((max - min) / (resolution - 1))  + min;
                 auto index_z = resolution * j + i;
-                vertex[index_z] = tree->eval_at({index_x, index_y}).height;
+                vertex[index_z] = tree->eval_at({index_x, index_y}).height * tree->eval_at({index_x, index_y}).weight;
                 objfile << "v " << index_x << " "; 
                 objfile << index_y << " ";
                 objfile << vertex[index_z] << "\n";
@@ -75,50 +86,59 @@ void tesselation(shared_ctree tree,
 
 }
 
-// int main() {
-//     auto perlin_t = shared_ctree(new global_prim{
-//         [](point p) { return pom::noise::fbm([](point p) { return pom::noise::perlin(p); }, 10, p); },
-//         [](point) { return 1.f; }
-//     });
-
-//     tesselation(perlin_t, -2, 2, 1200, "perlin_t");
-// }
-
 int main() {
-    // [-2, 2]^2 100^2
-    auto wyvill_t = shared_ctree(new global_prim{
-        wyvill_fall_off_filter(1.f),
+    auto perlin_t = shared_ctree(new global_prim{
+        [](point p) { return pom::noise::fbm([](point p) { return pom::noise::perlin(p); }, 10, p); },
+        wyvill_fall_off_filter(point{0, 0}, 1.f)
+    });
+
+    auto weighted_perlin_t = shared_ctree(new global_prim{
+        [perlin_t](point p) {
+            auto e = perlin_t->eval_at(p);
+            return e.height * e.weight;
+        },
         [](point) { return 1.f; }
     });
 
-    // // [-5, 5]^2 500^2
-    // auto rcos_t = shared_ctree(new global_prim{
-    //     radial_cos,
-    //     [](point) { return 1.f; }
-    // });
-
-    // // [-5, 5]^2 500^2
-    // auto warped_rcos_t = shared_ctree(new warping_op{
-    //     [](point p) {
-    //         auto d = sqrt(distance(p));
-    //         if(d != 0) return point{p[0] / d, p[1] / d};
-    //         else return point{0, 0};
-    //     },
-    //     rcos_t
-    // });
-
-    // // [-5, 5]^2 500^2
-    // auto squared_warped_rcos_t = shared_ctree(new modulation_op{
-    //     [](float h) { return h * h; },
-    //     warped_rcos_t
-    // });
-
-    std::cout << wyvill_t->eval_at({1, 0}).height << std::endl;
-    constexpr unsigned width = 4;
-    constexpr unsigned height = 4;
-    tesselation(wyvill_t, -2, 2, 100, "wyvill_t");
-    // tesselation(rcos_t, 10, 10, -5, 5, 501, "rcos_t");
-    // tesselation(warped_rcos_t, 10, 10, -5, 5, 501, "warped_rcos_t");
-    // tesselation(squared_warped_rcos_t, 10, 10, -5, 5, 501, "squared_warped_rcos_t");
-
+    tesselation(perlin_t, -2, 2, 1200, "perlin_t");
+    //tesselation(weighted_perlin_t, -2, 2, 500, "weighted_perlin_t");
 }
+
+// int main() {
+//     // [-2, 2]^2 100^2
+//     auto wyvill_t = shared_ctree(new global_prim{
+//         wyvill_fall_off_filter(1.f),
+//         [](point) { return 1.f; }
+//     });
+
+//     // // [-5, 5]^2 500^2
+//     // auto rcos_t = shared_ctree(new global_prim{
+//     //     radial_cos,
+//     //     [](point) { return 1.f; }
+//     // });
+
+//     // // [-5, 5]^2 500^2
+//     // auto warped_rcos_t = shared_ctree(new warping_op{
+//     //     [](point p) {
+//     //         auto d = sqrt(distance(p));
+//     //         if(d != 0) return point{p[0] / d, p[1] / d};
+//     //         else return point{0, 0};
+//     //     },
+//     //     rcos_t
+//     // });
+
+//     // // [-5, 5]^2 500^2
+//     // auto squared_warped_rcos_t = shared_ctree(new modulation_op{
+//     //     [](float h) { return h * h; },
+//     //     warped_rcos_t
+//     // });
+
+//     std::cout << wyvill_t->eval_at({1, 0}).height << std::endl;
+//     constexpr unsigned width = 4;
+//     constexpr unsigned height = 4;
+//     tesselation(wyvill_t, -2, 2, 100, "wyvill_t");
+//     // tesselation(rcos_t, 10, 10, -5, 5, 500, "rcos_t");
+//     // tesselation(warped_rcos_t, 10, 10, -5, 5, 500, "warped_rcos_t");
+//     // tesselation(squared_warped_rcos_t, 10, 10, -5, 5, 500, "squared_warped_rcos_t");
+
+// }
