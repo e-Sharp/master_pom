@@ -52,8 +52,7 @@ struct vector3 {
     {}
 };
 
-void tesselation(shared_ctree tree,
-                 int min, int max, int resolution, std::string name)
+void tesselation(shared_ctree tree, int min, int max, int resolution, std::string name)
 {
     resolution += 1;
     std::ofstream objfile;
@@ -64,9 +63,9 @@ void tesselation(shared_ctree tree,
     }
     else{
         for(auto j = 0; j < resolution; ++j) {
+            auto index_y = index(j, min, max, resolution);
             for(auto i = 0; i < resolution; ++i) {
                 auto index_x = index(i, min, max, resolution);
-                auto index_y = index(j, min, max, resolution);
                 auto index_z = resolution * j +i;
                 vertex[index_z] = tree->eval_at({index_x, index_y}).height;
                 objfile << "v " << index_x << " "; 
@@ -99,7 +98,15 @@ int main() {
         [](point) { return 1.f; }
     });
 
-    tesselation(perlin_t, -2, 2, 1200, "perlin_t");
+    auto weighted_perlin_t = shared_ctree(new global_prim{
+        [perlin_t](point p) {
+            auto e = perlin_t->eval_at(p);
+            return e.height * e.weight;
+        },
+        [](point) { return 1.f; }
+    });
+
+    tesselation(perlin_t, -2, 2, 100, "perlin_t");
 }
 
 // int main() {

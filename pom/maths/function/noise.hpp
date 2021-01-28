@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pom/maths/function/map/vector.hpp"
 #include "pom/maths/function/interpolation.hpp"
 #include "pom/maths/function/hash.hpp"
 #include "pom/maths/vector/all.hpp"
@@ -9,7 +10,7 @@ namespace noise {
 
 template<typename Traits>
 auto perlin(const vector<Traits>& p) {
-    auto i = floored(p);
+    auto i = mapped_d(p, [](float f) { return std::floor(f); });
     auto f = p - i;
 	
 	auto u = smoothstep_2(f);

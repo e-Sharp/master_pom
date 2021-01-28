@@ -15,7 +15,7 @@ vector<Tr> fract(const vector<Tr>& v) noexcept {
     const auto m = [](const vector<Tr>& v, std::size_t i) {
         return fract(at(v, i));
     };
-    return mapped(v, m);
+    return mapped_i(v, m);
 }
 
 } // namespace pom

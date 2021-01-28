@@ -1,5 +1,10 @@
 #pragma once
 
+#include "pom/maths/matrix/all.hpp"
+#include "pom/maths/vector/all.hpp"
+
+#include <cmath>
+
 namespace pom {
 
 template<typename Ty, typename I> constexpr
