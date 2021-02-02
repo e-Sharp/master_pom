@@ -7,16 +7,14 @@ INTERFACE
 
 ################################################################################
 
-add_executable(pom_maths_tests)
+add_executable(maths_sandbox)
 
-target_sources(pom_maths_tests
+target_sources(maths_sandbox
 PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/vector/tests.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests.cpp
-)
+    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox.cpp
+ )
 
-target_link_libraries(pom_maths_tests
+target_link_libraries(maths_sandbox
 PRIVATE
-    catch2
     pom_maths
 )

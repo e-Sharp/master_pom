@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 namespace pom {
 
 template<typename Ty, typename I> constexpr

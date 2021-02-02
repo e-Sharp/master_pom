@@ -1,19 +1,22 @@
 #pragma once
 
 #include "pom/maths/function/fract.hpp"
-#include "pom/maths/vector/all.hpp"
+#include "pom/maths/object/vector.hpp"
+#include "pom/maths/exceptions.hpp"
 
 #include <iostream>
 
 namespace pom {
+namespace maths {
 
-template<typename Traits> constexpr
-vector<Traits> hash(vector<Traits> v) {
-    auto k = vector<Traits>{0.3183099f, 0.3678794f};
-    v = v * k + vector<Traits>{at(k, 1), at(k, 0)};
-    auto h = -1.0 + 2.0 * fract(16.0 * k * fract(at(v, 0) * at(v, 1) * (at(v, 0) + at(v, 1))));
-    // std::cout << at(v, 0) << " " << at(v, 1) << " " << at(h, 0) << " " << at(h, 1) << std::endl;
+template<typename B> constexpr
+vector<B> hash(vector<B> v) {
+    if(size(v) != 2) throw precondition_violation{
+        "Vector size was expected to be 2."};
+    auto k = vector<B>{{0.3183099f, 0.3678794f}};
+    v = v * k + vector<B>{{at(k, 1), at(k, 0)}};
+    auto h = -1.f + 2.f * fract(16.f * k * fract(at(v, 0) * at(v, 1) * (at(v, 0) + at(v, 1))));
     return h;
 }
 
-} // namespace pom
+}}
