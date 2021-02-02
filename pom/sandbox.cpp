@@ -47,24 +47,6 @@ auto wyvill_fall_off_filter(point c, float r) {
     };
 }
 
-struct vector3 {
-    float x, y, z;
-    vector3()
-        : x(0)
-        , y(0)
-        , z(0)
-    {}
-    vector3(float a, float b, float c)
-        : x(a)
-        , y(b)
-        , z(c)
-    {}
-};
-
-float index(unsigned index, float min, float max, float resolution) {
-    return (index / (resolution - 1)) * (max - min) + min;
-}
-
 template<typename T>
 void tesselation(const T& tree, int min, int max, int resolution, std::string name) {
     resolution += 1;
@@ -76,10 +58,10 @@ void tesselation(const T& tree, int min, int max, int resolution, std::string na
     }
     else{
         for(auto j = 0; j < resolution; ++j) {
+            float index_y = j * ((max - min) / (resolution - 1))  + min;
             std::cout << "line " << j << std::endl;
             for(auto i = 0; i < resolution; ++i) {
-                auto index_x = index(i, min, max, resolution);
-                auto index_y = index(j, min, max, resolution);
+                float index_x = i * ((max - min) / (resolution - 1))  + min;
                 auto index_z = resolution * j +i;
                 vertex[index_z] = tree({{index_x, index_y}}).value;
                 objfile << "v " << index_x << " "; 
