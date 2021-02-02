@@ -1,14 +1,9 @@
 #pragma once
 
-#include "pom/maths/vector/all.hpp"
+#include "pom/maths/preset/default/all.hpp"
 
 #include <array>
 #include <cmath>
 
-using namespace pom;
+using point = pom::maths::default_preset::static_vector<float, 2>;
 
-using point = vector<traits::vector<float, 2>>;
-
-auto distance(const point& p) noexcept {
-    return std::sqrt(dot(p, p));
-}

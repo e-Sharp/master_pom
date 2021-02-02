@@ -1,21 +1,19 @@
 #pragma once
 
-#include "pom/maths/vector/all.hpp"
+#include "pom/maths/object/vector.hpp"
 
 #include <cmath>
 
 namespace pom {
+namespace maths {
 
 float fract(float x) noexcept {
     return x - std::floor(x);
 }
 
-template<typename Tr>
-vector<Tr> fract(const vector<Tr>& v) noexcept {
-    const auto m = [](const vector<Tr>& v, std::size_t i) {
-        return fract(at(v, i));
-    };
-    return mapped_i(v, m);
+template<typename V>
+auto fract(const vector<V>& v) noexcept {
+    return mapped(v, [](auto e) { return fract(e); });
 }
 
-} // namespace pom
+}}

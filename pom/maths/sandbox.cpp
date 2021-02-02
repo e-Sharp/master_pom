@@ -1,21 +1,26 @@
-#include "pom/maths/matrix/all.hpp"
+#include "pom/maths/function/vector/all.hpp"
+#include "pom/maths/preset/default/all.hpp"
 
-#include <iomanip>
 #include <iostream>
 
-using namespace pom;
+using namespace pom::maths;
+using namespace default_preset;
+
+void throwing_main() {
+	auto v = static_vector<int, 3>{{1, 2, 3}};
+	auto vv = dot(v, v);
+	std::cout << vv << std::endl;
+	// for(auto& e : vv) std::cout << e << " "; std::cout << std::endl;
+}
 
 int main() {
-	auto dm = dynamic_matrix<int>{col{3}, row{2}};
-	auto sm = static_matrix<int, col{4}, row{3}>{};
-
-	at(dm, col{2}, row{1}) = 3;
-
-	for(row r = {0}; r < size(dm, row{}); r = row{r + 1}) {
-		std::cout << "| ";
-		for(col c = {0}; c < size(dm, col{}); c = col{c + 1}) {
-			std::cout << std::setw(8) << at(dm, c, r) << " ";
-		}
-		std::cout << "|" << std::endl;
+	try {
+		throwing_main();
+	} catch(const pom::maths::exception& e) {
+		std::cerr << "pom::maths::exception: " << e.what() << std::endl;
+		return -1;
+	} catch(...) {
+		std::cerr << "Unhandled exception." << std::endl;
+		return -1;
 	}
 }
