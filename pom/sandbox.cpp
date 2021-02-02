@@ -47,8 +47,10 @@ auto wyvill_fall_off_filter(point c, float r) {
     };
 }
 
+
+
 template<typename T>
-void tesselation(const T& tree, int min, int max, int resolution, std::string name) {
+void tesselation(const T& tree, float min, float max, int resolution, std::string name) {
     resolution += 1;
     std::ofstream objfile;
     std::vector<float> vertex(resolution * resolution);
