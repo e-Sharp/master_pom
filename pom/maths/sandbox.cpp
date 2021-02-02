@@ -7,7 +7,8 @@ using namespace pom::maths;
 using namespace default_preset;
 
 void throwing_main() {
-	auto v = static_vector<int, 3>{{1, 2, 3}};
+	constexpr auto v = static_vector<int, 3>{{1, 2, 3}};
+	constexpr auto s = size(v);
 	auto vv = dot(v, v);
 	std::cout << vv << std::endl;
 	// for(auto& e : vv) std::cout << e << " "; std::cout << std::endl;
