@@ -3,12 +3,11 @@
 #include <vector>
 #include <fstream>
 
-#include "pom/ctree/global_prim.hpp"
-#include "pom/ctree/modulation_op.hpp"
-#include "pom/ctree/warping_op.hpp"
+#include "pom/ctree/all.hpp"
 #include "pom/maths/function/noise.hpp"
 #include "pom/maths/function/vector/all.hpp"
 
+using namespace pom::ctree;
 using namespace pom::maths;
 
 template<typename Ty>
@@ -66,24 +65,23 @@ float index(unsigned index, float min, float max, float resolution) {
     return (index / (resolution - 1)) * (max - min) + min;
 }
 
-
-void tesselation(shared_ctree tree,
-                 int min, int max, int resolution, std::string name)
-{
+template<typename T>
+void tesselation(const T& tree, int min, int max, int resolution, std::string name) {
     resolution += 1;
     std::ofstream objfile;
     std::vector<float> vertex(resolution * resolution);
     objfile.open(name + ".OBJ");
-    if(!objfile.is_open()){
+    if(!objfile.is_open()) {
         std::cout << "failed to open file" << std::endl;
     }
     else{
         for(auto j = 0; j < resolution; ++j) {
+            std::cout << "line " << j << std::endl;
             for(auto i = 0; i < resolution; ++i) {
                 auto index_x = index(i, min, max, resolution);
                 auto index_y = index(j, min, max, resolution);
                 auto index_z = resolution * j +i;
-                vertex[index_z] = tree->eval_at({{index_x, index_y}}).height;
+                vertex[index_z] = tree({{index_x, index_y}}).value;
                 objfile << "v " << index_x << " "; 
                 objfile << index_y << " ";
                 objfile << vertex[index_z] << "\n";
@@ -95,6 +93,7 @@ void tesselation(shared_ctree tree,
         }
 
         for (auto j = 0; j < resolution - 1; ++j) {
+            std::cout << "line " << j << std::endl;
             for (auto i = 0; i < resolution - 1; ++i) {
                 objfile << "f " << faces[resolution * j + i] << " ";
                 objfile << faces[resolution * j + (i + 1)] << " " ;
@@ -109,20 +108,18 @@ void tesselation(shared_ctree tree,
 }
 
 int main() {
-    auto perlin_t = shared_ctree(new global_prim{
-        [](point p) { return fbm([](point p) { return perlin(p); }, 10, p); },
-        wyvill_fall_off_filter(point{{0, 0}}, 1.f)
+    auto perlin_t = [](point p) {
+        return eval{
+            .value = fbm([](point p) { return perlin(p); }, 5, p),
+            .weight = wyvill_fall_off_filter(point{{0, 0}}, 1.f)(p)};
+    };
+
+    auto weighted_perlin_t = modulation(perlin_t, [](eval e) {
+        e.value *= e.weight;
+        return e;
     });
 
-    auto weighted_perlin_t = shared_ctree(new global_prim{
-        [perlin_t](point p) {
-            auto e = perlin_t->eval_at(p);
-            return e.height * e.weight;
-        },
-        [](point) { return 1.f; }
-    });
-
-    tesselation(perlin_t, -2, 2, 1000, "perlin_t");
+    tesselation(weighted_perlin_t, -2, 2, 200, "weighted_perlin_t");
 }
 
 // int main() {
