@@ -45,6 +45,7 @@ auto wyvill_fall_off_filter(point c, float r) {
     };
 }
 
+
 void tesselation(shared_ctree tree,
                  float min, float max, int resolution, std::string name)
 {
@@ -84,6 +85,28 @@ void tesselation(shared_ctree tree,
         }
     }
 
+}
+
+constexpr
+auto spiral_warping(point c, float r, float rotation) {
+    auto rr = r * r;
+    return[c, rr, rotation](point p) {
+        auto dd = (at(p, 0) - at(c, 0)) * (at(p, 0) - at(c, 0)) + (at(p, 1) - at(c, 1)) * (at(p, 1) - at(c, 1));
+        if(dd < rr) {
+            //cart to polar
+            auto d = sqrt(at(p, 0) * at(p, 0) + at(p, 1) * at(p,1));
+            auto a = atan2(at(p,1), at(p, 0));
+
+            auto p1 = rr - dd;
+            auto influence =  p1 > 0.f ? p1 * p1 * p1 : 0.f;
+            //angle pour willy
+            auto angle = a + rotation * influence;
+
+            //polar to cart
+            at(p, 0) = d * cos(angle);
+            at(p, 1) = d * sin(angle);
+        }
+    };
 }
 
 int main() {
