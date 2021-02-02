@@ -47,26 +47,10 @@ auto wyvill_fall_off_filter(point c, float r) {
     };
 }
 
-struct vector3 {
-    float x, y, z;
-    vector3()
-        : x(0)
-        , y(0)
-        , z(0)
-    {}
-    vector3(float a, float b, float c)
-        : x(a)
-        , y(b)
-        , z(c)
-    {}
-};
 
-float index(unsigned index, float min, float max, float resolution) {
-    return (index / (resolution - 1)) * (max - min) + min;
-}
 
 template<typename T>
-void tesselation(const T& tree, int min, int max, int resolution, std::string name) {
+void tesselation(const T& tree, float min, float max, int resolution, std::string name) {
     resolution += 1;
     std::ofstream objfile;
     std::vector<float> vertex(resolution * resolution);
@@ -76,10 +60,10 @@ void tesselation(const T& tree, int min, int max, int resolution, std::string na
     }
     else{
         for(auto j = 0; j < resolution; ++j) {
+            float index_y = j * ((max - min) / (resolution - 1))  + min;
             std::cout << "line " << j << std::endl;
             for(auto i = 0; i < resolution; ++i) {
-                auto index_x = index(i, min, max, resolution);
-                auto index_y = index(j, min, max, resolution);
+                float index_x = i * ((max - min) / (resolution - 1))  + min;
                 auto index_z = resolution * j +i;
                 vertex[index_z] = tree({{index_x, index_y}}).value;
                 objfile << "v " << index_x << " "; 
@@ -105,6 +89,28 @@ void tesselation(const T& tree, int min, int max, int resolution, std::string na
         }
     }
 
+}
+
+constexpr
+auto spiral_warping(point c, float r, float rotation) {
+    auto rr = r * r;
+    return[c, rr, rotation](point p) {
+        auto dd = (at(p, 0) - at(c, 0)) * (at(p, 0) - at(c, 0)) + (at(p, 1) - at(c, 1)) * (at(p, 1) - at(c, 1));
+        if(dd < rr) {
+            //cart to polar
+            auto d = sqrt(at(p, 0) * at(p, 0) + at(p, 1) * at(p,1));
+            auto a = atan2(at(p,1), at(p, 0));
+
+            auto p1 = rr - dd;
+            auto influence =  p1 > 0.f ? p1 * p1 * p1 : 0.f;
+            //angle pour willy
+            auto angle = a + rotation * influence;
+
+            //polar to cart
+            at(p, 0) = d * cos(angle);
+            at(p, 1) = d * sin(angle);
+        }
+    };
 }
 
 int main() {
