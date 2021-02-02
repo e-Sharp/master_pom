@@ -3,8 +3,8 @@
 #include "pom/ctree/warping_op.hpp"
 #include "pom/maths/function/noise.hpp"
 #include "pom/maths/function/interpolation/matrix.hpp"
-#include "pom/maths/function/map/vector.hpp"
 #include "pom/maths/matrix/all.hpp"
+#include "pom/io/std/all.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -29,15 +29,19 @@ void tesselation(F f, int min, int max, int resolution, std::string name)
     }
     std::cout << "--Outputing vertices." << std::endl;
     for(auto j = 0; j < resolution; ++j) {
-        std::cout << "line " << j << "\n";
         auto index_y = index(j, min, max, resolution);
         for(auto i = 0; i < resolution; ++i) {
             auto index_x = index(i, min, max, resolution);
             auto index_z = resolution * j + i;
-            vertex[index_z] = f({index_x, index_y});
-            objfile << "v " << index_x << " ";
-            objfile << index_y << " ";
-            objfile << vertex[index_z] << "\n";
+            vertex[index_z] = f({{index_x, index_y}});
+        }
+    }
+    for(auto j = 0; j < resolution; ++j) {
+        auto index_y = index(j, min, max, resolution);
+        for(auto i = 0; i < resolution; ++i) {
+            auto index_x = index(i, min, max, resolution);
+            auto index_z = resolution * j + i;
+            objfile << "v " << index_x << " " << index_y << " " << vertex[index_z] << '\n';
         }
     }
     std::vector<int> faces(resolution * resolution);
@@ -46,22 +50,21 @@ void tesselation(F f, int min, int max, int resolution, std::string name)
     }
     std::cout << "--Outputing faces." << "\n";
     for(auto j = 0; j < resolution - 1; ++j) {
-        std::cout << "line " << j << "\n";
         auto rj = resolution * j;
         auto rjj = resolution * (j + 1);
         for(auto i = 0; i < resolution - 1; ++i) {
             objfile << "f " << faces[rj + i] << " ";
             objfile << faces[rj + (i + 1)] << " ";
-            objfile << faces[rjj + i] << "\n";
+            objfile << faces[rjj + i] << '\n';
             objfile << "f " << faces[rj + (i + 1)] << " ";
             objfile << faces[rjj + i] << " ";
-            objfile << faces[rjj + (i + 1)] << "\n";
+            objfile << faces[rjj + (i + 1)] << '\n';
         }
     }
 }
 
 void throwing_main() {
-	auto img = QImageReader{"D:\\dataset\\nasa_images_png\\PIA18033~small.png"}.read();
+	/*auto img = QImageReader{"D:\\dataset\\nasa_images_png\\PIA18033~small.png"}.read();
 	if(img.isNull()) {
 		throw std::runtime_error{"Failed to open file."};
 	}
@@ -79,7 +82,25 @@ void throwing_main() {
 
     tesselation(
         [&m](point p) { return bilerp(m, p);  },
-        -100, 640, 2000, "res.obj"
+        -100, 640, 1000, "res.obj"
+    );*/
+
+    auto img = open_file("D:/project/pom/data/N01E014.hgt", std::ios::binary | std::ios::in);
+    auto data = std::vector<short>(size(img) / sizeof(short));
+    read_until_eof(img, data.begin());
+    auto m = dynamic_matrix<float>{col{1201}, row{1201}};
+    for(auto& h : data) {
+        h = ((h & 0xff) << 8) | ((h & 0xff00) >> 8);
+    }
+    for(col c = {0}; c < size(m, col{}); ++c) {
+        for(row r = {0}; r < size(m, row{}); ++r) {
+            at(m, c, r) = data[r * size(m, col{}) + c] / 32.767f;
+        }
+    }
+
+    tesselation(
+        [&m](point p) { return std::floor(bilerp(m, p)); },
+        0, 1200, 1201, "res.obj"
     );
 }
 

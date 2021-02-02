@@ -7,6 +7,9 @@
 #include "pom/ctree/modulation_op.hpp"
 #include "pom/ctree/warping_op.hpp"
 #include "pom/maths/function/noise.hpp"
+#include "pom/maths/function/vector/all.hpp"
+
+using namespace pom::maths;
 
 template<typename Ty>
 constexpr auto pi = static_cast<Ty>(3.14159265359L);
@@ -80,7 +83,7 @@ void tesselation(shared_ctree tree,
                 auto index_x = index(i, min, max, resolution);
                 auto index_y = index(j, min, max, resolution);
                 auto index_z = resolution * j +i;
-                vertex[index_z] = tree->eval_at({index_x, index_y}).height;
+                vertex[index_z] = tree->eval_at({{index_x, index_y}}).height;
                 objfile << "v " << index_x << " "; 
                 objfile << index_y << " ";
                 objfile << vertex[index_z] << "\n";
@@ -107,8 +110,8 @@ void tesselation(shared_ctree tree,
 
 int main() {
     auto perlin_t = shared_ctree(new global_prim{
-        [](point p) { return pom::noise::fbm([](point p) { return pom::noise::perlin(p); }, 10, p); },
-        wyvill_fall_off_filter(point{0, 0}, 1.f)
+        [](point p) { return fbm([](point p) { return perlin(p); }, 10, p); },
+        wyvill_fall_off_filter(point{{0, 0}}, 1.f)
     });
 
     auto weighted_perlin_t = shared_ctree(new global_prim{
@@ -119,7 +122,7 @@ int main() {
         [](point) { return 1.f; }
     });
 
-    tesselation(perlin_t, -2, 2, 1200, "perlin_t");
+    tesselation(perlin_t, -2, 2, 1000, "perlin_t");
 }
 
 // int main() {
