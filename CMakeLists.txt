@@ -8,7 +8,6 @@ if(MSVC)
     message("${CMAKE_CXX_FLAGS}")
 endif()
 
-add_subdirectory(lib/catch2)
+add_subdirectory(lib)
 
 add_subdirectory(pom)
-add_subdirectory(pom/maths)
