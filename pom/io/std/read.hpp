@@ -6,6 +6,7 @@
 #include <vector>
 
 namespace pom {
+namespace io {
 
 void throw_if_bad(const std::ios& s) {
 	if(s.bad()) throw std::runtime_error{
@@ -34,4 +35,12 @@ void read_until_eof(std::istream& is, It output) {
 	}
 }
 
-} // namespace pom
+std::size_t size(std::istream& is) {
+	auto pos = is.tellg();
+	is.ignore(std::numeric_limits<std::streamsize>::max());
+	auto c = is.gcount();
+	is.seekg(pos);
+	return c;
+}
+
+}}
