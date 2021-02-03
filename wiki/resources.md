@@ -1,9 +1,3 @@
-# Resources
-
-- [Book of shaders](https://thebookofshaders.com/)
-- [Éric Galin](https://perso.liris.cnrs.fr/eric.galin/articles.html)
-- [Inigo Quilez](https://www.iquilezles.org/www/index.htm)
-
 # Articles
 
 - [[Inigo Quilez] Raymarching terrains (2002)](https://www.iquilezles.org/www/articles/terrainmarching/terrainmarching.htm)
@@ -20,4 +14,12 @@
 - [Sparse representation of terrains for procedural modeling (2016)](https://perso.liris.cnrs.fr/eric.galin/Articles/2016-sparse-terrains.pdf)
 - [Terrain Modeling from Feature Primitives (2015)](https://perso.liris.cnrs.fr/eric.galin/Articles/2015-terrain-from-primitives.pdf)
 
+# Shadertoy
+
 # Videos
+
+# Websites
+
+- [Book of shaders](https://thebookofshaders.com/)
+- [Éric Galin](https://perso.liris.cnrs.fr/eric.galin/articles.html)
+- [Inigo Quilez](https://www.iquilezles.org/www/index.htm)
