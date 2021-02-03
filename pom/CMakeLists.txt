@@ -1,5 +1,3 @@
-add_subdirectory(qt)
-
 ################################################################################
 
 add_library(pom INTERFACE)
@@ -21,7 +19,6 @@ PRIVATE
 target_link_libraries(pom_sandbox
 PRIVATE
     pom
-    qt
 )
 
 add_executable(sandbox_qt)
@@ -34,5 +31,4 @@ PRIVATE
 target_link_libraries(sandbox_qt
 PRIVATE
     pom
-    qt
 )
