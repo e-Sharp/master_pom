@@ -6,7 +6,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <QImageReader>
 #include <stdexcept>
 
 using namespace pom;
