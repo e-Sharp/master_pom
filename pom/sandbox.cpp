@@ -91,25 +91,27 @@ void tesselation(const T& tree, float min, float max, int resolution, std::strin
 
 }
 
+float influence(float d) {
+    auto rotation = 5.f;
+    d = d > 1 ? 1.f : d;
+    auto p = d * (-3 + d * (3 - d)) + 1;
+    return rotation * p;
+}
+
 constexpr
-auto spiral_warping(point c, float r, float rotation) {
+auto spiral_warping(float r) {
     auto rr = r * r;
-    return[c, rr, rotation](point p) {
-        auto dd = (at(p, 0) - at(c, 0)) * (at(p, 0) - at(c, 0)) + (at(p, 1) - at(c, 1)) * (at(p, 1) - at(c, 1));
-        if(dd < rr) {
-            //cart to polar
-            auto d = sqrt(at(p, 0) * at(p, 0) + at(p, 1) * at(p,1));
-            auto a = atan2(at(p,1), at(p, 0));
-
-            auto p1 = rr - dd;
-            auto influence =  p1 > 0.f ? p1 * p1 * p1 : 0.f;
-            //angle pour willy
-            auto angle = a + rotation * influence;
-
-            //polar to cart
-            at(p, 0) = d * cos(angle);
-            at(p, 1) = d * sin(angle);
-        }
+    return[rr](point p) {
+        auto dd = at(p, 0) * at(p, 0) + at(p, 1) * at(p, 1);
+        auto d = sqrt(dd);
+        //cart to polar
+        auto angle = atan2(at(p,1), at(p, 0));
+        auto influ = influence(sqrt(dd / rr));
+        angle += influ;
+        //polar to cart
+        at(p, 0) = d * cos(angle);
+        at(p, 1) = d * sin(angle);
+        return p;
     };
 }
 
@@ -125,7 +127,12 @@ int main() {
         return e;
     });
 
-    tesselation(weighted_perlin_t, -2, 2, 200, "weighted_perlin_t");
+    //auto warped_perlin_t = warping(perlin_t, spiral_warping(point{{0, 0}}, 2.f));
+    auto warped_perlin_t = warping(perlin_t, [](point p) {
+        return spiral_warping(2)(p - point{{0, 0}});
+    });
+
+    tesselation(warped_perlin_t, -2, 2, 200, "warped_perlin_t");
 }
 
 // int main() {
