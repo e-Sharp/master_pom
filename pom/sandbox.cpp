@@ -102,9 +102,9 @@ constexpr
 auto spiral_warping(float r) {
     auto rr = r * r;
     return[rr](point p) {
+        //cart to polar
         auto dd = at(p, 0) * at(p, 0) + at(p, 1) * at(p, 1);
         auto d = sqrt(dd);
-        //cart to polar
         auto angle = atan2(at(p,1), at(p, 0));
         auto influ = influence(sqrt(dd / rr));
         angle += influ;
@@ -113,6 +113,32 @@ auto spiral_warping(float r) {
         at(p, 1) = d * sin(angle);
         return p;
     };
+}
+
+constexpr
+auto zoom_warping(float r) {
+    auto rr = r * r;
+    return[rr](point p) {
+        auto z = .75f;
+        //cart to polar
+        auto dd = at(p, 0) * at(p, 0) + at(p, 1) * at(p, 1);
+        auto d = sqrt(dd);
+        auto angle = atan2(at(p,1), at(p, 0));
+
+        auto p1 = rr - dd;
+        auto e = z + d * d * ((3 - 3 * z) + d * (-2 + 2 * z));
+        auto influence = p1 > 0.f ? e : 1.f; 
+        d *= influence;
+        //polar to cart
+        at(p, 0) = d * cos(angle);
+        at(p, 1) = d * sin(angle);
+        return p;
+    };
+}
+
+constexpr
+auto noise_warping(point p) {
+
 }
 
 int main() {
@@ -129,10 +155,10 @@ int main() {
 
     //auto warped_perlin_t = warping(perlin_t, spiral_warping(point{{0, 0}}, 2.f));
     auto warped_perlin_t = warping(perlin_t, [](point p) {
-        return spiral_warping(2)(p - point{{0, 0}});
+        return zoom_warping(1)(p - point{{0, 0}});
     });
 
-    tesselation(warped_perlin_t, -2, 2, 200, "warped_perlin_t");
+    tesselation(warped_perlin_t, -2, 2, 1000, "warped_perlin_t");
 }
 
 // int main() {
