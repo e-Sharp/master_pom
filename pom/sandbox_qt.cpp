@@ -1,17 +1,17 @@
-#include "pom/ctree/all.hpp"
 #include "pom/maths/function/noise.hpp"
 #include "pom/maths/function/interpolation/matrix.hpp"
 #include "pom/maths/matrix/all.hpp"
 #include "pom/io/std/all.hpp"
+#include "pom/terrain/all.hpp"
 
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 
 using namespace pom;
-using namespace pom::ctree;
 using namespace pom::io;
 using namespace pom::maths;
+using namespace pom::terrain;
 
 float index(unsigned index, float min, float max, float resolution) {
     return (index / (resolution - 1)) * (max - min) + min;
