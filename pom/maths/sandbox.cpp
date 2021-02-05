@@ -1,17 +1,13 @@
-#include "pom/maths/function/vector/all.hpp"
+#include "pom/maths/object/interval.hpp"
 #include "pom/maths/preset/default/all.hpp"
 
 #include <iostream>
 
-using namespace pom::maths;
-using namespace default_preset;
+using namespace pom::maths::default_preset;
 
 void throwing_main() {
-	constexpr auto v = static_vector<int, 3>{{1, 2, 3}};
-	constexpr auto s = size(v);
-	auto vv = dot(v, v);
-	std::cout << vv << std::endl;
-	// for(auto& e : vv) std::cout << e << " "; std::cout << std::endl;
+	constexpr auto i = interval<int>{1, 3};
+	std::cout << lower(i) << " " << upper(i) << " " << length(i) << std::endl;
 }
 
 int main() {
