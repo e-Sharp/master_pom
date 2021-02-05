@@ -107,7 +107,6 @@ int main() {
         return noise_warping()(p);
     });
 
-    //tesselation(noise_warping_t, -2, 2, 1000, "noise_warping_t");
     auto f = io::open_file("weighted_perlin_t.obj", std::ios::out);
     io::wavefront::write(f, hf);
 }
