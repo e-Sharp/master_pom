@@ -1,39 +1,40 @@
 #pragma once
 
-#include "pom/maths/exception/invariant_violation.hpp"
+#include "pom/maths/exceptions.hpp"
+
+#include <concepts>
 
 namespace pom {
+namespace maths {
 
-template<typename Traits>
-struct interval {
-	using element = typename Traits::element;
-	using traits = Traits;
-
-	interval() noexcept = default;
-
-	interval(const element& l, const element& u)
-		: lower_{l}
-		, upper_{u}
-	{
-		throw_if_invalid();
-	}
-
-	const element& lower() const noexcept {
-		return lower_;
-	}
-
-	const element& upper() const noexcept {
-		return upper_;
-	}
-
-private:
-	void throw_if_invalid() {
-		if(lower_ > upper_) throw maths::invariant_violation{
-			"Not a valid interval."};
-	}
-
-	element lower_ = {};
-	element upper_ = {};
+template<typename B>
+struct interval : B {
+	using B::B;
 };
 
-} // namespace pom
+template<typename B> constexpr
+decltype(auto) lower(const interval<B>& i)
+noexcept(noexcept(lower(static_cast<const B&>(i)))) {
+	return lower(static_cast<const B&>(i));
+}
+
+template<typename B> constexpr
+decltype(auto) upper(const interval<B>& i)
+noexcept(noexcept(lower(static_cast<const B&>(i)))) {
+	return upper(static_cast<const B&>(i));
+}
+
+template<typename B> constexpr
+decltype(auto) length(const interval<B>& i)
+noexcept(noexcept(lower(i)) && noexcept(upper(i))) {
+	return upper(i) - lower(i);
+}
+
+template<typename I> constexpr
+auto mapping(const interval<I>& orig, const interval<I>& dest) {
+	auto a = length(dest) / length(orig);
+	auto b = - a * lower(orig) + lower(dest);
+	return [a, b](const auto& x) { return a * x + b; };
+}
+
+}}

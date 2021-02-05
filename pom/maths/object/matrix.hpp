@@ -6,6 +6,4 @@ namespace maths {
 template<typename Base>
 struct matrix : Base {};
 
-
-
 }}
