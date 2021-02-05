@@ -137,8 +137,12 @@ auto zoom_warping(float r) {
 }
 
 constexpr
-auto noise_warping(point p) {
-
+auto noise_warping() {
+    return[](point p) {
+        point polar = {{perlin(p) * 2 * pi<float>, .5f}};
+        point cart = {{at(polar, 1) * cos(at(polar, 0)), at(polar, 1) * sin(at(polar, 0))}};
+        return p + cart;
+    };
 }
 
 int main() {
@@ -158,7 +162,11 @@ int main() {
         return zoom_warping(1)(p - point{{0, 0}});
     });
 
-    tesselation(warped_perlin_t, -2, 2, 1000, "warped_perlin_t");
+    auto noise_warping_t = warping(perlin_t, [](point p) {
+        return noise_warping()(p);
+    });
+
+    tesselation(noise_warping_t, -2, 2, 1000, "noise_warping_t");
 }
 
 // int main() {
