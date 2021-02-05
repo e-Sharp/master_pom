@@ -7,6 +7,10 @@ INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
+add_subdirectory(maths)
+
+add_subdirectory(sandbox)
+
 ################################################################################
 
 add_executable(pom_sandbox)

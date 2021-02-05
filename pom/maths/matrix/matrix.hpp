@@ -2,6 +2,7 @@
 
 #include "pom/maths/matrix/traits/dynamic.hpp"
 #include "pom/maths/matrix/traits/static.hpp"
+#include "pom/maths/preset/default/all.hpp"
 
 namespace pom {
 
@@ -50,6 +51,12 @@ auto size(const matrix<Tr>& m, dimension<0>) {
 template<dynamic_matrix_traits Tr>
 auto size(const matrix<Tr>& m, dimension<1>) {
 	return Tr::size(m.storage_, dimension<1>{});
+}
+
+template<dynamic_matrix_traits Tr>
+auto size(const matrix<Tr>& m) {
+	return maths::default_preset::static_vector<std::size_t, 2>{{
+		size(m, dimension<0>{}), size(m, dimension<1>{})}};
 }
 
 } // namespace pom

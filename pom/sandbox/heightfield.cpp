@@ -1,13 +1,16 @@
 #include "pom/maths/object/interval.hpp"
 #include "pom/maths/preset/default/all.hpp"
+#include "pom/terrain/tesselation.hpp"
 
 #include <iostream>
 
 using namespace pom::maths::default_preset;
+using namespace pom::terrain;
 
 void throwing_main() {
-	constexpr auto i = interval<int>{1, 3};
-	std::cout << lower(i) << " " << upper(i) << " " << length(i) << std::endl;
+	auto d = domain{{interval<float>{1, 10}, interval<float>{1, 10}}};
+	auto m = tesselation(
+		[](float x, float y) { return x + y; }, d, 10);
 }
 
 int main() {

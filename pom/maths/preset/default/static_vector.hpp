@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pom/maths/exception/invariant_violation.hpp"
 #include "pom/maths/object/vector.hpp"
+#include "pom/maths/exceptions.hpp"
 
 #include <array>
 
