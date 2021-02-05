@@ -13,4 +13,5 @@
 
 ## Wiki
 
+- [Experiments](wiki/experiments.md)
 - [Ressources](wiki/resources.md)
