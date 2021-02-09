@@ -3,14 +3,15 @@
 #include <vector>
 #include <fstream>
 
-#include "pom/io/std/all.hpp"
+#include "pom/io_std/all.hpp"
 #include "pom/io/wavefront/all.hpp"
-#include "pom/maths/function/noise.hpp"
-#include "pom/maths/function/vector/all.hpp"
+#include "pom/maths/noise.hpp"
+#include "pom/maths/vector/all.hpp"
 #include "pom/terrain/all.hpp"
 
 using namespace pom;
-using namespace pom::maths::default_preset;
+using namespace pom::maths;
+using namespace pom::maths_impl;
 using namespace pom::terrain;
 
 using pom::dynamic_matrix;
@@ -108,7 +109,7 @@ auto noise_warping() {
     };
 }
 
-int main() {
+void throwing_main() {
     auto perlin_t = [](point p) {
         return eval{
             .value = fbm([](point p) { return perlin(p); }, 5, p),
@@ -121,15 +122,25 @@ int main() {
     });
 
     auto hf = heightfield{};
-    hf.domain = {{interval<float>{-2, 2}, interval<float>{-2, 2}}};
+    hf.domain = {{interval_{-2.f, 2.f}, interval_{-2.f, 2.f}}};
     hf.heights = tesselation(
         [weighted_perlin_t](float x, float y) { return weighted_perlin_t({{x, y}}).value; },
-        hf.domain, 2);
+        hf.domain, 500);
 
     auto noise_warping_t = warping(perlin_t, [](point p) {
         return noise_warping()(p);
     });
 
-    auto f = io::open_file("weighted_perlin_t.obj", std::ios::out);
+    auto f = io_std::open_file("weighted_perlin_t.obj", std::ios::out);
     io::wavefront::write(f, hf);
+}
+
+int main() {
+    try {
+        throwing_main();
+    } catch(...) {
+        std::cerr << "Unhandled exception." << std::endl;
+        return -1;
+    }
+    return 0;
 }
