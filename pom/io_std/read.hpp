@@ -1,12 +1,12 @@
 #pragma once
 
-#include <iterator>
 #include <fstream>
+#include <iterator>
 #include <stdexcept>
 #include <vector>
 
 namespace pom {
-namespace io {
+namespace io_std {
 
 void throw_if_bad(const std::ios& s) {
 	if(s.bad()) throw std::runtime_error{

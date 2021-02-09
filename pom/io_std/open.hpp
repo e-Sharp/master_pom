@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 namespace pom {
-namespace io {
+namespace io_std {
 
 std::fstream open_file(const char* filename, std::ios::openmode mode) {
 	auto f = std::fstream{filename, mode};
