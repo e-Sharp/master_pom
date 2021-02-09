@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pom/maths/interval/all.hpp"
 #include "pom/terrain/heightfield.hpp"
 
 #include <iomanip>
@@ -13,9 +14,9 @@ void write(std::ostream& os, const terrain::heightfield& hf) {
     auto rx = size(hf.heights, col{});
     auto ry = size(hf.heights, row{});
 
-    using maths::default_preset::interval;
-    auto c_to_x = maths::mapping(interval<float>{0, static_cast<float>(rx - 1)}, at(hf.domain, 0));
-	auto r_to_y = maths::mapping(interval<float>{0, static_cast<float>(ry - 1)}, at(hf.domain, 1));
+    using maths_impl::interval_;
+    auto c_to_x = maths::mapping(interval_<float>{0, static_cast<float>(rx - 1)}, at(hf.domain, 0));
+	auto r_to_y = maths::mapping(interval_<float>{0, static_cast<float>(ry - 1)}, at(hf.domain, 1));
 
     os << std::setprecision(5);
 
