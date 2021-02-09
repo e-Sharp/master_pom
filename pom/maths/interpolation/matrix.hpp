@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pom/maths/function/fract.hpp"
+#include "pom/maths/fract.hpp"
 #include "pom/maths/matrix/all.hpp"
 #include "pom/maths/object/vector.hpp"
 
