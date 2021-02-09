@@ -1,13 +1,13 @@
 #pragma once
 
-#include "pom/maths/preset/default/all.hpp"
+#include "pom/maths_impl/all.hpp"
 #include "pom/terrain/heightfield.hpp"
 #include "pom/terrain/tesselation.hpp"
 
 namespace pom {
 namespace terrain {
 
-using point = pom::maths::default_preset::static_vector<float, 2>;
+using point = maths_impl::static_vector_<float, 2>;
 
 struct eval {
     float value = {};
