@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include "pom/io_std/all.hpp"
-#include "pom/io/wavefront/all.hpp"
+#include "pom/io/format/wavefront/all.hpp"
 #include "pom/maths/noise.hpp"
 #include "pom/maths/vector/all.hpp"
 #include "pom/terrain/all.hpp"
@@ -13,10 +13,6 @@ using namespace pom;
 using namespace pom::maths;
 using namespace pom::maths_impl;
 using namespace pom::terrain;
-
-using pom::dynamic_matrix;
-using pom::col;
-using pom::row;
 
 template<typename Ty>
 constexpr auto pi = static_cast<Ty>(3.14159265359L);
@@ -109,6 +105,66 @@ auto noise_warping() {
     };
 }
 
+//
+
+struct heightfield_to_obj {
+    struct v {
+        maths_impl::static_vector_<float, 3> coords = {};
+    };
+
+    struct f {
+        maths_impl::static_vector_<std::size_t, 3> indexes = {};
+    };
+
+    const heightfield& hf;
+};
+
+//
+
+auto f(const heightfield_to_obj&, std::size_t) {
+    return heightfield_to_obj::f{};
+}
+
+auto f_count(const heightfield_to_obj& hto) {
+    auto s = size(hto.hf.heights);
+    return 2 * (at(s, 0) - 1) * (at(s, 1) - 1); 
+}
+
+auto v(const heightfield_to_obj&, std::size_t) {
+    return heightfield_to_obj::v{};
+}
+
+auto v_count(const heightfield_to_obj& hto) {
+    auto s = size(hto.hf.heights);
+    return at(s, 0) * at(s, 1); 
+}
+
+//
+
+constexpr std::size_t count(heightfield_to_obj::f) noexcept {
+    return 3;
+}
+
+auto v(const heightfield_to_obj::f& f, std::size_t i) {
+    return at(f.indexes, i);
+}
+
+//
+
+auto x(const heightfield_to_obj::v& v) noexcept {
+    return at(v.coords, 0);
+}
+
+auto y(const heightfield_to_obj::v& v) noexcept {
+    return at(v.coords, 1);
+}
+
+auto z(const heightfield_to_obj::v& v) noexcept {
+    return at(v.coords, 2);
+}
+
+//
+
 void throwing_main() {
     auto perlin_t = [](point p) {
         return eval{
@@ -125,14 +181,24 @@ void throwing_main() {
     hf.domain = {{interval_{-2.f, 2.f}, interval_{-2.f, 2.f}}};
     hf.heights = tesselation(
         [weighted_perlin_t](float x, float y) { return weighted_perlin_t({{x, y}}).value; },
-        hf.domain, 500);
+        hf.domain, 200);
 
     auto noise_warping_t = warping(perlin_t, [](point p) {
         return noise_warping()(p);
     });
 
-    auto f = io_std::open_file("weighted_perlin_t.obj", std::ios::out);
-    io::wavefront::write(f, hf);
+    {
+        auto f = io_std::open_file("test1.obj", std::ios::out);
+        io::wavefront_format::write2(f, hf);
+    } 
+    {
+        auto f = io_std::open_file("test2.obj", std::ios::out);
+        io::wavefront_format::write(f, heightfield_to_obj{hf});
+    }
+
+    // auto f = io_std::open_file("weighted_perlin_t.obj", std::ios::out);
+    // io::wavefront_format::write(f, hf);
+    // io::wavefront_format::write(f, heightfield_to_obj{hf});
 }
 
 int main() {

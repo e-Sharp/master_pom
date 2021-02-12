@@ -8,12 +8,12 @@ namespace terrain {
 
 struct heightfield {
 	using interval = maths_impl::interval_<float>;
-
+	using matrix = maths_impl::dynamic_matrix_<float>;
 	template<typename Ty, std::size_t S>
 	using vector = maths_impl::static_vector_<Ty, S>;
 
 	vector<interval, 2> domain = {};
-	dynamic_matrix<float> heights = {};
+	matrix heights = {};
 };
 
 }}
