@@ -1,4 +1,5 @@
 #pragma once
 
-#include "pom/maths_impl/interval.hpp"
-#include "pom/maths_impl/static_vector.hpp"
+#include "dynamic_matrix.hpp"
+#include "interval.hpp"
+#include "static_vector.hpp"

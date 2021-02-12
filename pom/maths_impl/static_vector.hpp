@@ -3,6 +3,7 @@
 #include "pom/maths/exceptions.hpp"
 
 #include <algorithm>
+#include <array>
 #include <initializer_list>
 
 namespace pom {
