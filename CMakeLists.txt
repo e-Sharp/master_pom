@@ -24,6 +24,4 @@ find_package(Qt5 COMPONENTS Gui Widgets REQUIRED)
 
 ################################################################################
 
-add_subdirectory(lib)
-
 add_subdirectory(pom)

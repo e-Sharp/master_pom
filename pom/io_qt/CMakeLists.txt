@@ -7,6 +7,5 @@ INTERFACE
 
 target_link_libraries(pom_io_qt
 INTERFACE
-	pom
 	Qt5::Widgets
 )
