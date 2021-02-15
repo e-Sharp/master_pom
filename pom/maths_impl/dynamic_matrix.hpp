@@ -9,19 +9,19 @@ namespace maths_impl {
 
 template<typename Ty>
 struct dynamic_matrix_traits {
-	using index = static_vector_<std::size_t, 2>;
 	using element = Ty;
+	using index = static_vector_<std::size_t, 2>;
 };
 
 template<typename Traits>
 struct dynamic_matrix {
-	using index_type = typename Traits::index;
 	using element_type = typename Traits::element;
+	using index_type = typename Traits::index;
 
 	constexpr dynamic_matrix() noexcept = default;
 
 	constexpr
-	dynamic_matrix(const index_type& size)
+	dynamic_matrix(index_type size)
 		: size{size}
 		, elements(at(size, 0) * at(size, 1))
 	{}
@@ -31,9 +31,7 @@ struct dynamic_matrix {
 };
 
 template<typename Tr>
-decltype(auto) at(
-	const dynamic_matrix<Tr>& m, typename Tr::index ij)
-{
+decltype(auto) at(const dynamic_matrix<Tr>& m, typename Tr::index ij) {
 	return m.elements[index_at(m, ij)];
 }
 
@@ -43,9 +41,7 @@ decltype(auto) at(dynamic_matrix<Tr>& m, typename Tr::index ij) {
 }
 
 template<typename Tr>
-std::size_t index_at(
-	const dynamic_matrix<Tr>& m, typename Tr::index ij)
-{
+std::size_t index_at(const dynamic_matrix<Tr>& m, typename Tr::index ij) {
 	return at(size(m), 0) * at(ij, 1) + at(ij, 0);
 }
 
