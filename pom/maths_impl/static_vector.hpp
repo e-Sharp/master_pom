@@ -23,6 +23,7 @@ public:
 
 	constexpr static_vector() noexcept = default;
 
+	explicit
 	constexpr static_vector(std::size_t size) {
 		if(size != Traits::size) throw maths::invariant_violation{
 			"Static vectors have constant size."};
