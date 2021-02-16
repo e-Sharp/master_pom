@@ -20,7 +20,7 @@ struct dynamic_matrix {
 
 	constexpr dynamic_matrix() noexcept = default;
 
-	constexpr
+	explicit constexpr
 	dynamic_matrix(index_type size)
 		: size{size}
 		, elements(at(size, 0) * at(size, 1))
