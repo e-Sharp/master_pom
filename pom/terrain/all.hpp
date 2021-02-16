@@ -2,6 +2,7 @@
 
 #include "pom/maths_impl/all.hpp"
 #include "pom/terrain/heightfield.hpp"
+#include "pom/terrain/heightfield_to_obj.hpp"
 #include "pom/terrain/tesselation.hpp"
 
 namespace pom {
