@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pom/maths/collection/map/vector.hpp"
 #include "pom/maths/interpolation.hpp"
 #include "pom/maths/hash.hpp"
 #include "pom/maths/vector/all.hpp"
