@@ -1,13 +1,14 @@
-#include <cmath>
-#include <iostream>
-#include <vector>
-#include <fstream>
-
 #include "pom/io_std/all.hpp"
-#include "pom/io/wavefront/all.hpp"
+#include "pom/io_format/wavefront/all.hpp"
 #include "pom/maths/noise.hpp"
 #include "pom/maths/vector/all.hpp"
 #include "pom/terrain/all.hpp"
+
+#include <cmath>
+#include <iostream>
+#include <QImage>
+#include <vector>
+#include <fstream>
 
 using namespace pom;
 using namespace pom::maths;
@@ -105,6 +106,22 @@ auto noise_warping() {
     };
 }
 
+constexpr auto f_to_i(float f) {
+    return static_cast<int>(255.f * f + 0.5f);
+}
+
+template<maths::matrix M>
+QImage to_image(const M& m) {
+    auto im = QImage(static_cast<int>(maths::col_count(m)), static_cast<int>(maths::row_count(m)), QImage::Format_RGB32);
+    for(auto [c, r] : maths::row_major_indexes(m)) {
+        auto int_i = static_cast<int>(c);
+		auto int_j = static_cast<int>(r);
+        auto col = at(row(m, r), c);
+        im.setPixelColor(int_i, int_j, qRgba(f_to_i(at(col, 0)), f_to_i(at(col, 1)), f_to_i(at(col, 2)), 255));
+    }
+    return im;
+}
+
 void throwing_main() {
     auto perlin_t = [](point p) {
         return eval{
@@ -121,14 +138,47 @@ void throwing_main() {
         return noise_warping()(p);
     });
 
-    auto hf = heightfield{};
-    hf.domain = {{interval_{-2.f, 2.f}, interval_{-2.f, 2.f}}};
-    hf.heights = tesselation(
-        [noise_warping_t](float x, float y) { return noise_warping_t({{x, y}}).value; },
-        hf.domain, 500);
+    auto h = [noise_warping_t](float x, float y) { return noise_warping_t({x, y}).value; };
 
-    auto f = io_std::open_file("test.obj", std::ios::out);
-    io::wavefront::write(f, obj{hf});
+    auto hf = heightfield{};
+    hf.domain = {{maths_impl::interval{-16 / 9.f, 16 / 9.f}, maths_impl::interval{-1.f, 1.f}}};
+    hf.heights = tesselation(h, hf.domain, 200);
+
+    auto f = io_std::open_file("mesh.obj", std::ios::out);
+    io_format::wavefront::write(f, obj{hf});
+
+    
+
+    {
+        using color = decltype(maths_impl::vector<float, 3>());
+        auto m = maths_impl::matrix<color>(hf.heights.row_count(), hf.heights.col_count());
+        for(auto r : maths::row_indexes(m)) {
+            auto sr = row(hf.heights, r);
+            auto dr = row(m, r);
+            for(auto i : maths::indexes(sr)) {
+                auto h = at(sr, i);
+                at(dr, i) = h < 0.f ? color{0.f, 0.f, 1.f} : color{1.f, 0.f, 0.f};
+            }
+        }
+        to_image(m).save("texture.png");
+    }
+    
+    auto grads = gradients(h, hf.domain, 200);
+
+    {
+        using color = decltype(maths_impl::vector<float, 3>());
+        auto gtex = same_size<color>(grads);
+        for(auto&& [d, s] : ranges::views::zip(row_major(gtex), row_major(grads))) {
+            auto g = s;
+            auto l = length(g);
+            if(l > 1.f) {
+                g = 1.f / l * g;
+            }
+            g = (g + 1.f) * 0.5f;
+            d = {at(g, 0), 0.f, at(g, 1)};
+        }
+        to_image(gtex).save("grads.png");
+    }
 }
 
 int main() {
