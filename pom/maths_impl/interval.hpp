@@ -5,51 +5,47 @@
 namespace pom {
 namespace maths_impl {
 
-// Implementation of 'pom::maths::interval'.
 // Invariant: 'lower() <= upper()'.
 template<typename Ty>
-class interval_ {
+class interval {
 public:
-	constexpr interval_() noexcept = default;
+	constexpr interval() noexcept = default;
 
-	constexpr interval_(const Ty& lower, const Ty& upper)
+	constexpr interval(Ty lower, Ty upper)
 		: lower_{lower}
 		, upper_{upper}
 	{
 		throw_if_invalid();
 	}
 
-	constexpr const Ty& lower() const noexcept {
+	constexpr Ty lower() const noexcept {
 		return lower_;
 	}
 
-	constexpr const Ty& upper() const noexcept {
+	constexpr Ty upper() const noexcept {
 		return upper_;
 	}
 
 private:
 	constexpr void throw_if_invalid() const {
 		if(lower() > upper()) throw maths::invariant_violation{
-			"Interval: lower bound is greater than upper bound."};
+			"Interval: lower bound should be lesser or equal to upper bound."};
 	}
 
 	Ty lower_ = {};
 	Ty upper_ = {};
 };
 
-template<typename Ty> constexpr
-decltype(auto) lower(const interval_<Ty>& i) noexcept {
-	return i.lower();
-}
-
-template<typename Ty> constexpr
-decltype(auto) upper(const interval_<Ty>& i) noexcept {
-	return i.upper();
-}
-
 // Deduction guides.
 
 template<typename Ty>
-interval_(Ty, Ty) -> interval_<Ty>;
+interval(Ty, Ty) -> interval<Ty>;
+
+// Factories.
+
+template<typename Ty>
+interval<Ty> interval_0_n(Ty n) {
+	return interval(Ty{0}, n);
+}
 
 }}
