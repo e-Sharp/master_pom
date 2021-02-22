@@ -4,3 +4,8 @@ target_include_directories(pom_maths
 INTERFACE
     ${CMAKE_SOURCE_DIR}/.
 )
+
+target_link_libraries(pom_maths
+INTERFACE 
+    range-v3
+)

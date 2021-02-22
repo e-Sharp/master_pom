@@ -22,6 +22,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5 COMPONENTS Gui Widgets REQUIRED)
 
+# Range v3.
+
+add_subdirectory(lib/range_v3_0_11_0)
+
 ################################################################################
 
 add_subdirectory(pom)

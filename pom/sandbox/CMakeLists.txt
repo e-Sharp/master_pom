@@ -23,6 +23,7 @@ PRIVATE
 
 target_link_libraries(pom_sandbox_terrain
 PRIVATE
+	pom_io_qt
 	pom_maths
 )
 
