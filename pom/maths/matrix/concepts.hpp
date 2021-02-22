@@ -8,21 +8,17 @@
 namespace pom {
 namespace maths {
 
+template<typename C> constexpr
+auto col_count(const C& c) -> decltype(c.col_count()) {
+	return c.col_count();
+}
+
+template<typename C> constexpr
+auto row_count(const C& c) -> decltype(c.row_count()) {
+	return c.row_count();
+}
+
 template<typename Matrix>
-concept matrix = requires(const Matrix cm, Matrix m) {
-	// Constructors.
-
-	{ Matrix{} };
-    { Matrix({std::size_t{}, std::size_t{}}) };
-
-	// Capacity.
-
-	{ size(cm) } -> vector;
-
-	// Element access.
-
-	{ at(cm, {std::size_t{}, std::size_t{}}) };
-	{ at(m, {std::size_t{}, std::size_t{}}) };
-};
+concept matrix = true;
 
 }}
