@@ -8,7 +8,7 @@
 namespace pom {
 namespace terrain {
 
-using point = maths_impl::static_vector_<float, 2>;
+using point = maths_impl::static_vector<float, 2>;
 
 struct eval {
     float value = {};
