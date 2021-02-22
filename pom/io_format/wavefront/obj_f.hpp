@@ -5,7 +5,7 @@
 #include <concepts>
 
 namespace pom {
-namespace io {
+namespace io_format {
 namespace wavefront {
 
 template<typename F>

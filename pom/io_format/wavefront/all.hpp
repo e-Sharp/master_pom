@@ -10,7 +10,7 @@
 #include <ostream>
 
 namespace pom {
-namespace io {
+namespace io_format {
 namespace wavefront {
 
 template<typename Obj>

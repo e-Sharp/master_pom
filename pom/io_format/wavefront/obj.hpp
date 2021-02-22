@@ -11,7 +11,7 @@
 #include <ranges>
 
 namespace pom {
-namespace io {
+namespace io_format {
 namespace wavefront {
 
 // I couldn't figure out a way to make concept with defaults
