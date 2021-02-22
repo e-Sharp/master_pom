@@ -6,34 +6,29 @@
 namespace pom {
 namespace maths {
 
-template<typename V>
-concept vector = requires {
-    // Constructors.
+template<typename C> constexpr
+auto size(const C& c) -> decltype(c.size()) {
+    return c.size();
+}
 
-    { V{} };
-    { V(std::size_t{}) };
-} && requires(const V v) {
+template<typename V>
+concept vector = requires(const V cv, V v) {
+    // Types.
+
+    // typename V::index_type;
+
     // Element access.
 
-    { at(v, std::size_t{}) };
+    at(v, std::size_t{});
 
     // Iterators.
 
-    { begin(v) };
-    { end(v) };
+    //begin(v);
+    //end(v);
 
     // Capacity.
 
-    { size(v) } -> std::same_as<std::size_t>;
-} && requires(V v) {
-    // Element access.
-
-	{ at(v, std::size_t{}) };
-
-    // Iterators.
-
-    { begin(v) };
-    { end(v) };
+    size(v);
 };
 
 }}

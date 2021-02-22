@@ -1,8 +1,10 @@
 #pragma once
 
-#include "pom/maths/collection/reduce/vector.hpp"
-#include "pom/maths/vector/concepts.hpp"
+#include "map.hpp"
 
+#include "reduce.hpp"
+
+#include <cmath>
 #include <type_traits>
 
 namespace pom {
@@ -80,6 +82,9 @@ auto dot(const LV& lv, const RV& rv) {
 ////////////////////////////////////////////////////////////////////////////////
 // Distance.
 
-
+template<vector V>
+auto length(const V& v) {
+    return std::sqrt(dot(v, v));
+}
 
 }}
