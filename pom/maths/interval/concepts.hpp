@@ -5,17 +5,27 @@
 namespace pom {
 namespace maths {
 
+template<typename C> constexpr
+auto lower(const C& c) -> decltype(c.lower()) {
+    return c.lower();
+}
+
+template<typename C> constexpr
+auto upper(const C& c) -> decltype(c.upper()) {
+    return c.upper();
+}
+
 template<typename I>
 concept interval = requires(const I ci) {
-        // Constructors.
+    // Constructors.
 
-        { I{} };
-        { I(std::size_t{}, std::size_t{}) };
+    { I{} };
+    { I(lower(ci), upper(ci)) };
 
-        // Element access.
+    // Element access.
 
-        { ci.lower() };
-        { ci.upper() };
-    };
+    { ci.lower() };
+    { ci.upper() };
+};
 
 }}
