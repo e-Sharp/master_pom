@@ -4,7 +4,7 @@ project(pom)
 
 if(MSVC)
     string(REPLACE "/W3" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    add_compile_options(/std:c++latest /W4 /O2)
+    add_compile_options(/std:c++latest /W4)
     message("${CMAKE_CXX_FLAGS}")
 endif()
 
