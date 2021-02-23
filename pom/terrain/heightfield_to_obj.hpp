@@ -154,24 +154,26 @@ struct v_stream_ {
 
     const heightfield& hf;
 
-    std::size_t c = 0;
-    std::size_t r = 0;
+    maths_impl::col c = maths_impl::col{0};
+    maths_impl::row r = maths_impl::row{0};
 
-    using mapping = decltype(maths::mapping(maths_impl::interval<std::size_t>{}, maths_impl::interval<float>{}));
-    mapping c_to_x = maths::mapping(maths_impl::interval_0_n(hf.heights.col_count()), at(hf.domain, 0));
-    mapping r_to_y = maths::mapping(maths_impl::interval_0_n(hf.heights.row_count()), at(hf.domain, 1));
+    decltype(maths::mapping(maths_impl::interval_0_n(col_count(hf.heights)), at(hf.domain, 0)))
+        c_to_x = maths::mapping(maths_impl::interval_0_n(col_count(hf.heights)), at(hf.domain, 0));
+
+    decltype(maths::mapping(maths_impl::interval_0_n(row_count(hf.heights)), at(hf.domain, 1)))
+        r_to_y = maths::mapping(maths_impl::interval_0_n(row_count(hf.heights)), at(hf.domain, 1));
 };
 
 bool empty(const v_stream_& s) {
-    return s.r == s.hf.heights.row_count();
+    return s.r == row_count(s.hf.heights);
 }
 
 obj_v get(v_stream_& s) {
     auto x = s.c_to_x(s.c);
     auto y = s.r_to_y(s.r);
-    auto z = at(row(s.hf.heights, s.r), s.c);
+    auto z = at(at(s.hf.heights, s.r), s.c);
 
-    if(++s.c == s.hf.heights.col_count()) {
+    if(++s.c == col_count(s.hf.heights)) {
         s.c = 0;
         ++s.r;
     }
@@ -224,7 +226,7 @@ struct obj {
 };
 
 f_stream_ f_stream(const obj& o) {
-    return f_stream_{o.impl.heights.col_count(), o.impl.heights.row_count()};
+    return f_stream_{col_count(o.impl.heights), row_count(o.impl.heights)};
 }
 
 v_stream_ v_stream(const obj& o) {
@@ -232,7 +234,7 @@ v_stream_ v_stream(const obj& o) {
 }
 
 vt_stream_ vt_stream(const obj& o) {
-    return vt_stream_{o.impl.heights.col_count(), o.impl.heights.row_count()};
+    return vt_stream_{col_count(o.impl.heights), row_count(o.impl.heights)};
 }
 
 static_assert(io_format::wavefront::obj<obj>);
