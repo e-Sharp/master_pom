@@ -112,11 +112,11 @@ constexpr auto f_to_i(float f) {
 
 template<maths::matrix M>
 QImage to_image(const M& m) {
-    auto im = QImage(static_cast<int>(maths::col_count(m)), static_cast<int>(maths::row_count(m)), QImage::Format_RGB32);
+    auto im = QImage(static_cast<int>(col_count(m)), static_cast<int>(row_count(m)), QImage::Format_RGB32);
     for(auto [c, r] : maths::row_major_indexes(m)) {
         auto int_i = static_cast<int>(c);
 		auto int_j = static_cast<int>(r);
-        auto col = at(row(m, r), c);
+        auto col = at(at(m, r), c);
         im.setPixelColor(int_i, int_j, qRgba(f_to_i(at(col, 0)), f_to_i(at(col, 1)), f_to_i(at(col, 2)), 255));
     }
     return im;
@@ -151,10 +151,10 @@ void throwing_main() {
 
     {
         using color = decltype(maths_impl::vector<float, 3>());
-        auto m = maths_impl::matrix<color>(hf.heights.row_count(), hf.heights.col_count());
+        auto m = same_size_matrix<color>(hf.heights);
         for(auto r : maths::row_indexes(m)) {
-            auto sr = row(hf.heights, r);
-            auto dr = row(m, r);
+            auto sr = at(hf.heights, r);
+            auto dr = at(m, r);
             for(auto i : maths::indexes(sr)) {
                 auto h = at(sr, i);
                 at(dr, i) = h < 0.f ? color{0.f, 0.f, 1.f} : color{1.f, 0.f, 0.f};
@@ -167,7 +167,7 @@ void throwing_main() {
 
     {
         using color = decltype(maths_impl::vector<float, 3>());
-        auto gtex = same_size<color>(grads);
+        auto gtex = same_size_matrix<color>(grads);
         for(auto&& [d, s] : ranges::views::zip(row_major(gtex), row_major(grads))) {
             auto g = s;
             auto l = length(g);
