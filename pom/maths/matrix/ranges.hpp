@@ -21,14 +21,4 @@ auto row_indexes(const M& m) {
 	return ranges::views::iota(decltype(rc){0}, rc);
 }
 
-//
-
-template<matrix M> constexpr
-auto row_major_indexes(const M& m) {
-	auto cis = col_indexes(m);
-	return ranges::views::for_each(row_indexes(m), [cis](auto r) {
-		return ranges::views::transform(cis, [r](auto c) {
-			return std::make_tuple(c, r); }); });
-}
-
 }}
