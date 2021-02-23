@@ -12,13 +12,13 @@ namespace maths {
 template<typename M> constexpr
 auto col_indexes(const M& m) {
 	auto cc = col_count(m);
-	return ranges::views::ints(decltype(cc){0}, cc);
+	return ranges::views::iota(decltype(cc){0}, cc);
 }
 
 template<typename M> constexpr
 auto row_indexes(const M& m) {
 	auto rc = row_count(m);
-	return ranges::views::ints(decltype(rc){0}, rc);
+	return ranges::views::iota(decltype(rc){0}, rc);
 }
 
 //

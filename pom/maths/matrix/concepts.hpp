@@ -1,5 +1,7 @@
 #pragma once
 
+#include "col_row.hpp"
+
 #include "pom/maths/vector/concepts.hpp"
 
 #include <concepts>

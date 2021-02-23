@@ -1,5 +1,6 @@
 #pragma once
 
+#include "matrix_col_row.hpp"
 #include "vector_view.hpp"
 
 #include <range/v3/view/all.hpp>
@@ -19,23 +20,18 @@ class dynamic_matrix {
 public:
 	constexpr dynamic_matrix() noexcept = default;
 
-	explicit constexpr dynamic_matrix(std::size_t rows, std::size_t cols)
-		: col_count_{cols}
-		, row_count_{rows}
-		, elements(col_count() * row_count())
+	explicit constexpr dynamic_matrix(col_row cr)
+		: size_{cr.col, cr.row}
+		, elements(element_count(*this))
 	{}
 
-	// Dimensions.
+	explicit constexpr dynamic_matrix(row_col rc)
+		: dynamic_matrix({rc.col, rc.row})
+	{}
 
-	constexpr std::size_t col_count() const noexcept {
-		return col_count_;
-	}
-
-	constexpr std::size_t row_count() const noexcept {
-		return row_count_;
-	}
-
-	// Element access.
+	explicit constexpr dynamic_matrix(std::size_t square)
+		: dynamic_matrix({col{square}, row{square}})
+	{}
 
 	constexpr const Ty* data() const noexcept {
 		return elements.data();
@@ -45,14 +41,69 @@ public:
 		return elements.data();
 	}
 
+	constexpr col_row size() const noexcept {
+		return size_;
+	}
+
 private:
-	std::size_t col_count_ = 0;
-	std::size_t row_count_ = 0;
+	col_row size_ = {col{0}, row{0}};
 	std::vector<Ty> elements = {};
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// Ranges.
+// Ordering.
+
+template<typename Ty> constexpr
+bool is_col_major(const dynamic_matrix<Ty>& m) {
+	return false;
+}
+
+template<typename Ty> constexpr
+bool is_row_major(const dynamic_matrix<Ty>& m) {
+	return true;
+}
+
+// Size.
+
+template<typename Ty> constexpr
+col col_count(const dynamic_matrix<Ty>& m) {
+	return m.size().col;
+}
+
+template<typename Ty> constexpr
+row row_count(const dynamic_matrix<Ty>& m) {
+	return m.size().row;
+}
+
+template<typename Ty> constexpr
+std::size_t element_count(const dynamic_matrix<Ty>& m) {
+	auto cc = static_cast<std::size_t>(col_count(m));
+	auto rc = static_cast<std::size_t>(row_count(m));
+	return cc * rc;
+}
+
+// Element access.
+
+template<typename Ty> constexpr
+const Ty& at(const dynamic_matrix<Ty>& m, std::tuple<col, row> cr) {
+	auto i = get<row>(cr) * col_count(m) + get<col>(cr);
+	return *(m.data() + i);
+}
+
+template<typename Ty> constexpr
+Ty& at(dynamic_matrix<Ty>& m, std::tuple<col, row> cr) {
+	auto i = get<row>(cr) * get<col>(m.size()) + get<col>(cr);
+	return *(m.data() + i);
+}
+
+template<typename Ty> constexpr
+const Ty& at(const dynamic_matrix<Ty>& m, std::tuple<row, col> rc) {
+	return at(m, {get<col>(rc), get<row>(rc)});
+}
+
+template<typename Ty> constexpr
+Ty& at(dynamic_matrix<Ty>& m, std::tuple<row, col> rc) {
+	return at(m, {get<col>(rc), get<row>(rc)});
+}
 
 // Element ranges.
 
@@ -68,83 +119,83 @@ auto col_major(dynamic_matrix<Ty>& m) noexcept {
 
 template<typename Ty> constexpr
 auto row_major(const dynamic_matrix<Ty>& m) noexcept {
-	auto d = m.data();
-	return ranges::make_subrange(d, d + m.col_count() * m.row_count());
+	return ranges::make_subrange(m.data(), m.data() + element_count(m));
 }
 
 template<typename Ty> constexpr
 auto row_major(dynamic_matrix<Ty>& m) noexcept {
-	auto d = m.data();
-	return ranges::make_subrange(d, d + m.col_count() * m.row_count());
+	return ranges::make_subrange(m.data(), m.data() + element_count(m));
 }
 
-// Vector ranges.
+// Vector access (through 'vector_view's).
+
+template<typename Ty> constexpr
+auto at(const dynamic_matrix<Ty>& m, col c) {
+	auto cr = row_major(m)
+		| ranges::views::drop_exactly(c)
+		| ranges::views::stride(col_count(m))
+		| ranges::views::take_exactly(row_count(m));
+	return vector_view(std::move(cr), row_count(m));
+}
+
+template<typename Ty> constexpr
+auto at(dynamic_matrix<Ty>& m, col c) {
+	auto cr = row_major(m)
+		| ranges::views::drop_exactly(c)
+		| ranges::views::stride(col_count(m))
+		| ranges::views::take_exactly(row_count(m));
+	return vector_view(std::move(cr), row_count(m));
+}
+
+template<typename Ty> constexpr
+auto at(const dynamic_matrix<Ty>& m, row r) {
+	auto rv = row_major(m)
+		| ranges::views::drop_exactly(r * col_count(m))
+		| ranges::views::take_exactly(std::size_t{col_count(m)}); 
+	return vector_view(std::move(rv), col_count(m));
+}
+
+template<typename Ty> constexpr
+auto at(dynamic_matrix<Ty>& m, row r) {
+	auto rv = row_major(m)
+		| ranges::views::drop_exactly(r * col_count(m))
+		| ranges::views::take_exactly(static_cast<std::size_t>(col_count(m))); 
+	return vector_view(std::move(rv), col_count(m));
+}
+
+// Vector ranges (through 'vector_view's).
 // There might be more adequate combinations of adaptors.
 
 template<typename Ty> constexpr
-auto col(const dynamic_matrix<Ty>& m, std::size_t i) {
-	auto c = row_major(m)
-		| ranges::views::drop_exactly(i)
-		| ranges::views::stride(m.col_count())
-		| ranges::views::take_exactly(m.row_count());
-	return vector_view(std::move(c), m.row_count());
-}
-
-template<typename Ty> constexpr
-auto col(dynamic_matrix<Ty>& m, std::size_t i) {
-	auto c = row_major(m)
-		| ranges::views::drop_exactly(i)
-		| ranges::views::stride(m.col_count())
-		| ranges::views::take_exactly(m.row_count());
-	return vector_view(std::move(c), m.row_count());
-}
-
-template<typename Ty> constexpr
 auto cols(const dynamic_matrix<Ty>& m) {
+	auto cc = m.col_count();
 	return ranges::views::transform(
-		ranges::views::ints(std::size_t{0}, m.col_count()),
-		[&m](std::size_t c) { return col(m, c); }
-	);
+		ranges::views::ints(decltype(cc){0}, cc),
+		[&m](col c) { return at(m, c); });
 }
 
 template<typename Ty> constexpr
 auto cols(dynamic_matrix<Ty>& m) {
+	auto cc = m.col_count();
 	return ranges::views::transform(
-		ranges::views::ints(std::size_t{0}, m.col_count()),
-		[&m](std::size_t c) { return col(m, c); }
-	);
-}
-
-template<typename Ty>
-auto row(const dynamic_matrix<Ty>& m, std::size_t i) {
-	auto r = row_major(m)
-		| ranges::views::drop_exactly(i * m.col_count())
-		| ranges::views::take_exactly(m.col_count()); 
-	return vector_view(std::move(r), m.col_count());
-}
-
-template<typename Ty>
-auto row(dynamic_matrix<Ty>& m, std::size_t i) {
-	auto r = row_major(m)
-		| ranges::views::drop_exactly(i * m.col_count())
-		| ranges::views::take_exactly(m.col_count()); 
-	return vector_view(std::move(r), m.col_count());
+		ranges::views::ints(decltype(cc){0}, cc),
+		[&m](col c) { return at(m, c); });
 }
 
 template<typename Ty>
 auto rows(const dynamic_matrix<Ty>& m) {
+	auto rc = m.row_count();
 	return ranges::views::transform(
-		ranges::views::ints(std::size_t{0}, m.row_count()),
-		[&m](std::size_t r) { return row(m, r); }
-	);
+		ranges::views::ints(decltype(rc){0}, rc),
+		[&m](row r) { return at(m, r); });
 }
 
 template<typename Ty>
 auto rows(dynamic_matrix<Ty>& m) {
+	auto rc = m.row_count();
 	return ranges::views::transform(
-		ranges::views::ints(std::size_t{0}, m.row_count()),
-		[&m](std::size_t r) { return row(m, r); }
-	);
+		ranges::views::ints(decltype(rc){0}, rc),
+		[&m](row r) { return at(m, r); });
 }
 
 }}
