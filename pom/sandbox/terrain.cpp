@@ -1,4 +1,5 @@
 #include "pom/io_std/all.hpp"
+#include "pom/io_format/srtm/all.hpp"
 #include "pom/io_format/wavefront/all.hpp"
 #include "pom/maths/noise.hpp"
 #include "pom/maths/vector/all.hpp"
@@ -144,7 +145,7 @@ void throwing_main() {
 
     auto hf = heightfield{};
     hf.domain = {{maths_impl::interval{-16 / 9.f, 16 / 9.f}, maths_impl::interval{-1.f, 1.f}}};
-    hf.heights = tesselation(h, hf.domain, 200);
+    hf.heights = tesselation(h, hf.domain, 1000);
 
     auto f = io_std::open_file("mesh.obj", std::ios::out);
     io_format::wavefront::write(f, obj{hf});
@@ -165,7 +166,7 @@ void throwing_main() {
         to_image(m).save("texture.png");
     }
     
-    auto grads = gradients(h, hf.domain, 200);
+    auto grads = gradients(h, hf.domain, 1000);
 
     {
         using color = decltype(maths_impl::vector<float, 3>());

@@ -1,5 +1,20 @@
 ################################################################################
 
+add_executable(pom_sandbox_coloration)
+
+target_sources(pom_sandbox_coloration
+PRIVATE
+	${CMAKE_CURRENT_SOURCE_DIR}/coloration.cpp
+)
+
+target_link_libraries(pom_sandbox_coloration
+PRIVATE
+	pom_io_qt
+	pom_maths
+)
+
+################################################################################
+
 add_executable(pom_sandbox_maths)
 
 target_sources(pom_sandbox_maths
