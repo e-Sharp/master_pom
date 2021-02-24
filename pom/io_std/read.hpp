@@ -19,11 +19,16 @@ void throw_if_failed(const std::ios& s) {
 }
 
 template<typename Ty>
-Ty read(std::istream& is) {
+Ty get(std::istream& is) {
 	auto r = Ty{};
 	is.read(reinterpret_cast<char*>(&r), sizeof(Ty));
 	throw_if_failed(is);
 	return r;
+}
+
+template<typename Ty>
+Ty read(std::istream& is) {
+	return get<Ty>(is);
 }
 
 template<typename It>
