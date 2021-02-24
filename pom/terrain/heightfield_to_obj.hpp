@@ -3,8 +3,6 @@
 #include "heightfield.hpp"
 
 #include "pom/io_format/wavefront/all.hpp"
-#include "pom/maths/interval/all.hpp"
-#include "pom/maths/vector/all.hpp"
 #include "pom/maths_impl/all.hpp"
 
 #include <range/v3/all.hpp>
@@ -42,8 +40,6 @@ std::size_t vn(const obj_f&, std::size_t) {
     throw io::not_implemented{};
 }
 
-static_assert(io_format::wavefront::obj_f<obj_f>);
-
 // 'obj_v' concept.
 
 struct obj_v {
@@ -69,8 +65,6 @@ constexpr auto z(const obj_v& v) {
 float w(const obj_v&) {
     throw io::not_implemented{};
 }
-
-static_assert(io_format::wavefront::obj_v<obj_v>);
 
 // 'obj_vt' concept.
 
@@ -98,145 +92,62 @@ float w(const obj_vt&) {
     throw io::not_implemented{};
 }
 
-static_assert(io_format::wavefront::obj_vt<obj_vt>);
-
-// 'f_stream' requirement of 'obj'.
-
-struct f_stream_ {
-    using vector = maths_impl::static_vector<std::size_t, 2>;
-
-    obj_f get_a() {
-        get = &f_stream_::get_b;
-        auto a = r * col_count + c + 1;
-        auto b = r * col_count + c + 2;
-        auto c_ = (r + 1) * col_count + c + 1;
-        return {{a, b, c_}};
-    }
-
-    obj_f get_b() {
-        get = &f_stream_::get_a;
-        auto a = r * col_count + c + 2;
-        auto b = (r + 1) * col_count + c + 1;
-        auto c_ = (r + 1) * col_count + c + 2;
-
-        if(++c + 1 >= col_count) {
-            c = 0;
-            ++r;
-        }
-
-        return {{a, b, c_}};
-    }
-
-    std::size_t col_count = {};
-    std::size_t row_count = {};
-    
-    std::size_t c = 0;
-    std::size_t r = 0;
-    
-    decltype(&f_stream_::get_a) get = &f_stream_::get_a;
-};
-
-bool empty(const f_stream_& s) noexcept {
-    return s.r + 1 >= s.row_count;
-}
-
-obj_f get(f_stream_& s) {
-    return (s.*s.get)();
-}
-
-static_assert(io_format::wavefront::input_stream<f_stream_>);
-
-// 'v_stream' requirement of 'obj'.
-
-struct v_stream_ {
-    using matrix = maths_impl::dynamic_matrix<float>;
-    using index = maths_impl::static_vector<std::size_t, 2>;
-
-    const heightfield& hf;
-
-    std::size_t c = 0;
-    std::size_t r = 0;
-
-    decltype(maths::mapping(maths_impl::interval_0_n(hf.heights.col_count()), at(hf.domain, 0)))
-        c_to_x = maths::mapping(maths_impl::interval_0_n(hf.heights.col_count()), at(hf.domain, 0));
-
-    decltype(maths::mapping(maths_impl::interval_0_n(hf.heights.row_count()), at(hf.domain, 1)))
-        r_to_y = maths::mapping(maths_impl::interval_0_n(hf.heights.row_count()), at(hf.domain, 1));
-};
-
-bool empty(const v_stream_& s) {
-    return s.r == s.hf.heights.row_count();
-}
-
-obj_v get(v_stream_& s) {
-    auto x = s.c_to_x(s.c);
-    auto y = s.r_to_y(s.r);
-    auto z = at(row(s.hf.heights, s.r), s.c);
-
-    if(++s.c == col_count(s.hf.heights)) {
-        s.c = 0;
-        ++s.r;
-    }
-
-    return {{x, y, z}};
-}
-
-// 'vt_stream' requirement of 'obj'.
-
-auto vt_stream_mapping(std::size_t max) {
-    auto orig = maths_impl::interval{0.f, static_cast<float>(max) - 1.f};
-    auto dx = 1.f / (2.f * static_cast<float>(max));
-    auto dest = maths_impl::interval{dx, 1.f - dx};
-    return maths::mapping(orig, dest);
-}
-
-struct vt_stream_ {
-    std::size_t c_count;
-    std::size_t r_count;
-
-    std::size_t c = 0;
-    std::size_t r = 0;
-
-    decltype(vt_stream_mapping(c_count)) c_to_u =
-        vt_stream_mapping(c_count);
-    decltype(vt_stream_mapping(r_count)) r_to_v = 
-        vt_stream_mapping(r_count);
-};
-
-bool empty(const vt_stream_& s) {
-    return s.r == s.r_count;
-}
-
-obj_vt get(vt_stream_& s) {
-    auto u = s.c_to_u(static_cast<float>(s.c));
-    auto v = s.r_to_v(static_cast<float>(s.r));
-    
-    if(++s.c == s.c_count) {
-        s.c = 0;
-        ++s.r;
-    }
-
-    return {{u, v}};
-}
-
 // 'obj' concept.
 
 struct obj {
+    const heightfield* operator->() const noexcept {
+        return &impl;
+    }
+
     const heightfield& impl;
 };
 
-f_stream_ f_stream(const obj& o) {
-    return f_stream_{o.impl.heights.col_count(), o.impl.heights.row_count()};
+auto f_range(const obj& o) {
+    using namespace ranges;
+    auto cc = col_count(o->heights);
+    auto rs = ranges::views::ints(std::size_t{0}, row_count(o->heights) - 1);
+    auto cs = ranges::views::ints(std::size_t{1}, cc);
+    return views::for_each(rs, [=](auto r) {
+        auto r0 = r * cc;
+        auto r1 = (r + 1) * cc;
+        return views::for_each(cs, [r0, r1](auto c) {
+            auto v00 = r0 + c;
+            auto v01 = r1 + c;
+            auto v10 = r0 + c + 1;
+            auto v11 = r1 + c + 1;
+            return views::single(maths_impl::vector<2>({
+                obj_f({v00, v11, v01}), obj_f({v00, v10, v11})}))
+            | views::join;
+        });
+    });
 }
 
-v_stream_ v_stream(const obj& o) {
-    return v_stream_{o.impl};
+auto v_range(const obj& o) {
+    using namespace ranges;
+    auto c_to_x = maths::mapping(maths_impl::interval_0_n(col_count(o->heights)), at(o->domain, 0));
+    auto r_to_y = maths::mapping(maths_impl::interval_0_n(row_count(o->heights)), at(o->domain, 1));
+    return views::for_each(maths::row_indexes(o->heights), [=](auto ri) {
+        auto r = row(o->heights, ri);
+        auto y = r_to_y(ri);
+        return maths::col_indexes(o->heights) | views::transform([=](auto ci) {
+            auto x = c_to_x(ci);
+            auto z = at(r, ci);
+            return obj_v{{x, y, z}};
+        });
+    });
 }
 
-vt_stream_ vt_stream(const obj& o) {
-    return vt_stream_{o.impl.heights.col_count(), o.impl.heights.row_count()};
+auto vt_range(const obj& o) {
+    using namespace ranges;
+    auto c_to_u = maths::mapping(maths_impl::interval_0_n(col_count(o->heights) - 1), maths_impl::interval_0_1<float>());
+    auto r_to_v = maths::mapping(maths_impl::interval_0_n(row_count(o->heights) - 1), maths_impl::interval_0_1<float>());
+    return views::for_each(maths::row_indexes(o->heights), [=](auto ri) {
+        auto v = r_to_v(ri);
+        return maths::col_indexes(o->heights) | views::transform([=](auto ci) {
+            auto u = c_to_u(ci);
+            return obj_vt{{u, v}};
+        });
+    });
 }
-
-static_assert(io_format::wavefront::obj<obj>);
 
 }}

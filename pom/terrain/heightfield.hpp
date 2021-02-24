@@ -1,9 +1,8 @@
 #pragma once
 
+#include "pom/maths/interval/all.hpp"
 #include "pom/maths/matrix/all.hpp"
 #include "pom/maths_impl/all.hpp"
-
-#include <optional>
 
 namespace pom {
 namespace terrain {
@@ -17,5 +16,17 @@ struct heightfield {
 	vector<interval, 2> domain = {};
 	matrix heights = {};
 };
+
+constexpr auto col_to_x_mapping(const heightfield& hf) {
+	return maths::mapping(
+		maths_impl::interval_0_n(col_count(hf.heights) - 1),
+		at(hf.domain, 0));
+}
+
+constexpr auto row_to_y_mapping(const heightfield& hf) {
+	return maths::mapping(
+		maths_impl::interval_0_n(row_count(hf.heights) - 1),
+		at(hf.domain, 1));
+}
 
 }}
