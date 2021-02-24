@@ -1,6 +1,5 @@
 #pragma once
 
-#include "input_stream.hpp"
 #include "obj_f.hpp"
 #include "obj_v.hpp"
 #include "obj_vt.hpp"
@@ -19,9 +18,9 @@ namespace wavefront {
 
 template<typename Obj>
 concept obj = requires(const Obj o) {
-    { f_stream(o) } -> input_stream;
-    { v_stream(o) } -> input_stream;
-    { vt_stream(o) } -> input_stream;
+    { f_range(o) } -> std::ranges::range;
+    { v_range(o) } -> std::ranges::range;
+    { vt_range(o) } -> std::ranges::range;
 };
 
 }}}

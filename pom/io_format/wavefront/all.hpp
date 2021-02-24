@@ -15,8 +15,7 @@ namespace wavefront {
 
 template<typename Obj>
 void write_all_f(std::ostream& os, const Obj& o) {
-    for(auto&& fs = f_stream(o); !empty(fs);) {
-        auto&& f = get(fs);
+    for(auto&& f : f_range(o)) {
         os << "f";
         for(decltype(vertex_count(f)) i = 0; i < vertex_count(f); ++i) {
             os << " " << v(f, i);
@@ -28,16 +27,14 @@ void write_all_f(std::ostream& os, const Obj& o) {
 
 template<typename Obj>
 void write_all_v(std::ostream& os, const Obj& o) {
-    for(auto&& vs = v_stream(o); !empty(vs);) {
-        auto&& v = get(vs);
+    for(auto&& v : v_range(o)) {
         os << "v " << x(v) << " " << y(v) << " " << z(v) << "\n";
     }
 }
 
 template<typename Obj>
 void write_all_vt(std::ostream& os, const Obj& o) {
-    for(auto&& vts = vt_stream(o); !empty(vts);) {
-        auto vt = get(vts);
+    for(auto&& vt : vt_range(o)) {
         os << "vt " << u(vt);
         if(has_v(vt)) {
             os << " " << v(vt);
