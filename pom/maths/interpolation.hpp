@@ -6,7 +6,7 @@ namespace pom {
 
 template<typename Ty, typename I> constexpr
 auto lerp(const Ty& lhs, const Ty& rhs, const I& t) {
-    return lhs + t * (rhs - lhs);
+    return (1 - t) * lhs + t * rhs;
 }
 
 template<typename Ty> constexpr

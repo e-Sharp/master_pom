@@ -5,7 +5,7 @@
 namespace pom {
 namespace maths {
 
-template<std::integral Ty>
+template<typename Ty>
 struct col_i {
 	operator const Ty&() const noexcept {
 		return value;
@@ -18,7 +18,10 @@ struct col_i {
 	Ty value;
 };
 
-template<std::integral Ty>
+template<typename Ty>
+col_i(Ty) -> col_i<Ty>;
+
+template<typename Ty>
 struct row_i {
 	operator const Ty&() const noexcept {
 		return value;
@@ -30,9 +33,6 @@ struct row_i {
 
 	Ty value;
 };
-
-template<typename Ty>
-col_i(Ty) -> col_i<Ty>;
 
 template<typename Ty>
 row_i(Ty) -> row_i<Ty>;

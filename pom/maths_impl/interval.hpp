@@ -43,7 +43,12 @@ interval(Ty, Ty) -> interval<Ty>;
 
 // Factories.
 
-template<typename Ty>
+template<typename Ty> constexpr
+interval<Ty> interval_0_1() noexcept {
+	return interval(Ty{0}, Ty{1});
+}
+
+template<typename Ty> constexpr
 interval<Ty> interval_0_n(Ty n) {
 	return interval(Ty{0}, n);
 }
