@@ -42,14 +42,20 @@ auto ri_to_y_mapping(const wavefront<M>& w) {
 
 template<typename M> constexpr
 auto ci_to_u_mapping(const wavefront<M>& w) {
-    return maths::mapping(
-        maths_impl::interval_0_n(col_count(w.heights) - 1), w.u_domain);
+    // Inelegant. Find something proper.
+    auto m = maths::mapping(
+        maths_impl::interval_0_n(col_count(w.heights)), w.u_domain);
+    m.b += maths::length(w.u_domain) / (2.f * col_count(w.heights));
+    return m;
 }
 
 template<typename M> constexpr
 auto ri_to_v_mapping(const wavefront<M>& w) {
-    return maths::mapping(
-        maths_impl::interval_0_n(row_count(w.heights) - 1), w.v_domain);
+    // Inelegant. Find something proper.
+    auto m = maths::mapping(
+        maths_impl::interval_0_n(row_count(w.heights)), w.v_domain);
+    m.b += maths::length(w.v_domain) / (2.f * row_count(w.heights));
+    return m;
 }
 
 //
@@ -170,13 +176,13 @@ float w(const wavefront_vt&) {
 
 template<typename M> constexpr
 auto vt_range(const wavefront<M>& w) {
-    auto ci_to_x = ci_to_x_mapping(w);
-    auto ri_to_y = ri_to_y_mapping(w);
-    return ranges::views::for_each(maths::row_indexes(w.heights), [=](auto ri) {
-        auto v = ri_to_y(ri);
+    auto ci_to_u = ci_to_u_mapping(w);
+    auto ri_to_v = ri_to_v_mapping(w);
+    return ranges::views::for_each(maths::row_indexes(w.heights), [=, &w](auto ri) {
+        auto v = ri_to_v(ri);
         return maths::col_indexes(w.heights)
         | ranges::views::transform([=](auto ci) {
-            auto u = ci_to_x(ci);
+            auto u = ci_to_u(ci);
             return wavefront_vt({u, v});
         });
     });
