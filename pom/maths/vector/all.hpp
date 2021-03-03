@@ -1,7 +1,7 @@
 #pragma once
 
+#include "ranges.hpp"
 #include "map.hpp"
-
 #include "reduce.hpp"
 
 #include <cmath>
@@ -55,7 +55,6 @@ auto operator/(const V& v, const Ty& c) noexcept {
     return mapped(v, [&c](auto e) { return e / c; });
 }
 
-
 // Component / vector.
 
 template<typename Ty, vector V> constexpr
@@ -75,6 +74,18 @@ auto operator*(const Ty& c, const V& v) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vector arithmetic.
+
+template<vector LV, vector RV> constexpr
+auto cross(const LV& lv, const RV& rv) {
+    throw_if_different_size(lv, rv);
+    auto v = same_size(lv);
+    for(auto i : indexes(lv)) {
+        auto i1 = (i + 1) % size(v);
+        auto i2 = (i + 2) % size(v);
+        at(v, i) = at(lv, i1) * at(rv, i2) - at(lv, i2) * at(rv, i1);
+    }
+    return v;
+}
 
 template<vector LV, vector RV> constexpr
 auto dot(const LV& lv, const RV& rv) {

@@ -9,8 +9,8 @@ namespace maths {
 
 template<vector V> constexpr
 auto indexes(const V& v) {
-	auto z = decltype(size(v)){0};
-	return ranges::views::ints(z, size(v));
+	auto s = size(v);
+	return ranges::views::ints(decltype(s){0}, s);
 }
 
 }}
