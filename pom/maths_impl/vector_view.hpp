@@ -2,6 +2,9 @@
 
 #include <iterator>
 
+#include <range/v3/range/operations.hpp>
+#include <range/v3/view/drop_exactly.hpp>
+
 namespace pom {
 namespace maths_impl {
 
@@ -15,6 +18,12 @@ public:
 
 	constexpr std::size_t size() const noexcept {
 		return size_;
+	}
+
+	// Range.
+
+	Range range() const {
+		return range_;
 	}
 
 	// Iterators.
@@ -41,9 +50,8 @@ vector_view(R&&) -> vector_view<R>;
 
 template<typename R, typename Index> constexpr
 decltype(auto) at(const vector_view<R>& v, Index i) {
-	auto it = v.begin();
-	std::advance(it, i);
-	return *it;
+	auto r = v.range() | ranges::views::drop_exactly(i);
+	return *ranges::begin(r);
 }
 
 }}

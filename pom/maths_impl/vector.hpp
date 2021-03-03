@@ -24,4 +24,16 @@ auto vector(std::initializer_list<Ty> l) {
 	return static_vector<Ty, N>(l);
 }
 
+// Imitation factories.
+
+template<typename DTy, typename STy, std::size_t N> constexpr
+auto same_size(static_vector<STy, N>) {
+	return static_vector<DTy, N>();
+}
+
+template<typename Ty, std::size_t N> constexpr
+auto same_size(const static_vector<Ty, N>& v) {
+	return same_size<Ty, Ty>(v);
+}
+
 }}
