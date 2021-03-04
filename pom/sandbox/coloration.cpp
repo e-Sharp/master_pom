@@ -67,17 +67,23 @@ static_vector<float, 3> color(static_vector<float, 3> xyz) {
     // auto skin = maths_impl::vector<3>({.9F, .75F, .4F});
     // auto green = maths_impl::vector<3>({.153F, .86F, .0F});
     // auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
-    // auto blue = maths_impl::vector<3>({.0F, .0F, 1.0F});
+    auto blue = maths_impl::vector<3>({.0F, .0F, 1.0F});
 
-    auto darkblue = maths_impl::vector<3>({.0F, .0F, .65F});
-    auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
-    auto brown = maths_impl::vector<3>({.56F, .46F, .0F});
+    // auto darkblue = maths_impl::vector<3>({.0F, .0F, .65F});
+    // auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
+    // auto brown = maths_impl::vector<3>({.56F, .46F, .0F});
+    // auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
+    // auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
+
+    auto darkblue = maths_impl::vector<3>({.01F, .13F, .67F});
+    auto darkgreen = maths_impl::vector<3>({.15F, .48F, .0F});
+    auto brown = maths_impl::vector<3>({.38F, .24F, .01F});
     auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
-    auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
+    auto grey = maths_impl::vector<3>({.41F, .41F, .41F});
 
-    auto hmax = 8848;
-    auto snow = 1000;
-    auto rock = 100;
+    auto hmax = 50;
+    auto snow = 10;
+    auto rock = 5;
     auto water = 0;
 
 
@@ -91,7 +97,7 @@ static_vector<float, 3> color(static_vector<float, 3> xyz) {
     }
     else {//if(at(xyz, 2) >= -.75) {
         float t = (at(xyz, 2) - water) / (rock - water);
-        return lerp(darkblue, brown, t);
+        return lerp(blue, brown, t);
     }
 
     //return xyz / length(xyz);
@@ -117,36 +123,36 @@ void throwing_main() {
                 float(ri) / (row_count(hf.heights) - 1));
         }
     }
-    { // Outputing mesh.
-        auto chunk_side = std::size_t{256};
-        auto cmax = positive_ceiled_quotient(col_count(hf.heights), chunk_side);
-        auto rmax = positive_ceiled_quotient(row_count(hf.heights), chunk_side);
+    // { // Outputing mesh.
+    //     auto chunk_side = std::size_t{256};
+    //     auto cmax = positive_ceiled_quotient(col_count(hf.heights), chunk_side);
+    //     auto rmax = positive_ceiled_quotient(row_count(hf.heights), chunk_side);
         
-        auto w = wavefront(view_cr(hf.heights, {0, 0}, {1, 1}));
+    //     auto w = wavefront(view_cr(hf.heights, {0, 0}, {1, 1}));
 
-        auto ci_to_x = ci_to_x_mapping(hf);
-        auto ri_to_y = ri_to_y_mapping(hf);
-        auto ci_to_u = ci_to_u_mapping(hf);
-        auto ri_to_v = ri_to_v_mapping(hf);
+    //     auto ci_to_x = ci_to_x_mapping(hf);
+    //     auto ri_to_y = ri_to_y_mapping(hf);
+    //     auto ci_to_u = ci_to_u_mapping(hf);
+    //     auto ri_to_v = ri_to_v_mapping(hf);
 
-        for(std::size_t ri = 0; ri < rmax; ++ri) {
-            auto r1 = ri * chunk_side;
-            auto r2 = std::min(r1 + chunk_side, row_count(hf.heights) - 1);
-            for(std::size_t ci = 0; ci < cmax; ++ci) {
-                auto c1 = ci * chunk_side;
-                auto c2 = std::min(c1 + chunk_side, col_count(hf.heights) - 1);
-                if(c1 != c2 && r1 != r2){
-                    auto f = io_std::open_file(std::string(output_folder) + "/mesh_" + std::to_string(ci) + "_" + std::to_string(ri) + ".obj", std::ios::out);
-                    w.heights = view_cr(hf.heights, {c1, r1}, {c2 - c1, r2 - r1});
-                    w.x_domain = {ci_to_x(c1), ci_to_x(c2)};
-                    w.y_domain = {ri_to_y(r1), ri_to_y(r2)};
-                    w.u_domain = {ci_to_u(c1), ci_to_u(c2)};
-                    w.v_domain = {ri_to_v(r1), ri_to_v(r2)};
-                    io_format::wavefront::write(f, w);
-                }
-            }
-        }
-    }
+    //     for(std::size_t ri = 0; ri < rmax; ++ri) {
+    //         auto r1 = ri * chunk_side;
+    //         auto r2 = std::min(r1 + chunk_side, row_count(hf.heights) - 1);
+    //         for(std::size_t ci = 0; ci < cmax; ++ci) {
+    //             auto c1 = ci * chunk_side;
+    //             auto c2 = std::min(c1 + chunk_side, col_count(hf.heights) - 1);
+    //             if(c1 != c2 && r1 != r2){
+    //                 auto f = io_std::open_file(std::string(output_folder) + "/mesh_" + std::to_string(ci) + "_" + std::to_string(ri) + ".obj", std::ios::out);
+    //                 w.heights = view_cr(hf.heights, {c1, r1}, {c2 - c1, r2 - r1});
+    //                 w.x_domain = {ci_to_x(c1), ci_to_x(c2)};
+    //                 w.y_domain = {ri_to_y(r1), ri_to_y(r2)};
+    //                 w.u_domain = {ci_to_u(c1), ci_to_u(c2)};
+    //                 w.v_domain = {ri_to_v(r1), ri_to_v(r2)};
+    //                 io_format::wavefront::write(f, w);
+    //             }
+    //         }
+    //     }
+    // }
     { // Outputing normals.
         using normal = maths_impl::static_vector<float, 3>;
         auto ns = maths_impl::same_size_matrix<normal>(hf.heights);
