@@ -36,4 +36,10 @@ auto same_size(const static_vector<Ty, N>& v) {
 	return same_size<Ty, Ty>(v);
 }
 
+// Doesn't make a copy. Should reflect that somehow. meta::defaulted tag ?
+template<std::size_t DN, typename Ty, std::size_t SN> constexpr
+auto similar(const static_vector<Ty, SN>&) {
+	return static_vector<Ty, DN>();
+}
+
 }}

@@ -4,7 +4,13 @@
 #include "map.hpp"
 #include "reduce.hpp"
 
+#include "pom/maths/exceptions.hpp"
+
+#include "pom/meta/tag/checked.hpp"
+#include "pom/meta/tag/unchecked.hpp"
+
 #include <cmath>
+#include <range/v3/view/zip.hpp>
 #include <type_traits>
 
 namespace pom {
@@ -88,12 +94,18 @@ auto cross(const LV& lv, const RV& rv) {
 }
 
 template<vector LV, vector RV> constexpr
-auto dot(const LV& lv, const RV& rv) {
+auto dot(const LV& lv, const RV& rv, meta::unchecked) {
+    auto s = decltype(at(lv, 0))(0);
+    for(auto&& [l, v] : ranges::views::zip(lv, rv)) {
+        s += l * v;
+    }
+    return s;
+}
+
+template<vector LV, vector RV> constexpr
+auto dot(const LV& lv, const RV& rv, meta::checked = {}) {
     throw_if_different_size(lv, rv);
-    return reduced(
-        lv, rv,
-        [](auto& acc, auto l, auto r) { acc += l * r; },
-        std::remove_cvref_t<decltype(at(lv, 0))>{});
+    return dot(lv, rv, meta::unchecked());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +114,18 @@ auto dot(const LV& lv, const RV& rv) {
 template<vector V>
 auto length(const V& v) {
     return std::sqrt(dot(v, v));
+}
+
+template<vector V>
+auto normalized(const V& v, meta::unchecked) {
+    return v / length(v);
+}
+
+template<vector V>
+auto normalized(const V& v, meta::checked = {}) {
+    auto l = length(v);
+    if(l == 0) throw precondition_violation(""); // Use an epsilon ?
+    return v / l;
 }
 
 }}
