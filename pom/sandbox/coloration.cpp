@@ -51,9 +51,9 @@ auto gradient(F2 f, V pos, float e) {
 
 //lerp
 static_vector<float, 3> lerp(static_vector<float, 3> l, static_vector<float, 3> r, float t) {
-    auto x = at(l, 0) + t * at(r, 0) / at(l, 0);
-    auto y = at(l, 1) + t * at(r, 1) / at(l, 1);
-    auto z = at(l, 2) + t * at(r, 2) / at(l, 2);
+    auto x = at(l, 0) * (1 - t) + at(r, 0) * t;
+    auto y = at(l, 1) * (1 - t) + at(r, 1) * t;
+    auto z = at(l, 2) * (1 - t) + at(r, 2) * t;
     auto vec = maths_impl::vector<3>({x, y, z});
     return vec;
 }
@@ -81,23 +81,26 @@ static_vector<float, 3> color(static_vector<float, 3> xyz) {
     auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
     auto grey = maths_impl::vector<3>({.41F, .41F, .41F});
 
-    auto hmax = 50;
-    auto snow = 10;
-    auto rock = 5;
+    auto hmax = 100;
+    auto snow = 70;
+    auto rock = 20;
     auto water = 0;
 
 
     if(at(xyz, 2) >= snow) {
         float t = (at(xyz, 2) - snow) / (hmax - snow);
         return lerp(grey, white, t);
+        //return white;
     }
     else if(at(xyz, 2) >= rock) {
         float t = (at(xyz, 2) + rock) / (snow - rock);
         return lerp(brown, grey, t);
+        //return grey;
     }
     else {//if(at(xyz, 2) >= -.75) {
         float t = (at(xyz, 2) - water) / (rock - water);
         return lerp(blue, brown, t);
+        //return blue;
     }
 
     //return xyz / length(xyz);
