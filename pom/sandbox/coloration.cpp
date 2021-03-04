@@ -47,9 +47,52 @@ auto gradient(F2 f, V pos, float e) {
     return maths_impl::vector<2>({dx, dy});
 }
 
+//lerp
+static_vector<float, 3> lerp(static_vector<float, 3> l, static_vector<float, 3> r, float t) {
+    auto x = at(l, 0) + t * at(r, 0) / at(l, 0);
+    auto y = at(l, 1) + t * at(r, 1) / at(l, 1);
+    auto z = at(l, 2) + t * at(r, 2) / at(l, 2);
+    auto vec = maths_impl::vector<3>({x, y, z});
+    return vec;
+}
+
 static_vector<float, 3> color(static_vector<float, 3> xyz) {
     //////////////////////////////////////////////////////////////////////////////////////////////// PAR ICI
-    return xyz / length(xyz);
+    // auto black = maths_impl::vector<3>({.0F, .0F, .0F});
+    // auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
+    // auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
+    // auto yellow = maths_impl::vector<3>({.89F, .98F, .5F});
+    // auto skin = maths_impl::vector<3>({.9F, .75F, .4F});
+    // auto green = maths_impl::vector<3>({.153F, .86F, .0F});
+    // auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
+    // auto blue = maths_impl::vector<3>({.0F, .0F, 1.0F});
+
+    auto darkblue = maths_impl::vector<3>({.0F, .0F, .65F});
+    auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
+    auto brown = maths_impl::vector<3>({.56F, .46F, .0F});
+    auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
+    auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
+
+    auto hmax = 8848;
+    auto snow = 1000;
+    auto rock = 100;
+    auto water = 0;
+
+
+    if(at(xyz, 2) >= snow) {
+        float t = (at(xyz, 2) - snow) / (hmax - snow);
+        return lerp(grey, white, t);
+    }
+    else if(at(xyz, 2) >= rock) {
+        float t = (at(xyz, 2) + rock) / (snow - rock);
+        return lerp(brown, grey, t);
+    }
+    else {//if(at(xyz, 2) >= -.75) {
+        float t = (at(xyz, 2) - water) / (rock - water);
+        return lerp(darkblue, brown, t);
+    }
+
+    //return xyz / length(xyz);
 }
 
 void throwing_main() {
@@ -58,7 +101,7 @@ void throwing_main() {
         auto srtm = maths_impl::matrix<float>();
         { // Reading SRTM.
             auto srtm_file = io_std::open_file(
-                "d:/project/master_pom/data/srtmgl3_v003_hgt/n28e083.hgt",
+                "C:/Users/yoanp/Documents/GitHub/master_pom/data/srtmgl3_v003_hgt/n28e083.hgt",
                 std::ios::binary | std::ios::in);
             srtm = io_format::srtm::read_srtm3(srtm_file);
             for(auto&& e : row_major(srtm)) e /= 90.f;
@@ -135,17 +178,17 @@ void throwing_main() {
     //    }
     //    to_image(gtex).save("gradients.png");
     //}
-    //{ // Outputing texture.
-    //    auto tex = maths_impl::same_size_matrix<static_vector<float, 3>>(hf.heights);
-    //    for(auto ri : maths::row_indexes(hf.heights))
-    //    for(auto ci : maths::col_indexes(hf.heights)) {
-    //        auto x = hf.c_to_x(ci);
-    //        auto y = hf.r_to_y(ri);
-    //        auto z = at_cr(hf.heights, ci, ri);
-    //        at_cr(tex, ci, ri) = color({x, y, z});
-    //    }
-    //    to_image(tex).save("texture.png");
-    //}
+    { // Outputing texture.
+       auto tex = maths_impl::same_size_matrix<static_vector<float, 3>>(hf.heights);
+       for(auto ri : maths::row_indexes(hf.heights))
+       for(auto ci : maths::col_indexes(hf.heights)) {
+           auto x = hf.c_to_x(ci);
+           auto y = hf.r_to_y(ri);
+           auto z = at_cr(hf.heights, ci, ri);
+           at_cr(tex, ci, ri) = color({x, y, z});
+       }
+       to_image(tex).save("texture.png");
+    }
 }
 
 int main() {
