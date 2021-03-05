@@ -54,26 +54,27 @@ static_vector<float, 3> lerp(static_vector<float, 3> l, static_vector<float, 3> 
     auto x = at(l, 0) * (1 - t) + at(r, 0) * t;
     auto y = at(l, 1) * (1 - t) + at(r, 1) * t;
     auto z = at(l, 2) * (1 - t) + at(r, 2) * t;
+
     auto vec = maths_impl::vector<3>({x, y, z});
     return vec;
 }
 
 static_vector<float, 3> color(static_vector<float, 3> xyz) {
     //////////////////////////////////////////////////////////////////////////////////////////////// PAR ICI
-    // auto black = maths_impl::vector<3>({.0F, .0F, .0F});
+     auto black = maths_impl::vector<3>({.0F, .0F, .0F});
     // auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
     // auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
-    // auto yellow = maths_impl::vector<3>({.89F, .98F, .5F});
-    // auto skin = maths_impl::vector<3>({.9F, .75F, .4F});
-    // auto green = maths_impl::vector<3>({.153F, .86F, .0F});
-    // auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
+    auto yellow = maths_impl::vector<3>({.89F, .98F, .5F});
+    auto skin = maths_impl::vector<3>({.9F, .75F, .4F});
+    auto green = maths_impl::vector<3>({.153F, .86F, .0F});
+    //auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
     auto blue = maths_impl::vector<3>({.0F, .0F, 1.0F});
 
-    // auto darkblue = maths_impl::vector<3>({.0F, .0F, .65F});
-    // auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
-    // auto brown = maths_impl::vector<3>({.56F, .46F, .0F});
-    // auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
-    // auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
+    //auto darkblue = maths_impl::vector<3>({.0F, .0F, .65F});
+    //auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
+    //auto brown = maths_impl::vector<3>({.56F, .46F, .0F});
+    //auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
+    //auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
 
     auto darkblue = maths_impl::vector<3>({.01F, .13F, .67F});
     auto darkgreen = maths_impl::vector<3>({.15F, .48F, .0F});
@@ -82,24 +83,38 @@ static_vector<float, 3> color(static_vector<float, 3> xyz) {
     auto grey = maths_impl::vector<3>({.41F, .41F, .41F});
 
     auto hmax = 100;
-    auto snow = 70;
-    auto rock = 20;
+    auto snow = 30;
+    auto rock = 15;
+    auto grass = 10;
+    auto beach = 5;
     auto water = 0;
 
+    auto elevation = at(xyz, 2);
 
-    if(at(xyz, 2) >= snow) {
-        float t = (at(xyz, 2) - snow) / (hmax - snow);
+
+    if(elevation >= snow) {
+        float t = (elevation - snow) / (hmax - snow);
         return lerp(grey, white, t);
         //return white;
     }
-    else if(at(xyz, 2) >= rock) {
-        float t = (at(xyz, 2) + rock) / (snow - rock);
-        return lerp(brown, grey, t);
+    else if(elevation >= rock) {
+        float t = (elevation - rock) / (snow - rock);
+        return lerp(green, grey, t);
         //return grey;
     }
-    else {//if(at(xyz, 2) >= -.75) {
-        float t = (at(xyz, 2) - water) / (rock - water);
-        return lerp(blue, brown, t);
+    else if(elevation >= grass) {
+        float t = (elevation - grass) / (rock - grass);
+        return lerp(yellow, green, t);
+        //return grey;
+    }
+    else if(elevation >= beach) {
+        float t = (elevation - beach) / (grass - beach);
+        return lerp(blue, yellow, t);
+        //return grey;
+    }
+    else {//if(elevation) >= -.75) {
+        float t = (elevation - water) / (beach - water);
+        return lerp(darkblue, blue, t);
         //return blue;
     }
 
