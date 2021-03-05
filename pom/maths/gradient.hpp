@@ -17,7 +17,7 @@ template<typename V> constexpr
 auto normal_from_gradient(const V& g) {
 	auto&& [dx, dy] = g.elements;
 	auto _1 = decltype(dx)(1);
-	// Cross product of (1, 0, dx) and (0, 1, dy).
+	// Normalized cross product of (1, 0, dx) and (0, 1, dy).
 	return normalized(decltype(similar<3>(g))({-dx, -dy, _1}), meta::unchecked());
 }
 
