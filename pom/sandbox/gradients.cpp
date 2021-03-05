@@ -71,35 +71,6 @@ void throwing_main() {
             }
         }
     }
-    //{ // Erosion brush.
-    //    auto erosion = [](vec3f normal) {
-    //        auto xy = vec2f({at(normal, 0), at(normal, 1)});
-    //        auto l = length(xy);
-    //        auto n = 0.f;
-    //        if(l != 0) {
-    //            n = fbm([](vec2f xy) { return perlin(xy); }, 4, (l + 10.f) / l * xy);
-    //        }
-    //        auto g = lerp(0.f, n, smoothstep_1_((l - 0.3f) / (1.f - .3f)));
-    //        g = g /2.f + 0.5f;
-    //        return vec3f({g, g, g});
-    //    };
-
-    //    auto m = maths_impl::matrix_cr<vec3f>(1000, 1000);
-
-    //    auto x_domain = maths_impl::interval<float>(-1.f, 1.f);
-    //    auto ci_to_x = maths::mapping(maths_impl::interval_0_n(col_count(m)), x_domain);
-    //    auto y_domain = maths_impl::interval<float>(-1.f, 1.f);
-    //    auto ri_to_y = maths::mapping(maths_impl::interval_0_n(row_count(m)), y_domain);
-
-    //    for(auto ri : row_indexes(m)) {
-    //        auto y = ri_to_y(ri);
-    //        for(auto ci : col_indexes(m)) {
-    //            auto x = ci_to_x(ci);
-    //            at_cr(m, ci, ri) = erosion(vec3f({x, y, 0.f}));
-    //        }
-    //    }
-    //    io_qt::to_image(m).save((std::string(output_folder) + "/erosion.png").c_str());
-    //}
     { // Outputing mesh.
         auto chunk_side = std::size_t{512};
         auto cmax = 2; //positive_ceiled_quotient(col_count(hf.heights), chunk_side);
@@ -130,7 +101,7 @@ void throwing_main() {
             }
         }
     }
-    if(false) { // Outputing normals.
+    { // Outputing normals.
         auto ns = maths_impl::same_size_matrix<vec3f>(hf.heights);
 
         auto ci_to_x = maths::mapping(maths_impl::interval_0_n(col_count(ns) - 1), h.x_domain);
@@ -143,7 +114,7 @@ void throwing_main() {
         }
         io_qt::to_image(ns).save((std::string(output_folder) + "/normals.png").c_str());
     }
-    if(false) { // Outputing texture.
+    { // Outputing texture.
         auto tx = maths_impl::same_size_matrix<static_vector<float, 3>>(hf.heights);
         auto ci_to_x = ci_to_x_mapping(hf);
         auto ri_to_y = ri_to_y_mapping(hf);
@@ -151,8 +122,7 @@ void throwing_main() {
         for(auto ci : maths::col_indexes(hf.heights)) {
             auto x = ci_to_x(ci);
             auto y = ri_to_y(ri);
-            auto z = at_cr(hf.heights, ci, ri);
-            at_cr(tx, ci, ri) = color({x, y, z});
+            at_cr(tx, ci, ri) = color(h, {x, y});
         }
         io_qt::to_image(tx).save((std::string(output_folder) + "/texture.png").c_str());
     }
