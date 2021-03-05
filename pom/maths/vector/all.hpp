@@ -19,7 +19,7 @@ namespace maths {
 ////////////////////////////////////////////////////////////////////////////////
 // Arithmetic operators.
 
-// Vector / vector.
+// Vector, vector.
 
 template<vector LV, vector RV> constexpr
 auto operator+(const LV& lv, const RV& rv) {
@@ -39,7 +39,7 @@ auto operator*(const LV& lv, const RV& rv) {
     return mapped(lv, rv, [](auto l, auto r) { return l * r; });
 }
 
-// Vector / component.
+// Vector, component.
 
 template<vector V, typename Ty> constexpr
 auto operator+(const V& v, const Ty& c) noexcept {
@@ -61,7 +61,7 @@ auto operator/(const V& v, const Ty& c) noexcept {
     return mapped(v, [&c](auto e) { return e / c; });
 }
 
-// Component / vector.
+// Component, vector.
 
 template<typename Ty, vector V> constexpr
 auto operator+(const Ty& c, const V& v) noexcept {
