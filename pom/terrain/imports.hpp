@@ -16,4 +16,9 @@ using vec2 = decltype(maths_impl::vector<Ty, 2>());
 
 using vec2f = vec2<float>;
 
+template<typename Ty>
+using vec3 = decltype(maths_impl::vector<Ty, 3>());
+
+using vec3f = vec3<float>;
+
 }}
