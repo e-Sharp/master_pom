@@ -32,7 +32,7 @@ static_vector<float, 3> lerp(static_vector<float, 3> l, static_vector<float, 3> 
     return vec;
 }
 
-static_vector<float, 3> color(static_vector<float, 3> xyz) {
+static_vector<float, 3> color(static_vector<float, 3> xyz, float slope) {
     //////////////////////////////////////////////////////////////////////////////////////////////// PAR ICI
      auto black = maths_impl::vector<3>({.0F, .0F, .0F});
     // auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
@@ -64,32 +64,52 @@ static_vector<float, 3> color(static_vector<float, 3> xyz) {
 
     auto elevation = at(xyz, 2);
 
-
-    if(elevation >= snow) {
+    if(elevation >= -500) {
         float t = (elevation - snow) / (hmax - snow);
-        return lerp(grey, white, t);
-        //return white;
+        if(slope < 0.1) {
+            return white;
+        }
+        else if(0.1 < slope < 0.7) {
+            return lerp(grey, white, t);
+        }
+        else {
+            return lerp(black, grey, t);
+        }
     }
-    else if(elevation >= rock) {
-        float t = (elevation - rock) / (snow - rock);
-        return lerp(green, grey, t);
-        //return grey;
-    }
-    else if(elevation >= grass) {
-        float t = (elevation - grass) / (rock - grass);
-        return lerp(yellow, green, t);
-        //return grey;
-    }
-    else if(elevation >= beach) {
-        float t = (elevation - beach) / (grass - beach);
-        return lerp(blue, yellow, t);
-        //return grey;
-    }
-    else {//if(elevation) >= -.75) {
-        float t = (elevation - water) / (beach - water);
-        return lerp(darkblue, blue, t);
-        //return blue;
-    }
+
+
+    // if(elevation >= snow) {
+    //     float t = (elevation - snow) / (hmax - snow);
+    //     if(slope < .2) {
+    //         return white;
+    //     }
+    //     else if(.5 < slope < .7) {
+    //         return lerp(grey, white, t);
+    //     }
+    //     else
+    //         return lerp(black, grey, t);
+    //     //return white;
+    // }
+    // else if(elevation >= rock) {
+    //     float t = (elevation - rock) / (snow - rock);
+    //     return lerp(green, grey, t);
+    //     //return grey;
+    // }
+    // else if(elevation >= grass) {
+    //     float t = (elevation - grass) / (rock - grass);
+    //     return lerp(yellow, green, t);
+    //     //return grey;
+    // }
+    // else if(elevation >= beach) {
+    //     float t = (elevation - beach) / (grass - beach);
+    //     return lerp(blue, yellow, t);
+    //     //return grey;
+    // }
+    // else {//if(elevation) >= -.75) {
+    //     float t = (elevation - water) / (beach - water);
+    //     return lerp(darkblue, blue, t);
+    //     //return blue;
+    // }
 
     //return xyz / length(xyz);
 }
@@ -98,7 +118,8 @@ vec3f color(const himalayas& hs, vec2f xy) {
     auto h = height(hs, xy);
     auto g = gradient(hs, xy);
     auto n = normal(hs, xy);
-    return color({at(xy, 0), at(xy, 1), h});
+    float slope = 1 - at(n, 2);
+    return color({at(xy, 0), at(xy, 1), h}, slope);
 }
 
 void throwing_main() {
@@ -172,7 +193,8 @@ void throwing_main() {
             auto x = ci_to_x(ci);
             auto y = ri_to_y(ri);
             auto z = at_cr(hf.heights, ci, ri);
-            at_cr(tx, ci, ri) = color({x, y, z});
+            at_cr(tx, ci, ri) = color(h, {x, y});
+            //at_cr(tx, ci, ri) = color({x, y, z});
         }
         io_qt::to_image(tx).save((std::string(output_folder) + "/texture.png").c_str());
     }
