@@ -1,5 +1,9 @@
 # Shadertoy
 
+## Noise
+
+- [Worley noise](https://www.shadertoy.com/view/wtVBWc)
+
 ## Warping
 
 - [Magnifying warping](https://www.shadertoy.com/view/3tdBz7)
