@@ -1,6 +1,8 @@
 #pragma once
 
+#include "pom/io/exception/all.hpp"
 #include "pom/maths/interval/all.hpp"
+#include "pom/maths/matrix/all.hpp"
 #include "pom/maths_impl/all.hpp"
 
 #include <range/v3/view/enumerate.hpp>
