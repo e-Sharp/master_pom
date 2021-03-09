@@ -2,7 +2,8 @@
 
 ## Noise
 
-- [Worley noise](https://www.shadertoy.com/view/wtVBWc)
+- [Worley noise 2D (+ gradients ?)](https://www.shadertoy.com/view/wtVBWc)
+- [Worley noise 3D (+ gradients ?)](https://www.shadertoy.com/view/wlyBDd)
 
 ## Warping
 
