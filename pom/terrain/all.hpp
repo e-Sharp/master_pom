@@ -1,5 +1,7 @@
 #pragma once
 
+#include "primitive/all.hpp"
+#include "paths.hpp"
 #include "wavefront.hpp"
 
 #include "pom/maths_impl/all.hpp"
