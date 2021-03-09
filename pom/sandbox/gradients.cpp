@@ -1,31 +1,54 @@
+#include "pom/io_format/wavefront/all.hpp"
 #include "pom/io_qt/all.hpp"
 #include "pom/io_std/all.hpp"
-#include "pom/io_format/srtm/all.hpp"
-#include "pom/io_format/wavefront/all.hpp"
-#include "pom/maths/matrix/interpolation.hpp"
-#include "pom/maths/vector/all.hpp"
-#include "pom/maths/gradient.hpp"
-#include "pom/maths/noise.hpp"
-#include "pom/maths/numeric.hpp"
+#include "pom/maths/interval/all.hpp"
+#include "pom/maths_impl/all.hpp"
 #include "pom/terrain/all.hpp"
-#include "pom/terrain/examples.hpp"
-#include "pom/terrain/imports.hpp"
-#include "pom/terrain/paths.hpp"
+
+#include <pom/maths_impl/noise/perlin.hpp>
 
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <vector>
-#include <fstream>
 
 using namespace pom;
-using namespace pom::maths;
-using namespace pom::maths_impl;
-using namespace pom::terrain;
-
-
 
 void throwing_main() {
-    
+    auto xd = maths_impl::interval<float>(-1.1f, 1.1f);
+    auto yd = maths_impl::interval<float>(-1.1f, 1.1f);
+
+    if(false) {
+        auto m = maths_impl::matrix_cr<float>(500, 500);
+        auto ci_to_x = maths::mapping(maths_impl::interval_0_n(col_count(m)), xd);
+        auto ri_to_y = maths::mapping(maths_impl::interval_0_n(row_count(m)), yd);
+        for(auto&& [ci, ri] : maths::row_major_indexes_cr(m)) {
+            auto x = ci_to_x(ci);
+            auto y = ri_to_y(ri);
+            at_cr(m, ci, ri) = height(terrain::sphere(), {x, y});
+        }
+        auto f = io_std::open_file(
+            std::string(terrain::output_folder) + "/mesh.obj",
+            std::ios::binary | std::ios::out);
+        auto w = terrain::wavefront(maths_impl::view(m));
+        w.x_domain = xd;
+        w.y_domain = yd;
+        io_format::wavefront::write(f, w);
+    }
+
+    {
+        using namespace maths;
+        auto m = maths_impl::matrix_cr<terrain::vec3f>(500, 500);
+        auto ci_to_x = maths::mapping(maths_impl::interval_0_n(col_count(m)), xd);
+        auto ri_to_y = maths::mapping(maths_impl::interval_0_n(row_count(m)), yd);
+        for(auto&& [ci, ri] : maths::row_major_indexes_cr(m)) {
+            auto x = ci_to_x(ci);
+            auto y = ri_to_y(ri);
+            auto h = maths_impl::easy_perlin2(8. * maths_impl::vector<2>({x, y})) / 2.f + 0.5f;
+            at_cr(m, ci, ri) = terrain::vec3f({h, h, h});
+        }
+        io_qt::to_image(m).save(QString(terrain::output_folder) + "/normals.png");;
+    }
 }
 
 int main() {
