@@ -34,84 +34,129 @@ static_vector<float, 3> lerp(static_vector<float, 3> l, static_vector<float, 3> 
 
 static_vector<float, 3> color(static_vector<float, 3> xyz, float slope) {
     //////////////////////////////////////////////////////////////////////////////////////////////// PAR ICI
-     auto black = maths_impl::vector<3>({.0F, .0F, .0F});
-    // auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
-    // auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
+    auto black = maths_impl::vector<3>({.0F, .0F, .0F});
     auto yellow = maths_impl::vector<3>({.89F, .98F, .5F});
     auto skin = maths_impl::vector<3>({.9F, .75F, .4F});
     auto green = maths_impl::vector<3>({.153F, .86F, .0F});
-    //auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
     auto blue = maths_impl::vector<3>({.0F, .0F, 1.0F});
-
-    //auto darkblue = maths_impl::vector<3>({.0F, .0F, .65F});
-    //auto darkgreen = maths_impl::vector<3>({.15F, .45F, .0F});
-    //auto brown = maths_impl::vector<3>({.56F, .46F, .0F});
-    //auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
-    //auto grey = maths_impl::vector<3>({.59F, .59F, .59F});
-
     auto darkblue = maths_impl::vector<3>({.01F, .13F, .67F});
     auto darkgreen = maths_impl::vector<3>({.15F, .48F, .0F});
     auto brown = maths_impl::vector<3>({.38F, .24F, .01F});
+    auto darkbrown = maths_impl::vector<3>({.313F, .03F, .07F});
     auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
     auto grey = maths_impl::vector<3>({.41F, .41F, .41F});
+    auto br = maths_impl::vector<3>({.4F, .13F, .05F});
+    auto orange = maths_impl::vector<3>({.98F, .71F, .25F});
+    auto aqua = maths_impl::vector<3>({.015F, .54F, .58F});
 
     auto hmax = 10000;
-    auto snow = 3000;
-    auto rock = 1500;
+    auto hmin = 0;
+    auto snow = 6500;
+    auto rock = 3500;
     auto grass = 1000;
     auto beach = 500;
     auto water = 0;
 
     auto elevation = at(xyz, 2);
 
-    if(elevation >= -500) {
-        float t = (elevation - snow) / (hmax - snow);
-        if(slope < 0.1) {
-            return white;
-        }
-        else if(0.1 < slope < 0.7) {
-            return lerp(grey, white, t);
-        }
-        else {
-            return lerp(black, grey, t);
-        }
-    }
-
-
+    // Snow
     // if(elevation >= snow) {
     //     float t = (elevation - snow) / (hmax - snow);
-    //     if(slope < .2) {
-    //         return white;
-    //     }
-    //     else if(.5 < slope < .7) {
-    //         return lerp(grey, white, t);
-    //     }
-    //     else
-    //         return lerp(black, grey, t);
-    //     //return white;
+    //     return white;
     // }
     // else if(elevation >= rock) {
     //     float t = (elevation - rock) / (snow - rock);
-    //     return lerp(green, grey, t);
-    //     //return grey;
+    //     if(slope < 0.1) {
+    //         return white;
+    //     }
+    //     else if(0.1 < slope < 0.7) {
+    //         return lerp(grey, white, t);
+    //     }
+    //     else {
+    //         return lerp(black, grey, t);
+    //     }
     // }
-    // else if(elevation >= grass) {
-    //     float t = (elevation - grass) / (rock - grass);
-    //     return lerp(yellow, green, t);
-    //     //return grey;
-    // }
-    // else if(elevation >= beach) {
-    //     float t = (elevation - beach) / (grass - beach);
-    //     return lerp(blue, yellow, t);
-    //     //return grey;
-    // }
-    // else {//if(elevation) >= -.75) {
-    //     float t = (elevation - water) / (beach - water);
-    //     return lerp(darkblue, blue, t);
-    //     //return blue;
+    // else {
+    //     float t = (elevation - hmin) / (rock - hmin);
+    //     if(slope < 0.05) {
+    //         return white;
+    //     }
+    //     else if(0.05 < slope < 0.7) {
+    //         return lerp(brown, white, t);
+    //     }
+    //     else {
+    //         return lerp(brown, grey, t);
+    //     }
     // }
 
-    //return xyz / length(xyz);
+    //Grass mountains
+    // if(elevation >= snow) {
+    //     float t = (elevation - snow) / (hmax - snow);
+    //     return lerp(green, brown, t);
+    // }
+    // else if(elevation >= rock) {
+    //     float t = (elevation - rock) / (snow - rock);
+    //     if(slope < 0.01) {
+    //         return darkgreen;
+    //     }
+    //     else if(0.2 < slope < 0.7) {
+    //         return lerp(darkgreen, brown, t);
+    //     }
+    //     else {
+    //         return lerp(darkbrown, brown, t);
+    //     }
+    // }
+    // else {
+    //     float t = (elevation - hmin) / (snow - hmin);
+    //     if(slope < 0.2) {
+    //         return lerp(darkgreen, green, t);
+    //     }
+    //     else if(0.2 < slope < 0.7) {
+    //         return lerp(darkgreen, brown, t);
+    //     }
+    //     else {
+    //         return lerp(brown, grey, t);
+    //     }
+    // }
+
+    //desert
+    if(elevation >= snow) {
+        float t = (elevation - snow) / (hmax - snow);
+        return lerp(darkbrown, br, t);
+    }
+    else if(elevation >= rock) {
+        float t = (elevation - rock) / (snow - rock);
+        if(slope < .05) {
+            return skin;
+        }
+        else if(.05 < slope < .7) {
+            return lerp(skin, brown, t);
+        }
+        else
+            return lerp(brown, darkbrown, t);
+    }
+    else if(elevation >= grass) {
+        float t = (elevation - grass) / (rock - grass);
+        if(slope <= 0) {
+            return lerp(darkblue, blue, t);
+        }
+        else if(.05 < slope < .7) {
+            return lerp(brown, skin, t);
+        }
+        else
+            return lerp(orange, brown, t);
+    }
+    else if(elevation >= beach) {
+        float t = (elevation - beach) / (grass - beach);
+        if(slope < .001)
+            return lerp(blue, aqua, t);
+        else
+            return lerp(yellow, orange, t);
+    }
+    else {
+        float t = (elevation - water) / (beach - water);
+        return lerp(blue, aqua, t);
+    }
 }
 
 vec3f color(const himalayas& hs, vec2f xy) {
