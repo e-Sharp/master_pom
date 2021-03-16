@@ -2,6 +2,7 @@
 
 #include "ranges.hpp"
 #include "map.hpp"
+#include "numeric.hpp"
 #include "reduce.hpp"
 
 #include "pom/maths/exceptions.hpp"
