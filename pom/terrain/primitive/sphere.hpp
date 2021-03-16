@@ -17,7 +17,7 @@ float weight(sphere, vec2f pos) {
 
 float height(sphere, vec2f pos) {
 	auto dd = maths::dot(pos, pos);
-	if(dd < 1) {
+	if(dd <= 1) {
 		return std::sqrt(1 - dd);
 	} else {
 		return 0;
@@ -26,7 +26,7 @@ float height(sphere, vec2f pos) {
 
 vec3f normal(sphere, vec2f pos) {
 	auto dd = maths::dot(pos, pos);
-	if(dd < 1) {
+	if(dd <= 1) {
 		return vec3f({at(pos, 0), at(pos, 1), std::sqrt(1 - dd)});
 	} else {
 		return vec3f({0.f, 0.f, 1.f});
