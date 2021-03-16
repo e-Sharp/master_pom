@@ -8,6 +8,9 @@
 #include "pom/terrain/heightfield.hpp"
 #include "pom/terrain/tesselation.hpp"
 
+#include "effect/erosion.hpp"
+#include "primitive/all.hpp"
+
 namespace pom {
 namespace terrain {
 
