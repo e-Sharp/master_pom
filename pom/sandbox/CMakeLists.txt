@@ -15,6 +15,20 @@ PRIVATE
 
 ################################################################################
 
+add_executable(pom_sandbox_declarative)
+
+target_sources(pom_sandbox_declarative
+PRIVATE
+	${CMAKE_CURRENT_SOURCE_DIR}/declarative.cpp
+)
+
+target_link_libraries(pom_sandbox_declarative
+PRIVATE
+	pom_meta
+)
+
+################################################################################
+
 add_executable(pom_sandbox_erosion)
 
 target_sources(pom_sandbox_erosion
