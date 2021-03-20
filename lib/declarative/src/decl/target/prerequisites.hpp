@@ -1,17 +1,18 @@
 #pragma once
 
+#include "decl/type/type.hpp"
+#include "decl/type/what.hpp"
 #include "decl/type_list/type_list.hpp"
 
 namespace decl {
 namespace detail {
 
-template<typename Ty> consteval
-type_list<> prerequisites(Ty) { return {}; }
+template<typename Target, typename... Args> consteval
+type_list<> prerequisites(Target, Args&&...);
 
-template<typename T> consteval
-auto prerequisites(type<T>) {
-	// Removes the need of providing a function definition.
-	return decltype(prerequisites(T()))();
+template<typename Target, typename... Args> consteval
+auto prerequisites(type<Target>, type_list<Args...>) {
+	return decltype(prerequisites(Target(), what(type<Args>())...))();
 }
 
 }}

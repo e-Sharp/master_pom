@@ -10,14 +10,15 @@
 namespace decl {
 namespace detail {
 
-template<typename... TL> consteval
-auto target_sequence(type_list<TL...> l) {
+template<typename... TL, typename... Args> consteval
+auto target_sequence(type_list<TL...> l, type_list<Args...> as) {
 	if constexpr(empty(l)) {
+		(void) as;
 		return target_list<>();
 	} else {
 		constexpr auto h = head(l);
-		constexpr auto hps = target_sequence(prerequisites(h));
-		constexpr auto ts = target_sequence(tail(l));
+		constexpr auto hps = target_sequence(prerequisites(h, as), as);
+		constexpr auto ts = target_sequence(tail(l), as);
 		return union_(union_(hps, h), ts);
 	}
 }
