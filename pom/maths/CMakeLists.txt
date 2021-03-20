@@ -7,5 +7,6 @@ INTERFACE
 
 target_link_libraries(pom_maths
 INTERFACE 
+    decl
     range-v3
 )

@@ -24,6 +24,8 @@ PRIVATE
 
 target_link_libraries(pom_sandbox_declarative
 PRIVATE
+	pom_io_qt
+	pom_maths
 	pom_meta
 )
 
