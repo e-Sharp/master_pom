@@ -14,10 +14,11 @@ namespace decl {
 
 template<typename... Targets, typename... Args> constexpr
 auto make(Args&&... as) {
+	constexpr auto as_types = type_list<Args&&...>();
 	struct traits {
 		struct storage_traits {
-			using targets = decltype(detail::target_sequence(type_list<Targets...>()));
-			using recipes = decltype(detail::recipes_return_types(targets(), type_list<Args&&...>()));
+			using targets = decltype(detail::target_sequence(type_list<Targets...>(), as_types));
+			using recipes = decltype(detail::recipes_return_types(targets(), as_types));
 		};
 		using bound_targets = type_list<Targets...>;
 	};
