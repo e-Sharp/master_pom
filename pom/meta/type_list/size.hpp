@@ -8,7 +8,7 @@ namespace pom {
 namespace meta {
 
 template<typename... TL> consteval
-std::size_t size(type_list<TL...> l) {
+std::size_t size(type_list<TL...>) {
 	return sizeof...(TL);
 }
 
