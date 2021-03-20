@@ -11,6 +11,10 @@ endif()
 ################################################################################
 # Dependencies.
 
+# Declarative cpp.
+
+add_subdirectory(lib/declarative)
+
 # Qt.
 
 set(CMAKE_AUTOMOC ON)
