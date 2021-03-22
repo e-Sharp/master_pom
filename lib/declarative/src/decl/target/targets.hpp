@@ -6,6 +6,6 @@
 namespace decl {
 
 template<target... TL>
-struct target_list : type_list<TL...> {};
+struct targets : type_list<TL...> {};
 
 }

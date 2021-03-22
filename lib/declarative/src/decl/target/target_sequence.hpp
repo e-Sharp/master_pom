@@ -1,7 +1,7 @@
 #pragma once
 
 #include "decl/target/prerequisites.hpp"
-#include "decl/target/target_list.hpp"
+#include "decl/target/targets.hpp"
 #include "decl/type_list/empty.hpp"
 #include "decl/type_list/head.hpp"
 #include "decl/type_list/tail.hpp"
