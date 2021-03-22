@@ -3,6 +3,6 @@
 namespace pom {
 namespace terrain {
 
-struct height {};
+struct height_ {};
 
 }}

@@ -3,6 +3,6 @@
 namespace pom {
 namespace terrain {
 
-struct normal_ {};
+struct weight_ {};
 
 }}

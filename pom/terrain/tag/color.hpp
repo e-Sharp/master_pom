@@ -3,6 +3,6 @@
 namespace pom {
 namespace terrain {
 
-struct color {};
+struct color_ {};
 
 }}
