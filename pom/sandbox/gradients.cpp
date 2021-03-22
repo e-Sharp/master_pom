@@ -22,6 +22,7 @@ using namespace pom;
 void throwing_main() {
     auto ter = terrain::eroded(terrain::sphere());
 
+    auto resolution
     auto xd = maths_impl::interval<float>(-1.1f, 1.1f);
     auto yd = maths_impl::interval<float>(-1.1f, 1.1f);
 
