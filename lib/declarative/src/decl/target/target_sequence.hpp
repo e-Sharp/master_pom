@@ -14,7 +14,7 @@ template<typename... TL, typename... Args> consteval
 auto target_sequence(type_list<TL...> l, type_list<Args...> as) {
 	if constexpr(empty(l)) {
 		(void) as;
-		return target_list<>();
+		return type_list<>();
 	} else {
 		constexpr auto h = head(l);
 		constexpr auto hps = target_sequence(prerequisites(h, as), as);

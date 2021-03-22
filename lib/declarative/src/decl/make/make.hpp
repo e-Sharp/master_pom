@@ -22,7 +22,7 @@ auto make(Args&&... as) {
 		};
 		using bound_targets = type_list<Targets...>;
 	};
-	auto s = bound_storage<traits>();
+	auto s = detail::bound_storage<traits>();
 	make_and_store(s.storage, traits::storage_traits::targets(), std::forward<Args>(as)...);
 	return s;
 }
