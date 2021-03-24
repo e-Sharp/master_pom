@@ -1,30 +1,30 @@
 #pragma once
 
-#include "dynamic_matrix.hpp"
-#include "matrix_view.hpp"
+#include "dynamic_matrix/dynamic_matrix.hpp"
+#include "matrix_view/matrix_view.hpp"
 
 #include <range/v3/view/drop.hpp>
 #include <range/v3/view/for_each.hpp>
 
 namespace pom {
-namespace maths_impl {
+namespace maths {
 
 // Dynamic matrix factories.
 
-template<typename Ty> constexpr
-auto matrix() {
-	return dynamic_matrix<Ty>();
-}
+//template<typename Ty> constexpr
+//auto matrix() {
+//	return dynamic_matrix<Ty>();
+//}
 
 template<typename Ty> constexpr
 auto matrix_cr(std::size_t c, std::size_t r) {
 	return dynamic_matrix<Ty>(maths::col_i(c), maths::row_i(r));
 }
 
-template<typename Ty> constexpr
-auto matrix(std::size_t square) {
-	return dynamic_matrix<Ty>(square);
-}
+//template<typename Ty> constexpr
+//auto matrix(std::size_t square) {
+//	return dynamic_matrix<Ty>(square);
+//}
 
 // Imitation factories.
 
@@ -52,8 +52,8 @@ auto view(dynamic_matrix<Ty>& m) {
 template<typename Ty> constexpr
 auto view_cr(
 	dynamic_matrix<Ty>& m,
-	static_vector<std::size_t, 2> offset,
-	static_vector<std::size_t, 2> size)
+	maths::static_vector<std::size_t, 2> offset,
+	maths::static_vector<std::size_t, 2> size)
 {
 	auto r = ranges::views::for_each(
 		row_major(m) | ranges::views::chunk(col_count(m))

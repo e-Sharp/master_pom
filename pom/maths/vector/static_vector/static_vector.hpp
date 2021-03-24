@@ -1,12 +1,11 @@
 #pragma once
 
-#include "pom/maths/exceptions.hpp"
+#include <pom/meta/exception/all.hpp>
 
 #include <array>
 #include <initializer_list>
 
-namespace pom {
-namespace maths_impl {
+namespace pom::maths {
 
 template<typename Ty, std::size_t N>
 class static_vector {
@@ -16,7 +15,7 @@ public:
 	explicit constexpr static_vector(std::size_t) {}
 
 	constexpr static_vector(std::initializer_list<Ty> l) {
-		if(l.size() != N) throw maths::precondition_violation{""};
+		if(l.size() != N) throw meta::precondition_violation();
 		std::move(std::begin(l), std::end(l), std::begin(elements));
 	}
 
@@ -64,4 +63,4 @@ auto end(static_vector<Ty, N>& v) {
 	return end(v.elements);
 }
 
-}}
+}

@@ -1,9 +1,8 @@
 #pragma once
 
-#include "pom/maths/exceptions.hpp"
+#include <pom/meta/exception/all.hpp>
 
-namespace pom {
-namespace maths_impl {
+namespace pom::maths {
 
 // Invariant: 'lower() <= upper()'.
 template<typename Ty>
@@ -28,8 +27,7 @@ public:
 
 private:
 	constexpr void throw_if_invalid() const {
-		if(lower() > upper()) throw maths::invariant_violation{
-			"Interval: lower bound should be lesser or equal to upper bound."};
+		if(lower() > upper()) throw meta::invariant_violation();
 	}
 
 	Ty lower_ = {};
@@ -53,4 +51,4 @@ interval<Ty> interval_0_n(Ty n) {
 	return interval(Ty{0}, n);
 }
 
-}}
+}

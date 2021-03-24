@@ -6,7 +6,7 @@
 #include <range/v3/view/drop_exactly.hpp>
 
 namespace pom {
-namespace maths_impl {
+namespace maths {
 
 template<typename Range>
 class vector_view {

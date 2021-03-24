@@ -1,9 +1,7 @@
 #pragma once
 
-#include "static_vector.hpp"
-#include "vector_view.hpp"
-
 #include "pom/maths/matrix/col_row_indexes.hpp"
+#include "pom/maths/vector/all.hpp"
 
 #include <range/v3/view/chunk.hpp>
 #include <range/v3/view/drop_exactly.hpp>
@@ -13,8 +11,7 @@
 #include <range/v3/view/transform.hpp>
 #include <vector>
 
-namespace pom {
-namespace maths_impl {
+namespace pom::maths {
 
 template<typename Ty>
 class dynamic_matrix {
@@ -99,7 +96,7 @@ std::size_t element_count(const dynamic_matrix<Ty>& m) noexcept {
 }
 
 template<typename Ty> constexpr
-static_vector<std::size_t, 2> size_cr(const dynamic_matrix<Ty>& m) noexcept {
+maths::static_vector<std::size_t, 2> size_cr(const dynamic_matrix<Ty>& m) noexcept {
 	return {col_count(m), row_count(m)};
 }
 
@@ -211,4 +208,4 @@ auto rows(dynamic_matrix<Ty>& m) {
 		[cc](auto&& row) { return vector_view(std::move(row), cc); });
 }
 
-}}
+}

@@ -2,12 +2,11 @@
 
 #include "floor.hpp"
 
-namespace pom {
-namespace maths {
+namespace pom::maths {
 
 template<typename Ty> constexpr
 auto fract(const Ty& x) {
 	return x - floor(x);
 }
 
-}}
+}

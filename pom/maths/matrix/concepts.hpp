@@ -2,7 +2,7 @@
 
 #include "col_row_indexes.hpp"
 
-#include "pom/maths/vector/concepts.hpp"
+#include "pom/maths/vector/concept/vector.hpp"
 
 #include <concepts>
 #include <cstdlib>

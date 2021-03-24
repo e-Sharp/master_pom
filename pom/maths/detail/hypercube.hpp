@@ -9,7 +9,7 @@
 // Abstractions to for spatial interpolation.
 
 // TODO: Performance profiling.
-// TODO: Move to 'maths_impl' module ?
+// TODO: Move to 'maths' module ?
 
 namespace pom {
 namespace maths {

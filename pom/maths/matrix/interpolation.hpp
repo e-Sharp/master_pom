@@ -2,8 +2,7 @@
 
 #include "concepts.hpp"
 
-#include "pom/maths/fract.hpp"
-#include "pom/maths/interpolation.hpp"
+#include "pom/maths/operation/all.hpp"
 
 #include <cmath>
 #include <iomanip>

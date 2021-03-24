@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pom/maths/numeric/floor.hpp"
+#include "pom/maths/operation/floor.hpp"
 #include "pom/maths/vector/concept/vector.hpp"
 
 #include <pom/meta/tag/all.hpp>

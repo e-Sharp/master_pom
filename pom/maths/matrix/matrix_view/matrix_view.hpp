@@ -1,7 +1,5 @@
 #pragma once
 
-#include "vector_view.hpp"
-
 #include "pom/maths/matrix/col_row_indexes.hpp"
 
 #include <iostream>
@@ -9,7 +7,7 @@
 #include <range/v3/view/transform.hpp>
 
 namespace pom {
-namespace maths_impl {
+namespace maths {
 
 // TODO: Handling of ordering (only row major for now).
 template<typename Range>
