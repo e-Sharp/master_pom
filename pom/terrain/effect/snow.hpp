@@ -4,7 +4,7 @@
 
 #include <pom/maths/numeric/smoothstep.hpp>
 #include <pom/maths/vector/all.hpp>
-#include <pom/maths_impl/noise/perlin.hpp>
+#include <pom/maths/noise/perlin.hpp>
 
 #include <cmath>
 
@@ -42,7 +42,7 @@ float density(const snowy<T>& s, vec2f pos) {
 	a = std::max(a, 0.f);
 	a = std::pow(a, 2.f);
 
-	auto p = maths_impl::easy_perlin2(s.snow.frequency * pos) / 2.f + 0.5f;
+	auto p = maths::easy_perlin2(s.snow.frequency * pos) / 2.f + 0.5f;
 
 	if(p < 1. - a) {
 		return 0.f;

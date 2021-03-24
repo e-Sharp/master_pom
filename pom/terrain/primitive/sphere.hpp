@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pom/terrain/imports.hpp"
+#include "pom/terrain/import/all.hpp"
 #include "pom/terrain/tag/all.hpp"
 
 #include <decl.hpp>
@@ -15,6 +15,7 @@ struct sphere {};
 
 template<typename C>
 float recipe(C, height_, sphere, vec2f pos) {
+	begin(pos);
 	auto dd = maths::dot(pos, pos);
 	if(dd < 1) {
 		return std::sqrt(1.f - dd);

@@ -3,16 +3,16 @@
 #include "heightfield.hpp"
 
 #include "pom/maths/matrix/all.hpp"
-#include "pom/maths_impl/all.hpp"
+#include "pom/maths/all.hpp"
 
 namespace pom {
 namespace terrain {
 
-using domain = maths_impl::static_vector<maths_impl::interval<float>, 2>;
+using domain = maths::static_vector<maths::interval<float>, 2>;
 
 template<typename Terrain>
 auto gradients(Terrain t, const heightfield& hf, std::size_t resolution) {
-	auto m = maths_impl::dynamic_matrix<maths_impl::static_vector<float, 2>>(resolution);
+	auto m = maths::dynamic_matrix<maths::static_vector<float, 2>>(resolution);
 	auto ci_to_x = ci_to_x_mapping(hf);
 	auto ri_to_y = ri_to_y_mapping(hf);
 	for(auto ri : maths::row_indexes(m)) {
@@ -29,8 +29,8 @@ auto gradients(Terrain t, const heightfield& hf, std::size_t resolution) {
 }
 
 template<typename Terrain>
-maths_impl::dynamic_matrix<float> tesselation(Terrain t, const heightfield& hf, std::size_t resolution) {
-	auto m = maths_impl::dynamic_matrix<float>(resolution);
+maths::dynamic_matrix<float> tesselation(Terrain t, const heightfield& hf, std::size_t resolution) {
+	auto m = maths::dynamic_matrix<float>(resolution);
 	auto ci_to_x = ci_to_x_mapping(hf);
 	auto ri_to_y = ri_to_y_mapping(hf);
 	for(auto ri : maths::row_indexes(m)) {

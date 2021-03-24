@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pom/maths_impl/noise/perlin.hpp"
+#include "pom/maths/noise/perlin.hpp"
 #include "pom/terrain/imports.hpp"
 
 namespace pom {
@@ -10,7 +10,7 @@ struct billow {};
 
 float height(billow, vec2f pos) {
 	using namespace maths;
-	auto h = maths_impl::easy_perlin2(2.f * pos);
+	auto h = maths::easy_perlin2(2.f * pos);
 	h = std::abs(h);
 	return h;
 }
@@ -19,7 +19,7 @@ struct orange_peel {};
 
 float height(orange_peel, vec2f pos) {
 	using namespace maths;
-	auto h = maths_impl::easy_perlin2(2.f * pos) / 2.f + 0.5;
+	auto h = maths::easy_perlin2(2.f * pos) / 2.f + 0.5;
 	h = std::sqrt(1.f - h * h);
 	h = h * h;
 	return h;

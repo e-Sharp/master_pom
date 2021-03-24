@@ -3,12 +3,12 @@
 #include "pom/io/exception/all.hpp"
 #include "pom/maths/interval/all.hpp"
 #include "pom/maths/matrix/all.hpp"
-#include "pom/maths_impl/all.hpp"
+#include "pom/maths/all.hpp"
 
 #include <range/v3/view/enumerate.hpp>
+#include <range/v3/view/for_each.hpp>
 
-namespace pom {
-namespace terrain {
+namespace pom::terrain {
 
 template<typename Matrix>
 class wavefront {
@@ -19,10 +19,10 @@ public:
 
     Matrix heights;
 
-	maths_impl::interval<float> x_domain = maths_impl::interval_0_1<float>();
-	maths_impl::interval<float> y_domain = maths_impl::interval_0_1<float>();
-	maths_impl::interval<float> u_domain = maths_impl::interval_0_1<float>();
-	maths_impl::interval<float> v_domain = maths_impl::interval_0_1<float>();
+	maths::interval<float> x_domain = maths::interval_0_1<float>();
+	maths::interval<float> y_domain = maths::interval_0_1<float>();
+	maths::interval<float> u_domain = maths::interval_0_1<float>();
+	maths::interval<float> v_domain = maths::interval_0_1<float>();
 };
 
 template<typename M>
@@ -33,20 +33,20 @@ wavefront(M) -> wavefront<M>;
 template<typename M> constexpr
 auto ci_to_x_mapping(const wavefront<M>& w) {
     return maths::mapping(
-        maths_impl::interval_0_n(col_count(w.heights) - 1), w.x_domain);
+        maths::interval_0_n(col_count(w.heights) - 1), w.x_domain);
 }
 
 template<typename M> constexpr
 auto ri_to_y_mapping(const wavefront<M>& w) {
     return maths::mapping(
-        maths_impl::interval_0_n(row_count(w.heights) - 1), w.y_domain);
+        maths::interval_0_n(row_count(w.heights) - 1), w.y_domain);
 }
 
 template<typename M> constexpr
 auto ci_to_u_mapping(const wavefront<M>& w) {
     // Inelegant. Find something proper.
     auto m = maths::mapping(
-        maths_impl::interval_0_n(col_count(w.heights)), w.u_domain);
+        maths::interval_0_n(col_count(w.heights)), w.u_domain);
     m.b += maths::length(w.u_domain) / (2.f * col_count(w.heights));
     return m;
 }
@@ -55,7 +55,7 @@ template<typename M> constexpr
 auto ri_to_v_mapping(const wavefront<M>& w) {
     // Inelegant. Find something proper.
     auto m = maths::mapping(
-        maths_impl::interval_0_n(row_count(w.heights)), w.v_domain);
+        maths::interval_0_n(row_count(w.heights)), w.v_domain);
     m.b += maths::length(w.v_domain) / (2.f * row_count(w.heights));
     return m;
 }
@@ -63,7 +63,7 @@ auto ri_to_v_mapping(const wavefront<M>& w) {
 //
 
 struct wavefront_f {
-    maths_impl::static_vector<std::size_t, 3> indexes = {};
+    maths::static_vector<std::size_t, 3> indexes = {};
 };
 
 constexpr std::size_t vertex_count(const wavefront_f& f) noexcept {
@@ -103,15 +103,15 @@ auto f_range(const wavefront<M>& w) {
             auto v01 = r1 + c;
             auto v10 = r0 + c + 1;
             auto v11 = r1 + c + 1;
-            return ranges::views::single(maths_impl::vector<2>({
-                wavefront_f({v00, v11, v01}), wavefront_f({v00, v10, v11})}))
+            return ranges::views::single(maths::vector_of(
+                wavefront_f({v00, v11, v01}), wavefront_f({v00, v10, v11})))
             | ranges::views::join;
         });
     });
 }
 
 struct wavefront_v {
-    maths_impl::static_vector<float, 3> values = {};
+    maths::static_vector<float, 3> values = {};
 };
 
 constexpr bool has_w(const wavefront_v&) {
@@ -153,7 +153,7 @@ auto v_range(const wavefront<M>& w) {
 }
 
 struct wavefront_vt {
-    maths_impl::static_vector<float, 2> impl = {};
+    maths::static_vector<float, 2> impl = {};
 };
 
 constexpr bool has_v(const wavefront_vt&) noexcept {
@@ -190,4 +190,4 @@ auto vt_range(const wavefront<M>& w) {
     });
 }
 
-}}
+}
