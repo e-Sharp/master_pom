@@ -11,7 +11,7 @@ constexpr auto f_to_i(float f) {
     return static_cast<int>(255.f * f + 0.5f);
 }
 
-template<maths::matrix M>
+template<typename M>
 QImage to_image(const M& m) {
     auto im = QImage(static_cast<int>(col_count(m)), static_cast<int>(row_count(m)), QImage::Format_RGB32);
     for(auto r : maths::row_indexes(m)) {
