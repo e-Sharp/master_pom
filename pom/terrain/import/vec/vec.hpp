@@ -26,6 +26,9 @@ struct vec : maths::static_vector<Ty, N> {
 	}
 };
 
+template<typename Ty>
+vec(Ty, Ty) -> vec<Ty, 2>;
+
 using vec2f = vec<float, 2>;
 using vec3f = vec<float, 3>;
 
