@@ -4,6 +4,7 @@
 #include "difference.hpp"
 #include "distance.hpp"
 #include "dot.hpp"
+#include "flip.hpp"
 #include "floor.hpp"
 #include "length.hpp"
 #include "normalize.hpp"
