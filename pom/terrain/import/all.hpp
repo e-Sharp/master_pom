@@ -1,5 +1,6 @@
 #pragma once
 
+#include "noise/gradient_noise.hpp"
 #include "vec/vec.hpp"
 #include "vec/xyz.hpp"
 
