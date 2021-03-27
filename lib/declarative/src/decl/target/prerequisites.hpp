@@ -8,7 +8,7 @@ namespace decl {
 namespace detail {
 
 template<typename Target, typename... Args> consteval
-type_list<> prerequisites(Target, Args&&...);
+type_list<> prerequisites(Target, Args...);
 
 template<typename Target, typename... Args> consteval
 auto prerequisites(type<Target>, type_list<Args...>) {
