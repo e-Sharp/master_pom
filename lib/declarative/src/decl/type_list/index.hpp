@@ -9,17 +9,18 @@
 #include "decl/type/type.hpp"
 
 #include <cstdlib>
+#include <type_traits>
 
 namespace decl {
 
 template<typename... TL, typename T> consteval
-std::size_t index(type_list<TL...> l, type<T> t) {
+auto index(type_list<TL...> l, type<T> t) {
 	if constexpr(empty(l)) {
 		static_assert(false, "decl: Type list does not contain given type.");
 	} else if constexpr(same(head(l), t)) {
-		return 0;
+		return std::integral_constant<std::size_t, 0>();
 	} else {
-		return index(tail(l), t) + 1;
+		return std::integral_constant<std::size_t, index(tail(l), t) + 1>();
 	}
 }
 
