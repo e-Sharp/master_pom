@@ -8,8 +8,6 @@
 #include "decl/target/recipe_return_type.hpp"
 #include "decl/target/target_sequence.hpp"
 
-#include <iostream>
-
 namespace decl {
 
 template<typename... Targets, typename... Args> constexpr
