@@ -1,4 +1,4 @@
 #pragma once
 
-#include "directional_waves.hpp"
+#include "sine_wave.hpp"
 #include "sphere.hpp"
