@@ -19,7 +19,7 @@
 
 using namespace pom;
 using namespace pom::maths;
-using namespace pom::maths_impl;
+using namespace pom::maths;
 using namespace pom::terrain;
 
 //lerp
@@ -28,26 +28,26 @@ static_vector<float, 3> lerp(static_vector<float, 3> l, static_vector<float, 3> 
     auto y = at(l, 1) * (1 - t) + at(r, 1) * t;
     auto z = at(l, 2) * (1 - t) + at(r, 2) * t;
 
-    auto vec = maths_impl::vector<3>({x, y, z});
+    auto vec = maths::vector<3>({x, y, z});
     return vec;
 }
 
 static_vector<float, 3> color(static_vector<float, 3> xyz, float slope) {
     //////////////////////////////////////////////////////////////////////////////////////////////// PAR ICI
-    auto black = maths_impl::vector<3>({.0F, .0F, .0F});
-    auto yellow = maths_impl::vector<3>({.89F, .98F, .5F});
-    auto skin = maths_impl::vector<3>({.9F, .75F, .4F});
-    auto green = maths_impl::vector<3>({.153F, .86F, .0F});
-    auto blue = maths_impl::vector<3>({.0F, .0F, 1.0F});
-    auto darkblue = maths_impl::vector<3>({.01F, .13F, .67F});
-    auto darkgreen = maths_impl::vector<3>({.15F, .48F, .0F});
-    auto brown = maths_impl::vector<3>({.38F, .24F, .01F});
-    auto darkbrown = maths_impl::vector<3>({.313F, .03F, .07F});
-    auto white = maths_impl::vector<3>({1.F, 1.0F, 1.0F});
-    auto grey = maths_impl::vector<3>({.41F, .41F, .41F});
-    auto br = maths_impl::vector<3>({.4F, .13F, .05F});
-    auto orange = maths_impl::vector<3>({.98F, .71F, .25F});
-    auto aqua = maths_impl::vector<3>({.015F, .54F, .58F});
+    auto black = maths::vector<3>({.0F, .0F, .0F});
+    auto yellow = maths::vector<3>({.89F, .98F, .5F});
+    auto skin = maths::vector<3>({.9F, .75F, .4F});
+    auto green = maths::vector<3>({.153F, .86F, .0F});
+    auto blue = maths::vector<3>({.0F, .0F, 1.0F});
+    auto darkblue = maths::vector<3>({.01F, .13F, .67F});
+    auto darkgreen = maths::vector<3>({.15F, .48F, .0F});
+    auto brown = maths::vector<3>({.38F, .24F, .01F});
+    auto darkbrown = maths::vector<3>({.313F, .03F, .07F});
+    auto white = maths::vector<3>({1.F, 1.0F, 1.0F});
+    auto grey = maths::vector<3>({.41F, .41F, .41F});
+    auto br = maths::vector<3>({.4F, .13F, .05F});
+    auto orange = maths::vector<3>({.98F, .71F, .25F});
+    auto aqua = maths::vector<3>({.015F, .54F, .58F});
 
     auto hmax = 10000;
     auto hmin = 0;
@@ -174,9 +174,9 @@ void throwing_main() {
         hf.heights = matrix_cr<float>(1000, 1000);
 
         hf.x_domain = h.x_domain;
-        auto ci_to_x = maths::mapping(maths_impl::interval_0_n(col_count(hf.heights)), hf.x_domain);
+        auto ci_to_x = maths::mapping(maths::interval_0_n(col_count(hf.heights)), hf.x_domain);
         hf.y_domain = h.y_domain;
-        auto ri_to_y = maths::mapping(maths_impl::interval_0_n(row_count(hf.heights)), hf.y_domain);
+        auto ri_to_y = maths::mapping(maths::interval_0_n(row_count(hf.heights)), hf.y_domain);
 
         for(auto ri : maths::row_indexes(hf.heights)) {
             auto y = ri_to_y(ri);
@@ -217,10 +217,10 @@ void throwing_main() {
         }
     }
     { // Outputing normals.
-        auto ns = maths_impl::same_size_matrix<vec3f>(hf.heights);
+        auto ns = maths::same_size_matrix<vec3f>(hf.heights);
 
-        auto ci_to_x = maths::mapping(maths_impl::interval_0_n(col_count(ns) - 1), h.x_domain);
-        auto ri_to_y = maths::mapping(maths_impl::interval_0_n(row_count(ns) - 1), h.y_domain);
+        auto ci_to_x = maths::mapping(maths::interval_0_n(col_count(ns) - 1), h.x_domain);
+        auto ri_to_y = maths::mapping(maths::interval_0_n(row_count(ns) - 1), h.y_domain);
 
         for(auto ri : maths::row_indexes(ns))
         for(auto ci : maths::col_indexes(ns)) {
@@ -230,7 +230,7 @@ void throwing_main() {
         io_qt::to_image(ns).save((std::string(output_folder) + "/normals.png").c_str());
     }
     { // Outputing texture.
-        auto tx = maths_impl::same_size_matrix<static_vector<float, 3>>(hf.heights);
+        auto tx = maths::same_size_matrix<static_vector<float, 3>>(hf.heights);
         auto ci_to_x = ci_to_x_mapping(hf);
         auto ri_to_y = ri_to_y_mapping(hf);
         for(auto ri : maths::row_indexes(hf.heights))

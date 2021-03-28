@@ -1,30 +1,25 @@
 #include "pom/io_format/wavefront/all.hpp"
 #include "pom/io_std/all.hpp"
-#include "pom/maths/interval/all.hpp"
-#include "pom/maths/matrix/all.hpp"
-#include "pom/maths/vector/all.hpp"
-#include "pom/maths_impl/all.hpp"
-#include "pom/terrain/imports.hpp"
 #include "pom/terrain/paths.hpp"
 #include "pom/terrain/wavefront.hpp"
 
 using namespace pom;
 
 float f(float x, float y) {
-    auto d = maths::length(maths_impl::vector<2>({x, y}));
+    auto d = maths::length(maths::vector<2>({x, y}));
     auto dd = 1.f - d;
     if(d >= 1.f) return 0.f;
     else         return dd * dd * dd;
 }
 
 void throwing_main() {
-    auto m = maths_impl::matrix_cr<float>(4, 3);
+    auto m = maths::matrix_cr<float>(4, 3);
 
-    auto xd = maths_impl::interval<float>(-1.f, 1.f);
-    auto yd = maths_impl::interval<float>(-1.f, 1.f);
+    auto xd = maths::interval<float>(-1.f, 1.f);
+    auto yd = maths::interval<float>(-1.f, 1.f);
 
-    auto ci_to_x = maths::mapping(maths_impl::interval_0_n(col_count(m) - 1), xd);
-    auto ri_to_y = maths::mapping(maths_impl::interval_0_n(row_count(m) - 1), xd);
+    auto ci_to_x = maths::mapping(maths::interval_0_n(col_count(m) - 1), xd);
+    auto ri_to_y = maths::mapping(maths::interval_0_n(row_count(m) - 1), xd);
 
     for(auto&& [ci, ri] : maths::row_major_indexes_cr(m)) {
         at_cr(m, ci, ri) = f(ci_to_x(ci), ri_to_y(ri));

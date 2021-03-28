@@ -13,7 +13,7 @@
 
 using namespace pom;
 using namespace pom::maths;
-using namespace pom::maths_impl;
+using namespace pom::maths;
 using namespace pom::terrain;
 
 template<typename Ty>
@@ -144,7 +144,7 @@ void throwing_main() {
     auto h = [noise_warping_t](float x, float y) { return noise_warping_t({x, y}).value; };
 
     auto hf = heightfield{};
-    hf.domain = {{maths_impl::interval{-16 / 9.f, 16 / 9.f}, maths_impl::interval{-1.f, 1.f}}};
+    hf.domain = {{maths::interval{-16 / 9.f, 16 / 9.f}, maths::interval{-1.f, 1.f}}};
     hf.heights = tesselation(h, hf.domain, 1000);
 
     auto f = io_std::open_file("mesh.obj", std::ios::out);
@@ -153,7 +153,7 @@ void throwing_main() {
     
 
     {
-        using color = decltype(maths_impl::vector<float, 3>());
+        using color = decltype(maths::vector<float, 3>());
         auto m = same_size_matrix<color>(hf.heights);
         for(auto r : maths::row_indexes(m)) {
             auto sr = row(hf.heights, r);
@@ -169,7 +169,7 @@ void throwing_main() {
     auto grads = gradients(h, hf.domain, 1000);
 
     {
-        using color = decltype(maths_impl::vector<float, 3>());
+        using color = decltype(maths::vector<float, 3>());
         auto gtex = same_size_matrix<color>(grads);
         for(auto&& [d, s] : ranges::views::zip(row_major(gtex), row_major(grads))) {
             auto g = s;
