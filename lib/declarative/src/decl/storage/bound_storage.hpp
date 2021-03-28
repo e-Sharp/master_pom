@@ -18,14 +18,4 @@ struct bound_storage {
 	storage<storage_traits> storage = {};
 };
 
-template<std::size_t I, typename S> constexpr
-auto& get(bound_storage<S>& s) {
-	return get<I>(s.storage.data);
-}
-
-template<std::size_t I, typename S> constexpr
-auto&& get(bound_storage<S>&& s) {
-	return get<I>(s.storage.data);
-}
-
 }}
