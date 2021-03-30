@@ -28,15 +28,15 @@ float recipe(DeclContext, color_, const scaled<T>& s, vec2f coords) {
 }
 
 template<typename DeclContext, typename T> constexpr
-float recipe(DeclContext, gradient_, const scaled<T>& s, vec2f coords) {
+float recipe(DeclContext, gradient, const scaled<T>& s, vec2f coords) {
 	auto scs = s.factor * coords;
-	auto [g] = decl::make<gradient_>(s.terrain, scs);
+	auto [g] = decl::make<gradient>(s.terrain, scs);
 	return g;
 }
 
 template<typename DeclContext, typename T> constexpr
 float recipe(DeclContext, height_, const scaled<T>& s, vec2f coords) {
-	auto sf = s.scaling.factor
+	auto sf = s.scaling.factor;
 	auto scs = coords / sf;
 	auto [h] = decl::make<height_>(s.terrain, scs);
 	return sf * h;
