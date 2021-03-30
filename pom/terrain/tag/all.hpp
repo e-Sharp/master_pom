@@ -2,6 +2,7 @@
 
 #include "color.hpp"
 #include "coordinates.hpp"
+#include "gradient.hpp"
 #include "height.hpp"
 #include "normal.hpp"
 #include "position.hpp"
