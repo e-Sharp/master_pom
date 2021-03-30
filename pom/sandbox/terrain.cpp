@@ -47,7 +47,6 @@ auto wyvill_fall_off_filter(point c, float r) {
     auto rr = r * r;
     return [c, rr](point p) {
         auto dd = (at(p, 0) - at(c, 0)) * (at(p, 0) - at(c, 0)) + (at(p, 1) - at(c, 1)) * (at(p, 1) - at(c, 1));
-        //auto dd = dot(c, p);
         auto p1 = rr - dd;
         return p1 > 0.f ? p1 * p1 * p1 : 0.f;
     };
@@ -59,6 +58,22 @@ float influence(float d) {
     auto p = d * (-3 + d * (3 - d)) + 1;
     return rotation * p;
 }
+
+//TODO: Move to another file
+auto cart_to_polar(point &p) {
+    auto x = at(p, 0) * cos(at(p, 1));
+    auto y = at(p, 0) * sin(at(p, 1));
+    p = point{{x, y}};
+}
+
+//TODO: Move to another file
+auto polar_to_cart(point &p) {
+    auto dd = at(p, 0) * at(p, 0) + at(p, 1) * at(p, 1);
+    auto d = sqrt(dd);
+    auto angle = atan2(at(p,1), at(p, 0));
+    p = point{{d, angle}};
+}
+
 
 constexpr
 auto spiral_warping(float r) {
