@@ -23,17 +23,15 @@ auto operator|(Terrain&& te, translation tr) {
 template<typename DeclContext, typename T> constexpr
 vec3f recipe(DeclContext, gradient, const translated<T>& t, vec2f coords) {
 	auto& tr = t.translation.value;
-	auto tcs = coords + xy(tr);
-	auto [g] = decl::make<gradient>(t.terrain, tcs);
+	auto [g] = decl::make<gradient>(t.terrain, coords - tr);
 	return g;
 }
 
 template<typename DeclContext, typename T> constexpr
 float recipe(DeclContext, height_, const translated<T>& t, vec2f coords) {
-	auto& tr = t.translation.value;
-	auto tcs = coords - xy(tr);
-	auto [h] = decl::make<height_>(t.terrain, tcs);
-	return h + z(tr);
+	auto tr = t.translation.value;
+	auto [h] = decl::make<height_>(t.terrain, coords - tr);
+	return h;
 }
 
 }

@@ -5,7 +5,7 @@
 namespace pom::terrain {
 
 struct translation {
-	vec3f value = {};
+	vec2f value = {};
 };
 
 }
