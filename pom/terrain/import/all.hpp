@@ -8,6 +8,7 @@
 
 #include <decl.hpp>
 #include <pom/maths/all.hpp>
+#include <pom/meta/exception/all.hpp>
 
 namespace pom::terrain {
 
