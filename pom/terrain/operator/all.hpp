@@ -2,6 +2,10 @@
 
 #include "amplification/amplified.hpp"
 #include "distortion/distorted.hpp"
+#include "maximum/max.hpp"
+#include "maximum/maximized.hpp"
+#include "minimum/min.hpp"
+#include "minimum/minimized.hpp"
 #include "offset/offset.hpp"
 #include "offset/offsetted.hpp"
 #include "scaling/scaled.hpp"
