@@ -2,6 +2,8 @@
 
 #include "amplification/amplified.hpp"
 #include "distortion/distorted.hpp"
+#include "lerp/lerp.hpp"
+#include "lerp/lerped.hpp"
 #include "maximum/max.hpp"
 #include "maximum/maximized.hpp"
 #include "minimum/min.hpp"
