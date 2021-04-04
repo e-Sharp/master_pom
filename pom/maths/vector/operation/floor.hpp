@@ -6,16 +6,15 @@
 #include <pom/meta/tag/all.hpp>
 #include <range/v3/view/zip.hpp>
 
-namespace pom {
-namespace maths {
+namespace pom::maths {
 
-template<vector V> constexpr
-auto floor(const V& v) {
-	auto f = V();
+template<typename Ty, std::size_t N> constexpr
+auto floor(const static_vector<Ty, N>& v) {
+	auto f = static_vector<Ty, N>();
 	for(auto&& [a, b] : ranges::views::zip(f, v)) {
 		a = floor(b);
 	}
 	return f;
 }
 
-}}
+}
