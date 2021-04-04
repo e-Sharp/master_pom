@@ -6,6 +6,7 @@
 #include "dot.hpp"
 #include "flip.hpp"
 #include "floor.hpp"
+#include "fract.hpp"
 #include "length.hpp"
 #include "normalize.hpp"
 #include "product.hpp"
