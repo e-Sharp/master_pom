@@ -24,6 +24,10 @@ struct vec : maths::static_vector<Ty, N> {
 		at(*this, 1) = y;
 		at(*this, 2) = z;
 	}
+
+	constexpr vec(const maths::static_vector<Ty, N>& v)
+		: maths::static_vector<Ty, N>(v)
+	{}
 };
 
 template<typename Ty>
