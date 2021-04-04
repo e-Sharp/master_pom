@@ -23,4 +23,13 @@ auto operator/(const V& lv, const S& rs) {
 	return v;
 }
 
+template<typename S, vector V> constexpr
+auto operator/(const S& ls, const V& rv) {
+	auto v = V();
+	for(auto i : indexes(v)) {
+		at(v, i) =  ls / at(rv, i);
+	}
+	return v;
+}
+
 }
