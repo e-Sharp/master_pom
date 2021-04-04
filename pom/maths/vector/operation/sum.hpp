@@ -14,8 +14,8 @@ auto operator+(const V& lv, const V& rv) {
 	return v;
 }
 
-template<vector V, typename S> constexpr
-auto operator+(const V& lv, const S& rs) {
+template<vector V, typename S> requires (!vector<S>)
+constexpr auto operator+(const V& lv, const S& rs) {
 	auto v = V();
 	for(auto i : indexes(v)) {
 		at(v, i) = at(lv, i) + rs;
@@ -23,8 +23,8 @@ auto operator+(const V& lv, const S& rs) {
 	return v;
 }
 
-template<typename S, vector V> constexpr
-auto operator+(const S& ls, const V& rv) {
+template<typename S, vector V> requires (!vector<S>)
+constexpr auto operator+(const S& ls, const V& rv) {
 	auto v = V();
 	for(auto i : indexes(v)) {
 		at(v, i) = ls + at(rv, i);
