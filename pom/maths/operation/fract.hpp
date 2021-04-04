@@ -1,12 +1,12 @@
 #pragma once
 
-#include "floor.hpp"
+#include <cmath>
 
 namespace pom::maths {
 
-template<typename Ty> constexpr
-auto fract(const Ty& x) {
-	return x - floor(x);
+float fract(float x) noexcept {
+	float i;
+	return std::abs(std::modf(x, &i));
 }
 
 }
