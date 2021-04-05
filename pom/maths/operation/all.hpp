@@ -6,5 +6,6 @@
 #include "floor.hpp"
 #include "fract.hpp"
 #include "lerp.hpp"
-#include "interpolation.hpp"
+#include "smax.hpp"
+#include "smin.hpp"
 #include "smoothstep.hpp"
