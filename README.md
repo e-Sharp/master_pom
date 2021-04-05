@@ -14,4 +14,5 @@
 ## Wiki
 
 - [Experiments](wiki/experiments.md)
+- [Primitives and operators](wiki/primitives_and_operators.md)
 - [Ressources](wiki/resources.md)
