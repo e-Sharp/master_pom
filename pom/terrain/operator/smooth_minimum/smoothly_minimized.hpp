@@ -26,6 +26,14 @@ auto operator|(std::tuple<TA, TB>&& t, smin m) {
 }
 
 template<typename DeclContext, typename TA, typename TB> constexpr
+vec3f recipe(DeclContext, color_, const smoothly_minimized<TA, TB>& m, vec2f coords) {
+	auto [ca, ha] = decl::make<color_, height_>(m.a, coords);
+	auto [cb, hb] = decl::make<color_, height_>(m.b, coords);
+	auto t = maths::clamp((ha - hb) / (2.f * m.smin.range) + 0.5f, 0.f, 1.f);
+	return maths::lerp(ca, cb, t);
+}
+
+template<typename DeclContext, typename TA, typename TB> constexpr
 float recipe(DeclContext, height_, const smoothly_minimized<TA, TB>& m, vec2f coords) {
 	auto [ha] = decl::make<height_>(m.a, coords);
 	auto [hb] = decl::make<height_>(m.b, coords);
