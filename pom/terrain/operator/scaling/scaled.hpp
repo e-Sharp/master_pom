@@ -8,7 +8,7 @@ namespace pom::terrain {
 
 template<typename Terrain>
 struct scaled {
-	scaling scaling = {};
+	scaling scaling;
 	Terrain terrain;
 };
 
@@ -21,32 +21,24 @@ auto operator|(T&& t, scaling s) {
 }
 
 template<typename DeclContext, typename T> constexpr
-float recipe(DeclContext, color_, const scaled<T>& s, vec2f coords) {
-	auto scs = s.factor * coords;
+vec3f recipe(DeclContext, color_, const scaled<T>& s, vec2f coords) {
+	auto scs = coords / xy(s.scaling);
 	auto [c] = decl::make<color_>(s.terrain, scs);
 	return c;
 }
 
 template<typename DeclContext, typename T> constexpr
-float recipe(DeclContext, gradient, const scaled<T>& s, vec2f coords) {
-	auto scs = s.factor * coords;
+vec3f recipe(DeclContext, gradient, const scaled<T>& s, vec2f coords) {
+	auto scs = coords / xy(s.scaling);
 	auto [g] = decl::make<gradient>(s.terrain, scs);
-	return g;
+	return z(s.scaling) * g;
 }
 
 template<typename DeclContext, typename T> constexpr
 float recipe(DeclContext, height_, const scaled<T>& s, vec2f coords) {
-	auto sf = s.scaling.factor;
-	auto scs = coords / sf;
+	auto scs = coords / xy(s.scaling);
 	auto [h] = decl::make<height_>(s.terrain, scs);
-	return sf * h;
-}
-
-template<typename DeclContext, typename T> constexpr
-float recipe(DeclContext, normal_, const scaled<T>& s, vec2f coords) {
-	auto scs = s.factor * coords;
-	auto [n] = decl::make<normal_>(s.terrain, scs);
-	return n;
+	return z(s.scaling) * h;
 }
 
 }
