@@ -1,7 +1,11 @@
 #pragma once
 
+#include <string>
+
 namespace pom::meta {
 
-struct exception {};
+struct exception {
+	std::string what = {};
+};
 
 }
