@@ -1,7 +1,6 @@
 #pragma once
 
-namespace pom {
-namespace maths {
+namespace pom::maths {
 
 template<typename Ty> constexpr
 Ty clamp(const Ty& x, const Ty& min, const Ty& max) {
@@ -14,4 +13,4 @@ Ty clamp(const Ty& x, const Ty& min, const Ty& max) {
 	}
 }
 
-}}
+}
