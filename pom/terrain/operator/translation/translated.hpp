@@ -7,9 +7,13 @@
 namespace pom::terrain {
 
 template<typename Terrain>
-struct translated {
-	translation translation = {};
-	Terrain terrain;
+struct translated : Terrain {
+	constexpr translated(translation&& tr, Terrain&& te)
+		: Terrain(std::move(te)),
+		translation(std::move(tr))
+	{}
+
+	translation translation;
 };
 
 template<typename T>
@@ -20,18 +24,10 @@ auto operator|(Terrain&& te, translation tr) {
 	return translated(std::move(tr), std::forward<Terrain>(te));
 }
 
-template<typename DeclContext, typename Tag, typename T> constexpr
-vec3f recipe(DeclContext, Tag, const translated<T>& t, vec2f coords) {
-	auto& tr = t.translation.value;
-	auto [v] = decl::make<Tag>(t.terrain, coords - tr);
-	return v;
-}
-
 template<typename DeclContext, typename T> constexpr
 float recipe(DeclContext, height_, const translated<T>& t, vec2f coords) {
-	auto tr = t.translation.value;
-	auto [h] = decl::make<height_>(t.terrain, coords - tr);
-	return h;
+	auto [h] = decl::make<height_>(static_cast<const T&>(t), coords - xy(t.translation));
+	return h + z(t.translation);
 }
 
 }
