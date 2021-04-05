@@ -24,9 +24,9 @@ auto operator|(T&& t, color c) {
 	return colored(std::move(c), std::forward<T>(t));
 }
 
-template<typename DeclContext, typename T> constexpr
-vec3f recipe(DeclContext, color_, const colored<T>& c, vec2f) {
-	return c.color.rgb;
+template<typename DeclContext, typename C> constexpr
+vec3f recipe(DeclContext, color_, const colored<C>& c, vec2f) {
+	return c.color;
 }
 
 }
