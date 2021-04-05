@@ -1,6 +1,8 @@
 #pragma once
 
 #include "amplification/amplified.hpp"
+#include "color/color.hpp"
+#include "color/colored.hpp"
 #include "distortion/distorted.hpp"
 #include "lerp/lerp.hpp"
 #include "lerp/lerped.hpp"
