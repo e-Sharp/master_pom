@@ -20,11 +20,11 @@ auto operator|(Terrain&& te, translation tr) {
 	return translated(std::move(tr), std::forward<Terrain>(te));
 }
 
-template<typename DeclContext, typename T> constexpr
-vec3f recipe(DeclContext, gradient, const translated<T>& t, vec2f coords) {
+template<typename DeclContext, typename Tag, typename T> constexpr
+vec3f recipe(DeclContext, Tag, const translated<T>& t, vec2f coords) {
 	auto& tr = t.translation.value;
-	auto [g] = decl::make<gradient>(t.terrain, coords - tr);
-	return g;
+	auto [v] = decl::make<Tag>(t.terrain, coords - tr);
+	return v;
 }
 
 template<typename DeclContext, typename T> constexpr
