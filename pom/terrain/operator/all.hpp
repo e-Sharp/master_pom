@@ -1,8 +1,8 @@
 #pragma once
 
-#include "amplification/amplified.hpp"
 #include "color/color.hpp"
 #include "color/colored.hpp"
+#include "composition/composed.hpp"
 #include "distortion/distorted.hpp"
 #include "lerp/lerp.hpp"
 #include "lerp/lerped.hpp"
@@ -10,12 +10,8 @@
 #include "maximum/maximized.hpp"
 #include "minimum/min.hpp"
 #include "minimum/minimized.hpp"
-#include "offset/offset.hpp"
-#include "offset/offsetted.hpp"
 #include "scaling/scaled.hpp"
 #include "scaling/scaling.hpp"
-#include "smooth_minimum/smin.hpp"
-#include "smooth_minimum/smoothly_minimized.hpp"
 #include "sum/sum.hpp"
 #include "sum/sum_operation.hpp"
 #include "translation/translated.hpp"
