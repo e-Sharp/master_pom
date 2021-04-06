@@ -12,12 +12,11 @@ using namespace pom;
 using namespace pom::terrain;
 
 void throwing_main() {
-    //auto ter = terrain::directional_waves();
-    auto ter = dunes_0();
+    auto ter = test_0();
 
     auto resolution = maths::vector_of<std::size_t>(1000, 1000);
-    auto xd = maths::interval<float>(0.f, 1000.f);
-    auto yd = maths::interval<float>(0.f, 1000.f);
+    auto xd = maths::interval<float>(0.f, 10.f);
+    auto yd = maths::interval<float>(0.f, 10.f);
 
 
     auto heights = maths::matrix_cr<float>(at(resolution, 0), at(resolution, 1));
@@ -25,7 +24,7 @@ void throwing_main() {
     auto texture = maths::matrix_cr<terrain::vec3f>(at(resolution, 0), at(resolution, 1));
 
     { 
-        std::cout << "--Computing." << std::endl;
+        std::cout << "--Computing terrain." << std::endl;
         using namespace maths;
 
         auto ci_to_x = maths::mapping(maths::interval_0_n(at(resolution, 0)), xd);
@@ -36,15 +35,16 @@ void throwing_main() {
             auto y = ri_to_y(ri);
             using namespace terrain;
 
-            auto [h] = decl::make<height_>(ter, vec2f({x, y}));
+            auto [v] = decl::make<terrain::value>(ter, vec2f(x, y));
+            at_cr(heights, ci, ri) = v;
 
-            at_cr(heights, ci, ri) = h;
-            //at_cr(normals, ci, ri) = n / 2.f + 0.5f;
+            //auto [c, h] = decl::make<color_, height_>(ter, vec2f(x, y));
+            //at_cr(heights, ci, ri) = h;
             //at_cr(texture, ci, ri) = c;
         }
     }
     { 
-        std::cout << "--Writing mesh." << std::endl;
+        std::cout << "--Outputting mesh." << std::endl;
         auto f = io_std::open_file(
             std::string(terrain::output_folder) + "/mesh.obj",
             std::ios::binary | std::ios::out);
@@ -61,10 +61,10 @@ void throwing_main() {
     //    auto filename = "/normals_" + std::to_string(a) + "_" + std::to_string(f) + ".png";
     //    io_qt::to_image(normals).save(QString(terrain::output_folder) + "/normals_" + std::to_string(a) + "_" + std::to_string(f) + ".png");
     //}
-    //{ // Ouputting texture.
-    //    auto filename = "/texture_" + std::to_string(a) + "_" + std::to_string(f) + ".png";
-    //    io_qt::to_image(texture).save(QString(terrain::output_folder) + "/texture_" + std::to_string(a) + "_" + std::to_string(f) + ".png");
-    //}
+    { // Ouputting texture.
+        std::cout << "--Outputting texture." << std::endl;
+        io_qt::to_image(texture).save(QString(terrain::output_folder) + "/texture.png");
+    }
 }
 
 int main() {
