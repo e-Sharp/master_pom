@@ -6,5 +6,6 @@
 #include "height.hpp"
 #include "normal.hpp"
 #include "position.hpp"
+#include "probability.hpp"
 #include "value.hpp"
 #include "weight.hpp"
