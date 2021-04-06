@@ -6,8 +6,5 @@
 #include "pom/terrain/heightfield.hpp"
 #include "pom/terrain/tesselation.hpp"
 
-#include "defaults.hpp"
-
+#include "function/all.hpp"
 #include "landform/all.hpp"
-#include "operator/all.hpp"
-#include "primitive/all.hpp"
