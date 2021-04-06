@@ -2,11 +2,16 @@
 
 #include "sum_operation.hpp"
 
+#include "pom/terrain/operator/operation.hpp"
+
 #include <tuple>
 
 namespace pom::terrain {
 
 struct sum {};
+
+template<>
+struct is_operation<sum> : std::true_type {};
 
 template<typename Terrain, typename... Terrains> constexpr
 auto sum_of(Terrain&& t, Terrains&&... ts) {

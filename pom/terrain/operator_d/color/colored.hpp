@@ -8,7 +8,7 @@ namespace pom::terrain {
 
 template<typename Terrain>
 struct colored : Terrain {
-	colored(color c, Terrain&& t)
+	constexpr colored(color c, Terrain&& t)
 		: Terrain(std::move(t))
 		, color(std::move(c))
 	{}

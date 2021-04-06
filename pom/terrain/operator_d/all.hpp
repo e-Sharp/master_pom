@@ -10,6 +10,7 @@
 #include "maximum/maximized.hpp"
 #include "minimum/min.hpp"
 #include "minimum/minimized.hpp"
+#include "multiplication/all.hpp"
 #include "scaling/scaled.hpp"
 #include "scaling/scaling.hpp"
 #include "sum/sum.hpp"

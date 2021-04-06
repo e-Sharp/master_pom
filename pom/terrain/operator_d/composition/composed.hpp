@@ -2,6 +2,8 @@
 
 #include "pom/terrain/operator/operation.hpp"
 
+#include <tuple>
+
 namespace pom::terrain {
 
 template<operation First, operation Second>
