@@ -4,8 +4,6 @@
 #include "vec/vec.hpp"
 #include "vec/xyz.hpp"
 
-#include "pom/terrain/tag/all.hpp"
-
 #include <decl.hpp>
 #include <pom/maths/all.hpp>
 #include <pom/meta/exception/all.hpp>
