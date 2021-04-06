@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pom/terrain/import/vec/vec.hpp"
-#include "pom/terrain/tag/value.hpp"
+#include "pom/terrain/function/tag/value.hpp"
 
 #include <pom/maths/operation/noise/gradient_2.hpp>
 #include <pom/maths/operation/noise/gradient_2_value.hpp>
@@ -16,15 +16,15 @@ struct gradient_noise {
 };
 
 template<typename DeclContext> constexpr
-float recipe(DeclContext, value_, gradient_noise<1>, vec2f xy) {
-	return value(maths::gradient_noise_2(&maths::hash_1), xy);
+float recipe(DeclContext, value, gradient_noise<1>, vec2f xy) {
+	return maths::value(maths::gradient_noise_2(&maths::hash_1), xy);
 }
 
 template<typename DeclContext> constexpr
-vec2f recipe(DeclContext, value_, gradient_noise<2>, vec2f xy) {
+vec2f recipe(DeclContext, value, gradient_noise<2>, vec2f xy) {
 	return {
-		value(maths::gradient_noise_2(&maths::hash_1), xy),
-		value(maths::gradient_noise_2(&maths::hash_2), xy)};
+		maths::value(maths::gradient_noise_2(&maths::hash_1), xy),
+		maths::value(maths::gradient_noise_2(&maths::hash_2), xy)};
 }
 
 }
