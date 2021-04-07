@@ -4,7 +4,7 @@
 
 namespace pom::terrain {
 
-template<typename Default>
+template<typename Ty>
 struct is_first_order_function : std::false_type {};
 
 template<typename Ty>

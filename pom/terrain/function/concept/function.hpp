@@ -6,7 +6,13 @@
 namespace pom::terrain {
 
 template<typename Ty>
-concept function
-= (first_order_function<Ty> || higher_order_function<Ty>);
+struct is_function {
+	static constexpr bool value 
+	= is_first_order_function<Ty>::value
+	|| is_higher_order_function<Ty>::value;
+};
+
+template<typename Ty>
+concept function = is_function<Ty>::value;
 
 }

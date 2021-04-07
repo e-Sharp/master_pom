@@ -1,11 +1,13 @@
 #pragma once
 
-#include <type_traits>
+#include "decorator.hpp"
 
 namespace pom::terrain {
 
-template<typename Default>
-struct is_higher_order_function : std::false_type {};
+template<typename Ty>
+struct is_higher_order_function {
+	static constexpr bool value = is_decorator<Ty>::value;
+};
 
 template<typename Ty>
 concept higher_order_function
