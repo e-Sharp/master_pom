@@ -5,7 +5,9 @@
 namespace pom::terrain {
 
 auto test_0() {
-	return lerp(noise(), sin(), constant(0.5f));
+	return sin()
+	| distortion{.amplitude = 2.f, .frequency = 1 / 2.f}
+	| distortion{.amplitude = 1.f, .frequency = 1.f};
 }
 
 }
