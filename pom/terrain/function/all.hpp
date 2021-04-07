@@ -2,6 +2,7 @@
 
 #include "addition/all.hpp"
 #include "constant/all.hpp"
+#include "distortion/all.hpp"
 #include "lerp/all.hpp"
 #include "multiplication/all.hpp"
 #include "noise/all.hpp"
