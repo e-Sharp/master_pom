@@ -12,9 +12,9 @@ using namespace pom;
 using namespace pom::terrain;
 
 void throwing_main() {
-    auto ter = test_0();
+    auto ter = canyons_0();
 
-    auto resolution = maths::vector_of<std::size_t>(1000, 1000);
+    auto resolution = maths::vector_of<std::size_t>(500, 500);
     auto xd = maths::interval<float>(0.f, 10.f);
     auto yd = maths::interval<float>(0.f, 10.f);
 
