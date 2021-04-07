@@ -8,7 +8,7 @@ namespace pom::terrain {
 
 template<function A, typename B, typename I> constexpr
 auto lerp(A&& a, B&& b, I&& i) {
-	return I(i) * A(a) + (constant(1.f) + constant(-1.f) * I(i)) * B(b);
+	return I(i) * A(a) + (1.f + -1.f * I(i)) * B(b);
 }
 
 }
