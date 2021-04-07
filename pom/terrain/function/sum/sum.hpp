@@ -9,14 +9,14 @@ namespace pom::terrain {
 template<function Lhs, function Rhs>
 struct sum {
 	template<typename... Rhss>
-	constexpr sum(Lhs&& l, Rhss&&... rs)
-		: lhs(std::forward<Lhs>(l))
+	constexpr sum(Lhs l, Rhss&&... rs)
+		: lhs(std::move(l))
 		, rhs(sum(std::forward<Rhss>(rs)...))
 	{}
 
-	constexpr sum(Lhs&& l, Rhs&& r)
-		: lhs(std::forward<Lhs>(l))
-		, rhs(std::forward<Rhs>(r))
+	constexpr sum(Lhs l, Rhs r)
+		: lhs(std::move(l))
+		, rhs(std::move(r))
 	{}
 
 	Lhs lhs;
@@ -24,7 +24,7 @@ struct sum {
 };
 
 template<typename Lhs, typename... Rhss>
-sum(Lhs, Rhss...) -> sum<Lhs, decltype(sum(Rhss...))>;
+sum(Lhs, Rhss...) -> sum<Lhs, decltype(sum(std::declval<Rhss>()...))>;
 
 template<typename Lhs, typename Rhs>
 sum(Lhs, Rhs) -> sum<Lhs, Rhs>;

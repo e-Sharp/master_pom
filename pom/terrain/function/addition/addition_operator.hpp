@@ -11,12 +11,12 @@ auto operator+(Lhs&& l, Rhs&& r) {
 	return sum(std::forward<Lhs>(l), std::forward<Rhs>(r));
 }
 
-template<function Lhs, function Rhs> constexpr
+template<function Lhs> constexpr
 auto operator+(Lhs&& l, float r) {
 	return sum(std::forward<Lhs>(l), constant(r));
 }
 
-template<function Lhs, function Rhs> constexpr
+template<function Rhs> constexpr
 auto operator+(float l, Rhs&& r) {
 	return sum(constant(l), std::forward<Rhs>(r));
 }
