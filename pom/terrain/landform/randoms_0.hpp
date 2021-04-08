@@ -5,6 +5,7 @@
 
 namespace pom::terrain {
 
+//snowy / sandy mountains
 constexpr auto randoms_0() {
 	auto base =
 		(noise() +
@@ -35,6 +36,23 @@ constexpr auto randoms_0() {
     //return bumpCanyon;
     return 2.f * lerp(rockPlain, bump, constant(0.5f));
         
+}
+
+//wtf is this ?
+auto randoms_1() {
+	auto voronoi = worley() | distortion{.amplitude = 5.f, .frequency = 1.f} | scaling(.5f);
+	auto perlin = (noise() +
+		(noise() * 0.5f | scaling(1 / 2.f))+
+		(noise() * 0.25f | scaling(1 / 4.f))) | scaling(.5f);
+	auto wave = 1.5f * sin()
+	| distortion{.amplitude = 5.f, .frequency = 5.f}
+	| distortion{.amplitude = 2.f, .frequency = 1 / 8.f};
+	//return perlin;	
+	auto dune = lerp(voronoi, perlin, constant(.4f));
+	//return dune;
+	//return wave;
+	auto base = lerp(dune, wave, constant(.8f));
+	return base;
 }
 
 }
