@@ -8,8 +8,8 @@ namespace pom::terrain {
 template<typename A, typename B> constexpr
 auto smax(A&& a, B&& b, float smooth) {
 	return - smin(
-		- std::forward<A>(a),
-		- std::forward<B>(b),
+		opposed(std::forward<A>(a)),
+		opposed(std::forward<B>(b)),
 		smooth);
 }
 
