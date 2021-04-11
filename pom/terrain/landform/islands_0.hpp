@@ -13,9 +13,10 @@ constexpr auto islands_0() {
 		(1/8.f * noise() | scaling(1 / 8.f)) +
 		(1/16.f * noise() | scaling(1 / 16.f)) +
 		(1/32.f * noise() | scaling(1 / 32.f)))
-        * 5.f;
+        * 5.f
+		| color(0.5f, 0.5f, 0.5f);
     
-    auto island = 2.f * smax(std::move(base), constant(0.5f), 1.5f) | scaling(4.f);
+    auto island = 2.f * smax(base, constant(0.5f) | color(0.f, 0.f, 1.f), 1.5f) | scaling(4.f);
     return island;
         
 }

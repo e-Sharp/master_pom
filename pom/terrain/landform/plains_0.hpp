@@ -5,17 +5,7 @@
 
 namespace pom::terrain {
 
-constexpr auto mountains_0() {
-	return
-		noise() +
-		(noise() * 0.5f | scaling(1 / 2.f)) +
-		(1/4.f * noise() | scaling(1 / 4.f)) +
-		(1/8.f * noise() | scaling(1 / 8.f)) +
-		(1/16.f * noise() | scaling(1 / 16.f)) +
-		(1/32.f * noise() | scaling(1 / 32.f));
-}
-
-constexpr auto mountains_1() {
+constexpr auto plains_0() {
 	auto base =
 		((noise() +
 		(noise() * 0.5f | scaling(1 / 2.f)) +
@@ -42,16 +32,13 @@ constexpr auto mountains_1() {
         * 0.25f)
         | scaling(2.f);
     
-    auto mountain = lerp(land, bump, 0.8f) | color(0.5f, 0.5f, 0.5f);
+    auto hills = lerp(land, bump, 0.8f) | color(0.5f, 0.5f, 0.5f);
 
-    auto mountain2 = lerp(mountain, base, 0.95f) | color(0.5f, 0.5f, 0.5f);
-
-    return mountain2;
+    return hills;
         
 }
 
-constexpr auto mountains_2() {
-	auto voronoi =  3.f * (worley() | distortion{.amplitude = 5.f, .frequency = 1.f} | scaling(2.f));
+constexpr auto plains_1() {
 	auto base =
 		((noise() +
 		(noise() * 0.5f | scaling(1 / 2.f)) +
@@ -78,13 +65,20 @@ constexpr auto mountains_2() {
         * 0.25f)
         | scaling(2.f);
     
-    auto mountain = lerp(land, bump, 0.8f) | color(0.5f, 0.5f, 0.5f);
+    auto hills = lerp(land, bump, 0.8f) | color(0.5f, 0.5f, 0.5f);
 
-    auto mountain2 = lerp(mountain, base, 0.95f) | color(0.5f, 0.5f, 0.5f);
+    auto base2 =
+		((noise() +
+		(noise() * 0.5f | scaling(1 / 2.f)) +
+		(1/4.f * noise() | scaling(1 / 4.f)) +
+		(1/8.f * noise() | scaling(1 / 8.f)) +
+		(1/16.f * noise() | scaling(1 / 16.f)) +
+		(1/32.f * noise() | scaling(1 / 32.f)))
+        * 8.f) | scaling(8.f);
 
-	auto mountain3 = lerp(mountain2, voronoi, 0.75f) | color(0.5f, 0.5f, 0.5f);
+    auto hills2 = lerp(hills, base2, 0.75) | color(0.5f, 0.5f, 0.5f);
 
-    return smax(mountain3, constant(0.5f), 0.65f);
+    return hills2;
         
 }
 
