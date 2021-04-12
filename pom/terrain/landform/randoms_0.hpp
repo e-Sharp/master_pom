@@ -14,7 +14,8 @@ constexpr auto randoms_0() {
 		(1/8.f * noise() | scaling(1 / 8.f)) +
 		(1/16.f * noise() | scaling(1 / 16.f)) +
 		(1/32.f * noise() | scaling(1 / 32.f)))
-        * 5.f;
+        * 5.f
+		| color(0.21f, 0.21f, 0.21f);
     
     auto sminBase = smin(base, constant(0.5f), .5f);
     auto smaxBase = 2.f * smax(std::move(sminBase), constant(0.f), 1.f)
@@ -28,12 +29,10 @@ constexpr auto randoms_0() {
 		(1/8.f * noise() | scaling(1 / 8.f)) +
         (1/16.f * noise() | scaling(1/16.f)))
         * 5.f)
-        | scaling(10.f);
+        | scaling(10.f)
+		| color(1.f, 1.f, 1.f);
 
-    //return smaxBase;
-    //return bump;
-    auto rockPlain = lerp(std::move(smaxBase), std::move(plain), constant(0.5f));
-    //return bumpCanyon;
+    auto rockPlain = lerp(std::move(smaxBase) | color(0.21f, 0.21f, 0.21f), std::move(plain) | color(1.f, 1.f, 1.f), constant(0.5f));
     return 2.f * lerp(rockPlain, bump, constant(0.5f));
         
 }
