@@ -15,11 +15,11 @@ constexpr auto canyons_0() {
 		(1/32.f * noise() | scaling(1 / 32.f)))
         * 8.f;
     
-    auto sminBase = smin(base, constant(.65f), .5f);
-    auto smaxBase = 2.f * smax(std::move(sminBase), constant(0.f), 1.5f)
+    auto sminBase = smin(base, constant(.65f), .5f) | color(0.5f, 0.1f, 0.09f);
+    auto smaxBase = 2.f * smax(std::move(sminBase), constant(0.f) | color(1.f, 0.82f, 0.6f), 1.5f)
         | scaling(2.f);
 
-    auto plain = noise() | scaling(4.f);
+    auto plain = noise() | scaling(4.f) | color(1.f, 0.82f, 0.6f);
 
     auto bump = 
 		(((noise() * 0.5f | scaling(1 / 2.f)) +
@@ -28,7 +28,8 @@ constexpr auto canyons_0() {
         (1/16.f * noise() | scaling(1/16.f)) +
 		(1/32.f * noise() | scaling(1 / 32.f)))
         * 0.25f)
-        | scaling(2.f);
+        | scaling(2.f)
+        | color(0.5f, 0.24f, 0.09f);
 
     auto bumpCanyon = lerp(std::move(smaxBase), std::move(plain), constant(0.5f));
     return 2.f * lerp(bumpCanyon, bump, constant(0.5f));

@@ -26,19 +26,19 @@ constexpr auto dunes_2() {
 	auto base =
 		((noise() +
 		(noise() * 0.5f | scaling(1 / 2.f)))
-        * 8.f) | color(0.5f, 0.5f, 0.5f);
+        * 8.f) | color(0.72f, 0.45f, 0.27f);
     
-    auto sminBase = smin(base, constant(.65f), .5f);
-    auto smaxBase = 2.f * smax(std::move(sminBase), constant(0.f), 1.5f)
+    auto sminBase = smin(base, constant(.65f) | color(0.95f, 0.81f, 0.36f), .5f);
+    auto smaxBase = 2.f * smax(std::move(sminBase), constant(0.f) | color(1.f, 0.9f, 0.47f), 1.5f)
         | scaling(2.f);
 
-    auto plains = 5.f * noise() | scaling(4.f) | color(0.5f, 0.5f, 0.5f);
+    auto plains = 5.f * noise() | scaling(4.f) | color(1.f, 0.9f, 0.47f);
 
-    auto land = lerp(smaxBase, plains, 0.5f) | color(0.5f, 0.5f, 0.5f);
+    auto land = lerp(smaxBase, plains, 0.5f)| color(1.f, 0.9f, 0.47f);
 
-    auto dune1 = lerp(land, base, 0.95f) | color(0.5f, 0.5f, 0.5f);
+    auto dune1 = lerp(land, base, 0.95f)| color(1.f, 0.9f, 0.47f);
 
-	auto dune2 = lerp(dune1, voronoi, 0.3f) | color(0.5f, 0.5f, 0.5f);
+	auto dune2 = lerp(dune1, voronoi, 0.3f)| color(1.f, 0.9f, 0.47f);
 
     return dune2;
         
