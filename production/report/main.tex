@@ -1,229 +1,242 @@
-%%%%% Fichero de ejemplo LaTeX que ilustra el uso de la Hoja de Estilo %%%%%%
-%%%%% Jornadas.cls para Jornadas Sarteco
+\documentclass[a4paper]{article}
 
-\documentclass[twocolumn,twoside]{Jornadas}
-\usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
+\usepackage{INTERSPEECH2021}
+
+\usepackage{cases}
 \usepackage{listings}
-\usepackage{algorithm}
-\usepackage{algorithmicx}
-\usepackage{algcompatible}
-\usepackage{adjustbox}
-\usepackage{graphicx}
-\usepackage{color}
-\usepackage{caption}
-\captionsetup{font=footnotesize}
-\usepackage[caption=false,font=footnotesize]{subfig}
-%\setlength{\marginparwidth}{2cm}
-%\usepackage{todonotes}
-\usepackage{placeins}
-\usepackage{hyperref}
-\usepackage{url}
+\usepackage[framemethod=tikz]{mdframed}
 
-% -*- Ajustes LaTeX en relación a las figuras -*-
-\setcounter{topnumber}{10}     % Max. numero de figs. on top
-\setcounter{bottomnumber}{10}  % Max. numero de figs. abajo
-\setcounter{totalnumber}{10}   % Max. numero de figs. por pagina
-\renewcommand{\topfraction}{1} % Max. fraccion de pagina ocupada por figs.
-\renewcommand{\bottomfraction}{1}
-\renewcommand{\textfraction}{0}  % Min. fraccion de pagina ocupada por texto
-\renewcommand{\floatpagefraction}{1} % Max. espacio de pagina solo con figs.
+\hyphenpenalty=10000 % Disables hyphenation.
 
-\definecolor{gray97}{gray}{.97}
-\definecolor{gray75}{gray}{.75}
-\definecolor{gray45}{gray}{.45}
-
-\lstset{
-     inputencoding=utf8,
-     extendedchars=true,
-     backgroundcolor=\color{gray97},
-     %
-     stringstyle=\ttfamily,
-     showstringspaces = false,
-     basicstyle=\scriptsize\ttfamily,
-     commentstyle=\color{gray45},
-     keywordstyle=\bfseries,
-     linewidth=.98\columnwidth,
-     xleftmargin=3mm,
-     breaklines=true,
-     numbers=left,
-     numbersep=6pt,
-     numberstyle=\tiny,
-     numberfirstline = false,
-     firstnumber=auto,
-     breaklines=true,
-     %
-     escapeinside={(*@}{@*)},
-     literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1
-   }
-
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-
-\newtheorem{theorem}{Teorema}
-
-\hyphenation{pa-ra-le-lis-mo pro-cee-dings}
-
-%Directorios en los que se buscan las figuras
-\graphicspath{{.}{./Figuras/}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Procedural terrain generation}
+\name{Willy Jacquet$^1$, Parra Yoan$^2$}
+%The maximum number of authors in the author list is twenty. If the number of contributing authors is more than twenty, they should be listed in a footnote or in acknowledgement section, as appropriate.
+\address{
+  $^1$Author Affiliation\\
+  $^2$Co-author Affiliation}
+\email{author@university.edu, coauthor@company.com}
 
 \begin{document}
 
-\title{Terrain procedural generation.}
-
-\author{%
-     Jesús González%
-     \thanks{Dpto. de Informática, Universidad de Tombuctú, e-mail: {\tt gonzales@tbt.edu.}},
-     Ángela Sánchez$^2$ y Moisés Salmerón%
-     \thanks{Dpto. de Arquitectura de Computadores, Universidad de Pernambuco, 
-     e-mail: {\tt \{sanchez,salmeron\}@per.edu.}}
-}
-
 \maketitle
-% Oculta las cabeceras y los números de página.
-% Ambos elementos se añadirán durante la edición de las actas completas.
-\markboth{}{}
-\pagestyle{empty} 
-\thispagestyle{empty} % Oculta el número de la primera página
+% 
+\begin{abstract}
+%Thus we propose a model base on mathematical logic and it's resulting C++ implementation. The model is comprehensive by extensibility and therefore faster development of procedural terrain by inferring basic function properties and automatically optimizing code.
+
+\textit{Symbolic computation} is seen as a trade-off between expressiveness and performance.
+Metaprogramming can minimize that overhead and enable further optimization. 
+
+
+\end{abstract}
+
+%\noindent\textbf{Index Terms}: speech recognition, human-computer interaction, computational paralinguistics
 
 \section{Introduction}
 
-\section{Mathematical model}
+In this paper we use procedural terrain generation as our primary application and thus tweaked the model for vector manipulation.
 
-\textit{First-class function.}
+\section{State of the art}
 
-\textit{Domain.}
+\section{Symbolic computation}
 
-\textit{Value.}
+Manipulation of \textit{functions} instead of \textit{values}.
+\textit{Functions} are \textit{first class citizens}.
 
-\textit{Gradient.}
+The following model is designed to take advantage of \textit{template metaprogramming} facilities. 
 
-\textit{Higher-order function.}
-
-\subsection{Terrain representation}
-
-\textit{Heightmap.}
-
-\textit{Height.}
-
-\textit{Normal.}
-
-\textit{Color.}
+\begin{mdframed}
+This document is thus extended with insight about making a \textit{C++} implementation out of it.
+\end{mdframed}
 
 \subsection{Generic functions}
 
-\textit{Projection.}
+A \textbf{reduction} predicate is introduced, noted $a \rightarrow b$ ($a$ can be \textit{reduced} to $b$). This predicate is \textit{transitive}.
 
-\textit{Inner composition.}
+\begin{mdframed}
+A \textit{function} can be represented as a \textit{type} that holds no \textit{non-static data member}.
+In particular, if two instances of functions share the same type then they refer to the same function.
+\end{mdframed}
 
-\textit{Outer composition.}
+A \textbf{tuple} is defined as a \textit{sequence of objects} $(x_1,...,x_n)$.
 
-\textit{Generalized composition.}
+The \textbf{application} of a function $f$ with $x_1,...,x_n$ is noted $f(x_1,...,x_n)$.
+Generally, the \textit{application of a tuple} $(f_1,...,f_n)$ is defined as:
+\begin{equation}
+(f_1,...,f_n)(x_1,...,x_n) \rightarrow (f_1(x_1,...,x_n),...,f_n(x_1,...,x_n))
+\end{equation}
+If $f(x)$ cannot be further \textit{reduced} ($\neg\exists a, f(x) \rightarrow a$) then for $y_1,...y_n$:
+\begin{equation}
+f(x)(y_1,...y_n) \rightarrow f(x(y_1,...y_n))
+\end{equation}
 
-\subsection{Primary arithmetic functions}
+A \textbf{constant} $c$ is defined as a function that returns itself:
+\begin{equation}
+	c(x_1,...,x_n) \rightarrow c
+\end{equation}
 
-\textit{Constant.}
+\begin{mdframed}
+A \textit{compile-time constant} can be represented as:
+\begin{lstlisting}
+template<typename Type, Type Value>
+struct constant {};
+\end{lstlisting}
+Special constants ($0$, $1$, $\pi$, $e$, ...) can be introduced as specific symbols since they appear in many (number) sets.
+\begin{lstlisting}
+struct zero {}; struct one {}; ...
+\end{lstlisting}
+\end{mdframed}
 
-\textit{Addition.}
+Given $i \in \mathbb{N}^*$, the \textbf{$i$-th projection} is a function that returns its $i$-th parameter:
+\begin{numcases}{proj_i(x_1,...,x_n) \rightarrow}
+	x_i          & \text{if $i \leq n$} \\
+	proj_{i - n} & \text{otherwise} \label{partial_projection}
+\end{numcases}
+When the $i$-th projection is applied to the $i$-th parameter of each function, the notation is abbreviated:
+\begin{equation}
+	f(p_0,p_1,...) = f
+\end{equation}
 
-\textit{Multiplication.}
+The \textbf{arity} (function) can be defined as follows:
+\begin{equation}
+\begin{split}
+	arity(c) &= 0 \\
+	arity(proj_i) &= i \\
+	arity(f(g_1,...,g_n)) &= max\{arity(g_i)\}_{i \leq n}
+\end{split}
+\end{equation}
 
-\textit{Min.}
+\subsection{Arithmetic functions}
 
-\textit{Sin.}
+\textit{Elementary arithmetic} functions are introduced with their usual definition:
+\begin{equation}
+\begin{split}
+	(f + g)(x)      &\rightarrow f(x) + g(x) \\
+	(f - g)(x)      &\rightarrow f(x) - g(x) \\
+	(f \times g)(x) &\rightarrow f(x) \times g(x) \\
+	(f / g)(x)      &\rightarrow f(x) / g(x)
+\end{split}
+\end{equation}
+\textit{Partial application} is made possible by (\ref{partial_projection}). For example:
+\begin{equation}
+\begin{split}
+	(proj_0 + proj_1)(x) &\rightarrow proj_0(x) + proj_1(x) \\
+	                     &\rightarrow x + proj_0
+\end{split}
+\end{equation}
+\textit{Lazy evaluation} is introduced by establishing:
+\begin{equation}
+\begin{split}
+	0 \times g &\rightarrow 0\\
+	f \times 0 &\rightarrow 0\\
+	0 / g      &\rightarrow 0
+\end{split}
+\end{equation}
+\begin{mdframed}
+This can be implemented by providing \textit{function overloads} having the first or second operand with the zero type.
+\end{mdframed}
 
-\subsection{Derived arithmetic functions}
+The current model can be extended with any usual function.
+Any function that is not mentioned in this section is defined with its usual meaning.
 
-\textit{Subtraction.}
+\subsection{Differential calculus}
 
-\textit{Polynomials.}
+The \textbf{partial derivative} \textit{with respect to $x$} is introduced for generic functions:
+\begin{align}
+\frac{\partial}{\partial x}(c) &\rightarrow 0 \text{ with $c$ a constant} \\
+\frac{\partial}{\partial proj_j}(proj_i) &\rightarrow
+\begin{cases}{}
+1 & \text{if $i = j$} \\
+0 & \text{otherwise}
+\end{cases} \\
+\frac{\partial}{\partial x}(f(y)) &\rightarrow \frac{\partial}{\partial x}(y) \times \frac{\partial}{\partial x}(f)(y)
+\end{align}
+For arithmetic functions:
+\begin{align}
+\frac{\partial}{\partial x}(f + g) &\rightarrow \frac{\partial}{\partial x}(f) + \frac{\partial}{\partial x}(g) \\
+\frac{\partial}{\partial x}(f - g) &\rightarrow \frac{\partial}{\partial x}(f) - \frac{\partial}{\partial x}(g) \\
+\frac{\partial}{\partial x}(f \times g) &\rightarrow \frac{\partial}{\partial x}(f) \times g + f \times \frac{\partial}{\partial x}(g) \\
+\frac{\partial}{\partial x}(f / g) &\rightarrow \frac{\frac{\partial}{\partial x}(f) \times g - f \times \frac{\partial}{\partial x}(g)}{g \times g}
+\end{align}
 
-\textit{Linear interpolation.}
+\subsection{Computational redundancy}
 
-\textit{Max.}
-
-\textit{Absolute value.}
-
-\textit{Smooth min.}
-
-\textit{Gradient noise.}
-
-\textit{Worley noise.}
-
-\subsection{Coloration}
-
-\textit{Decorator.}
-
-\subsection{Extensibility}
-
-\textit{Implicit modelling.}
-
-\section{Examples}
-
-\subsection{Notation}
-
-\section{Implementation}
-
-\textit{Declarative programming.}
-
-\textit{Static system.}
-
-\subsection{Symbolic computation}
-
-\textit{Exact evaluation.}
-
-\textit{Approximation.}
-
-\textit{Integral calculus.}
-
-\textit{Compilation.}
-
-\subsection{Factorization of computations}
-
-\subsection{Factorization of dependencies}
-
-\subsection{Parallelization}
-
-\subsection{Dynamization}
-
-\subsection{Performances}
-
-\section{Conclusion and future work}
-
-\section*{References}
+Suppose that, provided a function $f \times g$, you wish to compute its value \emph{and} partial derivative for an argument $x$.
 
 
-%\begin{abstract}
-%Este artículo explica cómo usar la hoja de estilo \LaTeX\ para las
-%Jornadas Sarteco.
-%\end{abstract}
+
+\subsection{Performance}
+
 %
-%\begin{keywords}
-%Hoja de estilo, \LaTeX, Jornadas Sarteco.
-%\end{keywords}
-
-%Añade los ficheros que necesites:
-
-%\input{01-Intro.tex}
-%\input{02-Background.tex}
-%\input{03-Method.tex}
-%\input{04-Experimental.tex}
-%\input{05-Conclusions.tex}
-
-
-
-%\section*{Agradecimientos}
+%\subsection{Coloration}
 %
-%Añadir en esta sección no numerada los posibles agradecimientos a proyectos,
-%instituciones o personas. Por ejemplo: El presente trabajo ha sido financiado
-%mediante  el proyecto xxxx-xxxxx-xxx. 
+%\textit{Decorator.}
 %
-%%Comenta la línea \nocite para que sólo se incluyan en las referencias
-%%las entradas que esté referenciadas en el texto con \cite{}
-%\nocite{*}
-%\bibliographystyle{Jornadas}
-%\bibliography{biblio}
+%\subsection{Extensibility}
+%
+%\textit{Implicit modelling.}
+
+%\textit{Compilation.}
+
+%\subsection{Factorization of computations}
+%
+%\subsection{Factorization of dependencies}
+%
+%\subsection{Parallelization}
+%
+%\subsection{Dynamization}
+
+\section{Results}
+
+\section{Appendix A: Derived functions}
+
+Many usual functions can be defined in terms of those previously introduced.
+Doing so makes inferring most properties (derivative, domain, ...) automatically possible.
+
+\subsection{Generic functions}
+\begin{flalign*}
+swap = (proj_1, proj_0)
+\end{flalign*}
+
+\subsection{Arithmetic functions}
+\begin{equation*}
+\begin{array}{ll}
+opposite    &= 0 - proj_0 \\
+inverse     &= 1 / proj_0 \\
+\\
+translation &= p1(p0 + p2) \\
+scaling     &= p1(p0 \times p2)
+\end{array}
+\end{equation*}
+
+\subsection{Calculus functions}
+\begin{equation*}
+\begin{array}{ll}
+\partial(cos) &= - sin \\
+\partial(sin) &= cos \\
+\end{array}
+\end{equation*}
+
+\bibliographystyle{IEEEtran}
+
+\bibliography{mybib}
+
+% \begin{thebibliography}{9}
+% \bibitem[1]{Davis80-COP}
+%   S.\ B.\ Davis and P.\ Mermelstein,
+%   ``Comparison of parametric representation for monosyllabic word recognition in continuously spoken sentences,''
+%   \textit{IEEE Transactions on Acoustics, Speech and Signal Processing}, vol.~28, no.~4, pp.~357--366, 1980.
+% \bibitem[2]{Rabiner89-ATO}
+%   L.\ R.\ Rabiner,
+%   ``A tutorial on hidden Markov models and selected applications in speech recognition,''
+%   \textit{Proceedings of the IEEE}, vol.~77, no.~2, pp.~257-286, 1989.
+% \bibitem[3]{Hastie09-TEO}
+%   T.\ Hastie, R.\ Tibshirani, and J.\ Friedman,
+%   \textit{The Elements of Statistical Learning -- Data Mining, Inference, and Prediction}.
+%   New York: Springer, 2009.
+% \bibitem[4]{YourName17-XXX}
+%   F.\ Lastname1, F.\ Lastname2, and F.\ Lastname3,
+%   ``Title of your INTERSPEECH 2021 publication,''
+%   in \textit{Interspeech 2021 -- 20\textsuperscript{th} Annual Conference of the International Speech Communication Association, September 15-19, Graz, Austria, Proceedings, Proceedings}, 2020, pp.~100--104.
+% \end{thebibliography}
 
 \end{document}
-
