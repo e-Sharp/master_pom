@@ -162,28 +162,66 @@ For arithmetic functions:
 
 Suppose that, provided a function $f \times g$, you wish to compute its value \emph{and} partial derivative for an argument $x$.
 
+\subsection{Parallelization}
 
+\subsection{Compilation}
 
 \subsection{Performance}
 
-%
-%\subsection{Coloration}
-%
-%\textit{Decorator.}
-%
-%\subsection{Extensibility}
-%
-%\textit{Implicit modelling.}
+\section{Common functions}
 
-%\textit{Compilation.}
+\subsection{Interpolation}
 
-%\subsection{Factorization of computations}
-%
-%\subsection{Factorization of dependencies}
-%
-%\subsection{Parallelization}
-%
-%\subsection{Dynamization}
+Provided an interpolant $t \in [0, 1]$.
+Polynomial interpolation with null derivatives is defined as follows:
+\begin{itemize}
+\item linea:r $t$
+\item cubic: $-2t^3 + 3t^2$
+\item quintic: $6t^5 - 15t^4 + 10t^3$
+\end{itemize}
+
+\subsection{Noise functions}
+
+\textit{Coherent noise} can be used to model many natural phenomena and is characterized as follow \cite{libnoise_coherent_noise}:
+\begin{itemize}
+\item \textit{Referential transparency} i.e.\ the same input produces the same output
+\item A small change in the input value will produce a small change in the output value.
+\item A large change in the input value will produce a random change in the output value
+\end{itemize}
+
+\textbf{Value noise} is achieved by interpolating random values on a regular grid along each axis until it is reduced to a single number.
+
+\begin{figure}[h]
+\includegraphics[width=\linewidth]{img/value_noise_2d}
+\caption{2D value noise with quintic interpolation.}
+\end{figure}
+
+
+\begin{lstlisting}[caption=Pseudo code implementation of 2D value noise]
+float noise(v:float[2]):
+  i=floor(v)
+  t=fract(v)
+  return interp(
+    interp(hash(i+[0,0]),hash(i+[0,1]),t[0]),
+    interp(hash(i+[1,0]),hash(i+[1,1]),t[0]),
+    t[1])
+\end{lstlisting}
+With $interp$ being an interpolation function. 
+
+\subsection{Worley noise}
+
+\section{Terrain representation}
+
+A \textbf{terrain} can be defined as a $C^2$ function $\mathbb{R}^2 \rightarrow \mathbb{R}$.
+Therefore it is interpreted 
+
+\subsection{Coloration}
+
+\subsection{Rendering}
+
+\subsection{Implicit representation}
+
+
 
 \section{Results}
 
@@ -217,26 +255,6 @@ scaling     &= p1(p0 \times p2)
 \end{equation*}
 
 \bibliographystyle{IEEEtran}
-
 \bibliography{mybib}
-
-% \begin{thebibliography}{9}
-% \bibitem[1]{Davis80-COP}
-%   S.\ B.\ Davis and P.\ Mermelstein,
-%   ``Comparison of parametric representation for monosyllabic word recognition in continuously spoken sentences,''
-%   \textit{IEEE Transactions on Acoustics, Speech and Signal Processing}, vol.~28, no.~4, pp.~357--366, 1980.
-% \bibitem[2]{Rabiner89-ATO}
-%   L.\ R.\ Rabiner,
-%   ``A tutorial on hidden Markov models and selected applications in speech recognition,''
-%   \textit{Proceedings of the IEEE}, vol.~77, no.~2, pp.~257-286, 1989.
-% \bibitem[3]{Hastie09-TEO}
-%   T.\ Hastie, R.\ Tibshirani, and J.\ Friedman,
-%   \textit{The Elements of Statistical Learning -- Data Mining, Inference, and Prediction}.
-%   New York: Springer, 2009.
-% \bibitem[4]{YourName17-XXX}
-%   F.\ Lastname1, F.\ Lastname2, and F.\ Lastname3,
-%   ``Title of your INTERSPEECH 2021 publication,''
-%   in \textit{Interspeech 2021 -- 20\textsuperscript{th} Annual Conference of the International Speech Communication Association, September 15-19, Graz, Austria, Proceedings, Proceedings}, 2020, pp.~100--104.
-% \end{thebibliography}
 
 \end{document}
